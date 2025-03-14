@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+  <%- include('partials/head', {title: 'Dashboard', csslink:
+  '../css/dashboard.css'}) %>
+  <body>
+    <%- include('partials/sidebar') %>
+
+    <div class="main-content">
+      <%- include('partials/topbar') %>
+      <h2>Dashboard</h2>
+
+      <div class="cards">
+        <div class="card">
+          <i class="fas fa-user icon1"></i>
+          <div class="card-info">
+            <h3 id="tcpnum">0</h3>
+            <p>Current No. of Tree Cutting Permits</p>
+          </div>
+        </div>
+        <div class="card">
+          <i class="fas fa-shopping-cart icon2"></i>
+          <div class="card-info">
+            <h3 id="crnum">0</h3>
+            <p>Current No. of Chainsaw Registrations</p>
+          </div>
+        </div>
+        <div class="card">
+          <i class="fas fa-box icon3"></i>
+          <div class="card-info">
+            <h3 id="tpnum">0</h3>
+            <p>Current No. of Transport Permits</p>
+          </div>
+        </div>
+        <div class="card">
+          <i class="fas fa-dollar-sign icon4"></i>
+          <div class="card-info">
+            <h3 id="panum">0</h3>
+            <p>Current Permits for approval</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="tables-section">
+        <div class="tables-column">
+          <div class="table-container">
+            <h3>Recent Tree Cutting Applications</h3>
+            <table>
+              <thead>
+                <tr>
+                  <th>CLIENT</th>
+                  <th>NUMBER</th>
+                  <th>TYPE</th>
+                  <th>STATUS</th>
+                  <th>CURRENT LOCATION</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Jane Smith</td>
+                  <td>TCP-2025-03-12-0001</td>
+                  <td>Tree Cutting</td>
+                  <td><span class="status">Pending</span></td>
+                  <td>CENRO-Approval</td>
+                </tr>
+                <tr>
+                  <td>Michael Ray</td>
+                  <td>TCP-2025-03-12-0002</td>
+                  <td>Tree Cutting</td>
+                  <td><span class="status">Approved</span></td>
+                  <td>RPU</td>
+                </tr>
+                <tr>
+                  <td>Emily Carson</td>
+                  <td>TCP-2025-03-12-0003</td>
+                  <td>Tree Cutting</td>
+                  <td><span class="status">In Review</span></td>
+                  <td>RPS-Recommending Approval</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div class="table-container">
+            <h3>Recent Chainsaw Registrations</h3>
+            <table>
+              <thead>
+                <tr>
+                  <th>CLIENT</th>
+                  <th>NUMBER</th>
+                  <th>TYPE</th>
+                  <th>STATUS</th>
+                  <th>CURRENT LOCATION</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>John Miller</td>
+                  <td>CW-2025-03-12-0001</td>
+                  <td>Chainsaw Registration</td>
+                  <td><span class="status">Pending</span></td>
+                  <td>RPU</td>
+                </tr>
+                <tr>
+                  <td>Ana Rivera</td>
+                  <td>CW-2025-03-12-0002</td>
+                  <td>Chainsaw Registration</td>
+                  <td><span class="status">Approved</span></td>
+                  <td>CENRO-Approval</td>
+                </tr>
+                <tr>
+                  <td>David Cruz</td>
+                  <td>CW-2025-03-12-0003</td>
+                  <td>Chainsaw Registration</td>
+                  <td><span class="status">In Review</span></td>
+                  <td>RPS-Recommending Approval</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div class="table-container">
+            <h3>Recent Transport Permits</h3>
+            <table>
+              <thead>
+                <tr>
+                  <th>CLIENT</th>
+                  <th>NUMBER</th>
+                  <th>TYPE</th>
+                  <th>STATUS</th>
+                  <th>CURRENT LOCATION</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Lisa Monroe</td>
+                  <td>TP-2025-03-12-0001</td>
+                  <td>Transport Permit</td>
+                  <td><span class="status">Pending</span></td>
+                  <td>CENRO-Approval</td>
+                </tr>
+                <tr>
+                  <td>Chris Dela Cruz</td>
+                  <td>TP-2025-03-12-0002</td>
+                  <td>Transport Permit</td>
+                  <td><span class="status">Approved</span></td>
+                  <td>RPU</td>
+                </tr>
+                <tr>
+                  <td>Samantha Lee</td>
+                  <td>TP-2025-03-12-0003</td>
+                  <td>Transport Permit</td>
+                  <td><span class="status">In Review</span></td>
+                  <td>RPS-Recommending Approval</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="side-container">
+          <h3>Pending Approval of CENRO</h3>
+          <ul>
+            <li>Tree Cutting: TCP-2025-03-12-0001 - Jane Smith</li>
+            <li>Chainsaw: CW-2025-03-12-0002 - Ana Rivera</li>
+            <li>Transport Permit: TP-2025-03-12-0001 - Lisa Monroe</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <script type="module" src="../scripts/dashboard.js"></script>
+  </body>
+</html>

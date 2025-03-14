@@ -1,0 +1,158 @@
+@page {
+    size: A4 portrait;
+    margin: 0;
+  }
+
+  body {
+    font-family: 'Times New Roman', Times, serif;
+    font-size: 11px;
+    margin: 0;
+    background: #000;
+  }
+
+  .page-container {
+    width: 210mm;
+    height: 297mm;
+    margin: auto;
+    background: white;
+    padding: 5mm 10mm;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+
+  #sender{
+    margin-bottom: 10px;
+  }
+
+  .form-container {
+    width: 100%;
+    height: 47%;
+    padding: 1px;
+    box-sizing: border-box;
+    position: relative;
+    border: 1px solid;
+  }
+
+  .form-header {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 6px;
+  }
+
+  .form-title {
+    text-align: center;
+    font-weight: bold;
+    text-transform: uppercase;
+    margin-bottom: 6px;
+    font-size: 18px;
+  }
+
+  .field-label {
+    display: inline-block;
+    width: 180px;
+    vertical-align: top;
+  }
+
+  .underline {
+    /* display: inline-block; */
+    border-bottom: 1px solid black;
+    min-width: 1000px;
+    height: 14px;
+    width: 100%;
+    margin-left: 5px;
+  }
+
+  .begin {
+    /* display: inline-block; */
+    border-bottom: 1px solid black;
+    min-width: 250px;
+    height: 14px;
+    margin-left: 5px;
+    color: white;
+  }
+
+  #indented{
+    margin-left: 30px;
+  }
+
+  .section {
+    margin-bottom: 6px;
+  }
+
+  .amount-section {
+    font-weight: bold;
+    margin: 10px 0;
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 6px;
+    font-size: 10.5px;
+  }
+
+  table td {
+    padding: 3px;
+    vertical-align: top;
+  }
+
+  .bordered td {
+    border: 1px solid black;
+  }
+
+  .right {
+    text-align: right;
+  }
+
+  .signature-block {
+    text-align: right;
+    margin-top: 20px;
+  }
+
+  .small-text {
+    font-size: 10px;
+  }
+
+  .page-number {
+    text-align: center;
+    margin-top: 15px;
+    font-size: 10px;
+  }
+
+  .cut-line {
+    width: 100%;
+    border-top: 1px dashed black;
+    margin: 6px 0;
+  }
+
+  .btn-container {
+    text-align: center;
+    padding: 10px;
+    background: #000;
+  }
+
+  button {
+    padding: 8px 16px;
+    font-size: 12px;
+    cursor: pointer;
+  }
+
+  @media print {
+    .btn-container {
+      display: none;
+    }
+
+    body {
+      background: white;
+    }
+
+    .page-container {
+      box-shadow: none;
+    }
+  }
+
+  a{
+    color: black;
+  }

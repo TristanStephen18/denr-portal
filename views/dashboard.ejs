@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
-  <%- include('partials/head', {title: 'Dashboard', csslink:
-  '../css/dashboard.css'}) %>
+  <%- include('partials/head', {title: 'Dashboard', csslink:'../css/dashboard.css'}) %>
   <body>
     <%- include('partials/sidebar') %>
 
@@ -29,6 +28,20 @@
           <div class="card-info">
             <h3 id="tpnum">0</h3>
             <p>Current No. of Transport Permits</p>
+          </div>
+        </div>
+        <div class="card">
+          <i class="fas fa-box icon3"></i>
+          <div class="card-info">
+            <h3 id="pwprnum">0</h3>
+            <p>Current No. Plantation and Wood Processing</p>
+          </div>
+        </div>
+        <div class="card">
+          <i class="fas fa-box icon3"></i>
+          <div class="card-info">
+            <h3 id="wrnum">0</h3>
+            <p>Current No. of Wildlife Registration</p>
           </div>
         </div>
         <div class="card">
@@ -149,6 +162,80 @@
                   <td>Samantha Lee</td>
                   <td>TP-2025-03-12-0003</td>
                   <td>Transport Permit</td>
+                  <td><span class="status">In Review</span></td>
+                  <td>RPS-Recommending Approval</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="table-container">
+            <h3>Recent Plantation and Wood Processing Registrations</h3>
+            <table>
+              <thead>
+                <tr>
+                  <th>CLIENT</th>
+                  <th>NUMBER</th>
+                  <th>TYPE</th>
+                  <th>STATUS</th>
+                  <th>CURRENT LOCATION</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Jane Smith</td>
+                  <td>PWPR-2025-03-12-0001</td>
+                  <td>Wood Processing</td>
+                  <td><span class="status">Pending</span></td>
+                  <td>CENRO-Approval</td>
+                </tr>
+                <tr>
+                  <td>Michael Ray</td>
+                  <td>PWPR-2025-03-12-0002</td>
+                  <td>Wood Processing</td>
+                  <td><span class="status">Approved</span></td>
+                  <td>RPU</td>
+                </tr>
+                <tr>
+                  <td>Emily Carson</td>
+                  <td>PWPR-2025-03-12-0003</td>
+                  <td>Plantation Registration</td>
+                  <td><span class="status">In Review</span></td>
+                  <td>RPS-Recommending Approval</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="table-container">
+            <h3>Recent Wildlife Registrations</h3>
+            <table>
+              <thead>
+                <tr>
+                  <th>CLIENT</th>
+                  <th>NUMBER</th>
+                  <th>TYPE</th>
+                  <th>STATUS</th>
+                  <th>CURRENT LOCATION</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Jane Smith</td>
+                  <td>WR-2025-03-12-0001</td>
+                  <td>Wildlife Registration</td>
+                  <td><span class="status">Pending</span></td>
+                  <td>CENRO-Approval</td>
+                </tr>
+                <tr>
+                  <td>Michael Ray</td>
+                  <td>WR-2025-03-12-0002</td>
+                  <td>Wildlife Registration</td>
+                  <td><span class="status">Approved</span></td>
+                  <td>RPU</td>
+                </tr>
+                <tr>
+                  <td>Emily Carson</td>
+                  <td>WR-2025-03-12-0003</td>
+                  <td>Wildlife Registration</td>
                   <td><span class="status">In Review</span></td>
                   <td>RPS-Recommending Approval</td>
                 </tr>

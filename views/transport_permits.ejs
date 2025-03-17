@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+  <%- include('partials/head', {title: 'Transport Permits',
+  csslink:'../css/tp.css'}) %>
+  <body>
+    <%- include('partials/sidebar') %>
+
+    <div class="main-content">
+      <div class="table-container">
+        <h3>Transport Permits</h3>
+        <table id="tp-tables">
+          <thead>
+            <tr>
+              <th>CLIENT</th>
+              <th>NUMBER</th>
+              <th>TYPE</th>
+              <th>STATUS</th>
+              <th>CURRENT LOCATION</th>
+              <th>Date Created</th>
+            </tr>
+          </thead>
+          <tbody id="permittablebody"></tbody>
+        </table>
+      </div>
+    </div>
+    <!-- Bootstrap Modal -->
+    <!-- Modal Structure -->
+    <div id="permitModal" class="modal hidden">
+      <div class="modal-content">
+        <span id="closeModal" class="close-button">&times;</span>
+        <h2>Permit Details</h2>
+        <p><strong>Client:</strong> <span id="modalClient"></span></p>
+        <p><strong>Permit ID:</strong> <span id="modalPermitId"></span></p>
+        <p><strong>Status:</strong> <span id="modalStatus"></span></p>
+        <p><strong>Location:</strong> <span id="modalLocation"></span></p>
+        <p><strong>Uploaded At:</strong> <span id="modalDate"></span></p>
+      </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script type="module" src="../scripts/tp.js"></script>
+    <script>
+      document.getElementById("closeModal").addEventListener("click", () => {
+        document.getElementById("permitModal").classList.add("hidden");
+      });
+
+      // Optional: close modal on outside click
+      window.addEventListener("click", (e) => {
+        const modal = document.getElementById("permitModal");
+        if (e.target === modal) {
+          modal.classList.add("hidden");
+        }
+      });
+    </script>
+  </body>
+</html>

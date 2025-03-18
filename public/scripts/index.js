@@ -5,53 +5,56 @@ import {
   getDocs,
   collection,
 } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-firestore.js";
+function showModal(message) {
+  const modal = document.getElementById("custom-modal");
+  const modalMessage = document.getElementById("modal-message");
+  modalMessage.innerText = message;
+  modal.style.display = "block";
+}
 
+function hideModal() {
+  const modal = document.getElementById("custom-modal");
+  modal.style.display = "none";
+}
 
 async function login(username, password) {
-  console.log("sample");
+  showModal("Logging in...");
   try {
     const admincollection = collection(db, "admins");
-    console.log(admincollection);
     const admindocs = await getDocs(admincollection);
-    console.log(admindocs);
+    let userFound = false;
+
     admindocs.forEach((user) => {
       const data = user.data();
       if (username === data.username && password === data.password) {
-        console.log("user found");
+        userFound = true;
         signInWithEmailAndPassword(auth, data.email, data.password).then(
-          (userCredential) => {
-            Swal.fire({
-              title: "Log in successful",
-              text: `Welcome ${data.username}`,
-              icon: "success",
-              confirmButtonText: "Continue",
-            }).then(() => {
+          () => {
+            showModal(`Login successful! Welcome ${data.username}`);
+            setTimeout(() => {
+              hideModal();
               window.location.assign("/dashboard");
-            });
+            }, 1500);
           }
         );
-      } else if (username === data.username && password != data.password) {
-        console.log("Password incorrect");
-        Swal.fire({
-          title: "Error logging you in",
-          text: `Password incorrect for ${data.username}`,
-          icon: "error",
-          confirmButtonText: "Try again",
-        });
-      } else {
-        Swal.fire({
-          title: "User does not exists",
-          text: `The user ${data.username} does not exists`,
-          icon: "error",
-          confirmButtonText: "Try again",
-        });
+      } else if (username === data.username && password !== data.password) {
+        userFound = true;
+        showModal("Password incorrect. Try again.");
+        setTimeout(hideModal, 2000);
       }
-      console.log(user.data());
     });
+
+    if (!userFound) {
+      showModal(`User "${username}" does not exist.`);
+      setTimeout(hideModal, 2000);
+    }
   } catch (error) {
     console.error(error);
+    showModal("An error occurred. Please try again.");
+    setTimeout(hideModal, 2000);
   }
 }
+
 
 const loginform = document.getElementById("login-form");
 loginform.addEventListener("submit", (e) => {

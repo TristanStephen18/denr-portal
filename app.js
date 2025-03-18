@@ -9,6 +9,7 @@ app.use(express.static(path.join(__dirname, 'public' )))
 
 app.get('/', (req, res) => res.render('index'))
 app.get('/tcp', (req, res) => res.render('tcp'))
+app.get('/chainsawregistration', (req, res) => res.render('chainsaw_reg'))
 app.get('/dashboard', (req, res) => res.render('dashboard'))
 app.get('/transportpermits', (req, res) => res.render('transport_permits'))
 app.get('/decoder', (req, res) => res.render('decoder'))

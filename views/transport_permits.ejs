@@ -28,12 +28,16 @@
     <div id="permitModal" class="modal hidden">
       <div class="modal-content">
         <span id="closeModal" class="close-button">&times;</span>
-        <h2>Permit Details</h2>
+        <h2 id="modalTitle">Permit Details</h2>
         <p><strong>Client:</strong> <span id="modalClient"></span></p>
-        <p><strong>Permit ID:</strong> <span id="modalPermitId"></span></p>
-        <p><strong>Status:</strong> <span id="modalStatus"></span></p>
-        <p><strong>Location:</strong> <span id="modalLocation"></span></p>
+        <p><strong>Address:</strong>Sample Address</p>
         <p><strong>Uploaded At:</strong> <span id="modalDate"></span></p>
+        <h3 style="margin-top: 20px;">Permit Requirements</h3>
+        <div id="requirements" class="requirements-grid"></div>
+        <!-- <div class="action-buttons">
+          <button id="approvebtn">Mark as Evaluated</button>
+          <span><button id="rejectbtn">Reject</button></span>
+        </div> -->
       </div>
     </div>
 

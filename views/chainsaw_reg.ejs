@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<%- include('partials/head', {title: 'Transport Permits',
+csslink:'../css/chainsawreg.css'}) %>
+<body>
+    <%- include('partials/sidebar') %>
+    <div class="main-content">
+        <div class="table-container">
+            <h3>Chainsaw Registrations</h3>
+            <table id="tp-tables">
+              <thead>
+                <tr>
+                  <th>CLIENT</th>
+                  <th>NUMBER</th>
+                  <th>TYPE</th>
+                  <th>STATUS</th>
+                  <th>CURRENT LOCATION</th>
+                  <th>Date Created</th>
+                </tr>
+              </thead>
+              <tbody id="permittablebody"></tbody>
+            </table>
+          </div>
+    </div>
+</body>
+</html>

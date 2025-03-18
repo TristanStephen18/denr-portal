@@ -4,6 +4,9 @@ import {
   collection,
 } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-firestore.js";
 
+const requirementsdiv = document.querySelector('requirements');
+
+
 async function getfiles() {
   console.log("fetching");
   try {
@@ -30,8 +33,9 @@ async function getfiles() {
     console.error(error);
   }
 }
-function displayPDF(base64, filename) {
-    const pdfDiv = document.querySelector('.pdfs');
+
+export function displayPDF(base64, filename) {
+    // const requirementsdiv = document.querySelector('.pdfs');
   
     const byteCharacters = atob(base64);
     const byteNumbers = Array.from(byteCharacters, char => char.charCodeAt(0));
@@ -47,13 +51,12 @@ function displayPDF(base64, filename) {
     link.innerText = `Open PDF in new tab: ${filename}`;
   
     wrapper.appendChild(link);
-    pdfDiv.appendChild(wrapper);
+    requirementsdiv.appendChild(wrapper);
   }
   
   
 
-function displayImage(base64, filename) {
-  const imgDiv = document.querySelector(".images");
+export function displayImage(base64, filename) {
   const img = document.createElement("img");
   img.src = `data:image/jpeg;base64,${base64}`;
   img.alt = filename;
@@ -65,7 +68,7 @@ function displayImage(base64, filename) {
   label.innerText = `Image: ${filename}`;
   wrapper.appendChild(label);
   wrapper.appendChild(img);
-  imgDiv.appendChild(wrapper);
+  requirementsdiv.appendChild(wrapper);
 }
 
 // const sampleBase64 = 'JVBERi0xLjQKJc...'; // full base64 of a small PDF

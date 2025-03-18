@@ -17,6 +17,7 @@ username.innerHTML = `${usernamegetter()}`;
 setInterval(updateDateTime, 1000);
 
 const tpnum = document.getElementById('tpnum');
+const crnum = document.getElementById('crnum');
 
 async function quantitygetter(){
     try{

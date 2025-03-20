@@ -7,10 +7,14 @@ import {
 const requirementsdiv = document.querySelector('requirements');
 
 
-async function getfiles() {
+export async function getfiles(id, elemendId, collectionname) {
+  elemendId.innerHTML = "";
   console.log("fetching");
   try {
-    const filecollection = collection(db, "files");
+    const filecollection = collection(
+      db,
+      `${collectionname}/${id}/requirements`
+    );
     const filedocs = await getDocs(filecollection);
 
     filedocs.forEach((fdoc) => {
@@ -19,14 +23,18 @@ async function getfiles() {
 
       const { file, fileExtension, fileName } = data;
 
-      if (fileExtension === "pdf") {
+      if (fileExtension === ".pdf") {
         console.log("pdf found");
 
-        displayPDF(file, fileName);
-      } else if (fileExtension === "jpg" || fileExtension === "jpeg") {
+        displayPDF(file, fdoc.id, elemendId);
+      } else if (
+        fileExtension === ".jpg" ||
+        fileExtension === ".jpeg" ||
+        fileExtension === ".png"
+      ) {
         console.log("images found");
 
-        displayImage(file, fileName);
+        displayImage(file, fdoc.id, elemendId);
       }
     });
   } catch (error) {
@@ -34,41 +42,45 @@ async function getfiles() {
   }
 }
 
-export function displayPDF(base64, filename) {
-    // const requirementsdiv = document.querySelector('.pdfs');
-  
-    const byteCharacters = atob(base64);
-    const byteNumbers = Array.from(byteCharacters, char => char.charCodeAt(0));
-    const byteArray = new Uint8Array(byteNumbers);
-    const blob = new Blob([byteArray], { type: 'application/pdf' });
-    const blobUrl = URL.createObjectURL(blob);
-  
-    const wrapper = document.createElement('div');
-    const link = document.createElement('a');
-    link.href = blobUrl;
-    link.target = '_blank';
-    link.rel = 'noopener noreferrer';
-    link.innerText = `Open PDF in new tab: ${filename}`;
-  
-    wrapper.appendChild(link);
-    requirementsdiv.appendChild(wrapper);
-  }
-  
-  
+export function displayPDF(base64, filename, elemendId) {
+  const byteCharacters = atob(base64);
+  const byteNumbers = Array.from(byteCharacters, (char) => char.charCodeAt(0));
+  const byteArray = new Uint8Array(byteNumbers);
+  const blob = new Blob([byteArray], { type: "application/pdf" });
+  const blobUrl = URL.createObjectURL(blob);
 
-export function displayImage(base64, filename) {
+  const icon = document.createElement("h1");
+  const wrapper = document.createElement("div");
+  wrapper.className = "requirement-item-pdf";
+  wrapper.onclick = () => window.open(blobUrl, "_blank");
+  icon.innerText = "📄";
+  const label = document.createElement("h4");
+  label.innerText = `${filename}`;
+  wrapper.appendChild(label);
+  wrapper.appendChild(icon);
+  elemendId.appendChild(wrapper);
+}
+
+export function displayImage(base64, filename, elemendId) {
+  const wrapper = document.createElement("div");
+  wrapper.className = "requirement-item";
+
+  const label = document.createElement("p");
+  label.innerText = `🖼️ ${filename}`;
   const img = document.createElement("img");
   img.src = `data:image/jpeg;base64,${base64}`;
   img.alt = filename;
-  img.style.maxWidth = "100%";
-  img.style.height = "auto";
 
-  const wrapper = document.createElement("div");
-  const label = document.createElement("p");
-  label.innerText = `Image: ${filename}`;
   wrapper.appendChild(label);
   wrapper.appendChild(img);
-  requirementsdiv.appendChild(wrapper);
+  wrapper.onclick = () => {
+    const newTab = window.open();
+    newTab.document.write(
+      `<img src="${img.src}" style="width:100%;height:auto;">`
+    );
+  };
+
+  elemendId.appendChild(wrapper);
 }
 
 // const sampleBase64 = 'JVBERi0xLjQKJc...'; // full base64 of a small PDF

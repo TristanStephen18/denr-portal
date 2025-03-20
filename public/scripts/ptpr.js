@@ -5,12 +5,11 @@ const logoutbtn = document.getElementById("logout");
 logoutbtn.addEventListener("click", logoutfunction);
 
 const modal = new bootstrap.Modal(document.getElementById("permitModal"));
-const searchfilter = document.getElementById('searchdata');
+const searchfilter = document.getElementById("searchdata");
 const requirementsdiv = document.getElementById("requirements");
 
-
-searchfilter.addEventListener('input', () => {
+searchfilter.addEventListener("input", () => {
   searching(searchfilter);
 });
 
-getpendingpermits('transport_permit', requirementsdiv);
+getpendingpermits("plantation", requirementsdiv);

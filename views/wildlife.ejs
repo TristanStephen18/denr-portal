@@ -1,23 +1,27 @@
 <!DOCTYPE html>
 <html lang="en">
-  <%- include('partials/head', {title: 'Transport Permits',
-  csslink:'../css/tp.css'}) %>
+  <%- include('partials/head', {title: 'Wildlife Registrations',
+  csslink:'../css/wildlife.css'}) %>
   <body>
     <%- include('partials/sidebar') %>
-
     <div class="main-content">
       <div class="table-container">
-        <h3>Transport Permits</h3>
+        <h3>Wildlife Registrations</h3>
         <br>
         <%- include('partials/tables/table_partials') %>
         <%- include('partials/tables/pendingpermitstable') %>
+        <%- include('partials/tables/evaluatedtable') %>
+        <%- include('partials/tables/rejectedtable') %>
+
       </div>
     </div>
     <%- include('partials/modals/firstactionmodal') %>
 
+    
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 
-    <script type="module" src="../scripts/tp.js"></script>
+    <script type="module" src="../scripts/wildlife.js"></script>
+
     <script>
       document.getElementById("closeModal").addEventListener("click", () => {
         document.getElementById("permitModal").classList.add("hidden");

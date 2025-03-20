@@ -1,37 +1,44 @@
-
-import {usernamegetter, updateDateTime} from './sessionchecker.js';
-import {logoutfunction, db } from "./config.js";
+import { usernamegetter, updateDateTime, sessionchecker } from "./sessionchecker.js";
+import { logoutfunction, db } from "./config.js";
 import {
-    getDocs,
-    collection,
-  } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-firestore.js";
-  
+  collection,
+  onSnapshot,
+} from "https://www.gstatic.com/firebasejs/11.4.0/firebase-firestore.js";
 
-const logoutbtn = document.getElementById('logout');
+const logoutbtn = document.getElementById("logout");
+logoutbtn.addEventListener("click", logoutfunction);
 
-logoutbtn.addEventListener('click', logoutfunction);
 
-const username = document.getElementById('username');
-username.innerHTML = `${usernamegetter()}`;
+const username = document.getElementById("username");
+sessionchecker(username);
 
 setInterval(updateDateTime, 1000);
 
-const tpnum = document.getElementById('tpnum');
-const crnum = document.getElementById('crnum');
+// Map of collection names to their corresponding DOM element IDs
+const collectionsToListen = {
+  "transport_permit": "tpnum",
+  "chainsaw": "crnum",
+  "tree_cutting": "tcpnum",
+  "wildlife": "wrnum",
+  "plantation": "pwprnum", // make sure pwprnum is the correct element ID
+};
 
-async function quantitygetter(){
-    try{
-        const tpcollection = collection(db,'transport_permit');
-        const snapshots = await getDocs(tpcollection);
-        console.log(snapshots.docs.length);
-        tpnum.innerHTML = "";
-        tpnum.innerHTML = `${snapshots.docs.length}`;
-    }catch(error){
-        console.error(error);
-    }
+// Reusable function to set up a listener
+function setupSnapshotListener(collectionName, elementId) {
+  const colRef = collection(db, collectionName);
+  const element = document.getElementById(elementId);
+  if (!element) return;
+
+  onSnapshot(colRef, (snapshot) => {
+    element.innerHTML = `${snapshot.docs.length}`;
+  });
 }
 
-quantitygetter();
+// Initialize all listeners
+Object.entries(collectionsToListen).forEach(([col, el]) => {
+  setupSnapshotListener(col, el);
+});
 
+console.log(Date());
 
 

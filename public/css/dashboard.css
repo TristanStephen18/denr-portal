@@ -197,6 +197,11 @@ a {
   background-color: #00cec9;
 }
 
+#username{
+  text-transform: capitalize;
+  font-weight: bold;
+}
+
 /* Table */
 .table-container {
   background-color: #fff;

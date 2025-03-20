@@ -5,6 +5,7 @@ import {
   getDocs,
   collection,
 } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-firestore.js";
+
 function showModal(message) {
   const modal = document.getElementById("custom-modal");
   const modalMessage = document.getElementById("modal-message");

@@ -316,6 +316,11 @@
     background-color: #1e7e34;
     transform: scale(1.05);
   }
+
+  .action-buttons #createOOPBtn:hover {
+    background-color: #1e7e34;
+    transform: scale(1.05);
+  }
   
   .action-buttons #rejectbtn {
     background-color: #b02a37;
@@ -326,7 +331,6 @@
     transform: scale(1.05);
   }
   
-  
   .top-elements {
     display: flex;
     flex-wrap: wrap;
@@ -336,32 +340,23 @@
   
   /* Each main section */
   .top-elements > .search,
-  .top-elements > .range-date-filters,
   .top-elements > .drop-down-filters {
     display: flex;
     align-items: center;
     flex-wrap: wrap;
     gap: 0.5rem;
     flex: 1 1 auto;
-    min-width: 200px;
+    min-width: 100px;
   }
   
   /* Range filters internal layout - make From and To side by side */
-  .range-date-filters label {
-    white-space: nowrap;
-  }
-  
-  .range-date-filters input[type="date"] {
-    width: auto;
-    min-width: 150px;
-  }
   
   .search input {
     flex: 1;
     padding: 0.4rem;
     box-sizing: border-box;
   }
-  
+
   .search button {
     padding: 0.4rem 0.8rem;
   }
@@ -380,7 +375,7 @@
     min-width: 180px;
     text-transform: capitalize;
   }
-
+  
   #evaluated-table{
     display: none;
   }
@@ -388,5 +383,4 @@
   #rejected-table{
     display: none;
   }
-  
   

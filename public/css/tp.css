@@ -380,3 +380,11 @@ table tbody tr:hover {
   text-transform: capitalize;
 }
 
+#evaluated-table{
+  display: none;
+}
+
+#rejected-table{
+  display: none;
+}
+

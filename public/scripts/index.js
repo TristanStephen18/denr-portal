@@ -6,6 +6,9 @@ import {
   collection,
 } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-firestore.js";
 
+
+const loaderchanger = document.getElementById('loadergif');
+
 function showModal(message) {
   const modal = document.getElementById("custom-modal");
   const modalMessage = document.getElementById("modal-message");
@@ -16,6 +19,7 @@ function showModal(message) {
 function hideModal() {
   const modal = document.getElementById("custom-modal");
   modal.style.display = "none";
+  loaderchanger.src = "../images/tanap.gif";
 }
 
 async function login(username, password) {
@@ -31,6 +35,7 @@ async function login(username, password) {
         userFound = true;
         signInWithEmailAndPassword(auth, data.email, data.password).then(
           () => {
+            loaderchanger.src = "../images/ok.png";
             showModal(`Login successful! Welcome ${data.username}`);
             setTimeout(() => {
               hideModal();
@@ -40,12 +45,14 @@ async function login(username, password) {
         );
       } else if (username === data.username && password !== data.password) {
         userFound = true;
+        loaderchanger.src = "../images/error2.png";
         showModal("Password incorrect. Try again.");
         setTimeout(hideModal, 2000);
       }
     });
 
     if (!userFound) {
+      loaderchanger.src = "../images/error2.png";
       showModal(`User "${username}" does not exist.`);
       setTimeout(hideModal, 2000);
     }

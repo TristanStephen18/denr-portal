@@ -1,9 +1,9 @@
 import { logoutfunction } from "./config.js";
 import {
-  getevaluatedpermits,
-  getpendingpermits,
   searching,
-  getrejectedpermits,
+  getpendingpermits_chainsawandtcp,
+  getevaluatedpermits_chainsawandtcp,
+  getrejectedpermits_chainsawandtcp,
 } from "./datahelpers.js";
 
 const logoutbtn = document.getElementById("logout");
@@ -37,13 +37,13 @@ statusfilter.addEventListener("change", () => {
   searchfilter.value = "";
   if (statusfilter.value === "pending") {
     typelabel.innerText = "Pending";
-    getpendingpermits("wildlife", requirementsdiv);
+    getpendingpermits_chainsawandtcp("tree_cutting", requirementsdiv, 'Private Land Timber Permit');
   } else if (statusfilter.value === "evaluated") {
     typelabel.innerText = "Evaluated";
-    getevaluatedpermits("wildlife", evaluatedtablebody, requirementsdiv);
+    getevaluatedpermits_chainsawandtcp("tree_cutting", requirementsdiv, evaluatedtablebody, 'Private Land Timber Permit');
   } else {
     typelabel.innerText = "Rejected";
-    getrejectedpermits("wildlife", rejectedtablebody, requirementsdiv);
+    getrejectedpermits_chainsawandtcp("tree_cutting", requirementsdiv, rejectedtablebody, 'Private Land Timber Permit');
   }
   tablechanger[beforechange].style.display = "none";
   console.log(beforechange);
@@ -51,4 +51,4 @@ statusfilter.addEventListener("change", () => {
   tablechanger[statusfilter.value].style.display = "table";
 });
 
-window.onload(getpendingpermits("wildlife", requirementsdiv));
+getpendingpermits_chainsawandtcp("tree_cutting", requirementsdiv, "Private Land Timber Permit");

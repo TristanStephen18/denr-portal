@@ -1,16 +1,19 @@
 <!DOCTYPE html>
 <html lang="en">
-    <%- include('partials/head', {title: 'Permit to Purchase (Chainsaw)',
-csslink:'../css/chainsaw_ptp.css'}) %>
-<body>
+  <%- include('partials/head', {title: 'Permit to Purchase (Chainsaw)',
+  csslink:'../css/chainsaw_ptp.css'}) %>
+  <body>
     <%- include('partials/sidebar') %>
     <div class="main-content">
-        <div class="table-container">
-            <h3>Chainsaw Permits to Purchase Applications</h3>
-            <br>
-            <%- include('partials/tables/table_partials') %>
-            <%- include('partials/tables/pendingpermitstable') %>
-          </div>
+      <div class="table-container">
+        <h2>Chainsaw Permits to Purchase Applications</h2>
+        <h3 id="typelabel">Pending</h3>
+        <br />
+        <%- include('partials/tables/table_partials') %> <%-
+        include('partials/tables/pendingpermitstable') %> <%-
+        include('partials/tables/evaluatedtable') %> <%-
+        include('partials/tables/rejectedtable') %>
+      </div>
     </div>
 
     <%- include('partials/modals/firstactionmodal') %>
@@ -32,5 +35,5 @@ csslink:'../css/chainsaw_ptp.css'}) %>
         }
       });
     </script>
-</body>
+  </body>
 </html>

@@ -380,11 +380,11 @@
     min-width: 180px;
     text-transform: capitalize;
   }
-
+  
   #evaluated-table{
     display: none;
   }
-
+  
   #rejected-table{
     display: none;
   }

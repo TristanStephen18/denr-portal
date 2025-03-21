@@ -1,15 +1,18 @@
 <!DOCTYPE html>
 <html lang="en">
     <%- include('partials/head', {title: 'Private Tree Plantation Registrations',
-csslink:'../css/chainsaw_ptp.css'}) %>
+csslink:'../css/ptpr.css'}) %>
 <body>
     <%- include('partials/sidebar') %>
     <div class="main-content">
         <div class="table-container">
-            <h3>Private Tree Plantation Registrations</h3>
+            <h2>Private Tree Plantation Registrations</h2>
+            <h3 id="typelabel">Pending</h3>
             <br>
             <%- include('partials/tables/table_partials') %>
             <%- include('partials/tables/pendingpermitstable') %>
+            <%- include('partials/tables/evaluatedtable') %>
+            <%- include('partials/tables/rejectedtable') %>
           </div>
     </div>
 

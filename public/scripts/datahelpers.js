@@ -124,6 +124,7 @@ export async function toggleapplication(
 
 export async function getpendingpermits(permittype, requirementsdiv) {
   const options = { month: "long", day: "numeric", year: "numeric" };
+  let type = "";
 
   try {
     const tpcollectionref = collection(db, `${permittype}`);
@@ -138,10 +139,17 @@ export async function getpendingpermits(permittype, requirementsdiv) {
           const row = document.createElement("tr");
           if (docdata.status === "Pending") {
             row.setAttribute(`${permittype}-num`, doc.id);
+            if(permittype === "wildlife"){
+              type = 'Wildlife Registration';
+            }else if(permittype === "plantation"){
+              type = 'Private Tree Plantation Registration';
+            }else{
+              type = 'Transport Permit';
+            }
             row.innerHTML = `
               <td>${docdata.client}</td>
               <td>${doc.id}</td>
-              <td>Transport Permit</td>
+              <td>${type}</td>
               <td><span class="status">${docdata.status}</span></td>
               <td>${docdata.current_location}</td>
               <td>${docdata.uploadedAt
@@ -233,7 +241,205 @@ export async function getpendingpermits(permittype, requirementsdiv) {
   }
 }
 
-export async function getpendingpermits_chainsawreg(
+export async function getevaluatedpermits(
+  permittype,
+  tablebodyid,
+  requirementsdiv
+) {
+  const options = { month: "long", day: "numeric", year: "numeric" };
+  console.log("getting evaluated dataa");
+  let type = "";
+
+  try {
+    const tpcollectionref = collection(db, `${permittype}`);
+    onSnapshot(tpcollectionref, (snapshot) => {
+      tablebodyid.innerHTML = "";
+      console.log(snapshot);
+      if (snapshot.empty) {
+        console.log("Snapshot is empty");
+      } else {
+        snapshot.forEach((doc) => {
+          const docdata = doc.data();
+          const row = document.createElement("tr");
+          if (docdata.status === "Evaluated") {
+            row.setAttribute(`${permittype}-num`, doc.id);
+            if(permittype === "wildlife"){
+              type = 'Wildlife Registration';
+            }else if(permittype === "plantation"){
+              type = 'Private Tree Plantation Registration';
+            }else{
+              type = 'Transport Permit';
+            }
+            row.innerHTML = `
+              <td>${docdata.client}</td>
+              <td>${doc.id}</td>
+              <td>${type}</td>
+              <td><span class="status">${docdata.status}</span></td>
+              <td>${docdata.evaluated_by}</td>
+              <td>${docdata.evaluated_at
+                .toDate()
+                .toLocaleDateString("en-US", options)}</td>
+              <td>${docdata.current_location}</td>
+              <td>${docdata.uploadedAt
+                .toDate()
+                .toLocaleDateString("en-US", options)}</td>
+            `;
+            console.log(docdata.uploadedAt);
+
+            // Add event listener for modal
+            row.addEventListener("click", () => {
+              getfiles(
+                `${doc.id.toString()}`,
+                requirementsdiv,
+                `${permittype}`
+              ).then((sample) => {
+                // Instead of creating a new div, grab the existing one
+                const actionButtonsDiv =
+                  document.querySelector(".action-buttons");
+
+                // Clear previous content (in case it's already populated)
+                actionButtonsDiv.innerHTML = "";
+
+                // Create the first button: "Mark as Evaluated"
+                const createOOPBtn = document.createElement("button");
+                createOOPBtn.id = "createOOPBtn";
+                createOOPBtn.textContent = "Create Order of Payment";
+                createOOPBtn.onclick = function () {
+                  console.log("Creating order of payment...");
+                  window.open(`/orderofpayment/${docdata.client}`);
+                };
+
+                document.getElementById("modalClient").textContent =
+                  docdata.client;
+                document.getElementById("modalAddress").textContent =
+                  docdata.address;
+                document.getElementById("modalTitle").textContent = doc.id;
+                document.getElementById("modalDate").textContent =
+                  docdata.uploadedAt
+                    .toDate()
+                    .toLocaleDateString("en-US", options);
+
+                document
+                  .getElementById("permitModal")
+                  .classList.remove("hidden");
+                actionButtonsDiv.appendChild(createOOPBtn);
+              });
+            });
+
+            // approvebtn.addEventListener('click', toggleapplication);
+            tablebodyid.appendChild(row);
+          }
+        });
+        const allPendingRows = Array.from(tablebodyid.querySelectorAll("tr"));
+        setPermitRows(allPendingRows);
+      }
+    });
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+export async function getrejectedpermits(
+  permittype,
+  tablebodyid,
+  requirementsdiv
+) {
+  const options = { month: "long", day: "numeric", year: "numeric" };
+  console.log("getting REJECTED dataa");
+  let type = "";
+
+  try {
+    const tpcollectionref = collection(db, `${permittype}`);
+    onSnapshot(tpcollectionref, (snapshot) => {
+      tablebodyid.innerHTML = "";
+      console.log(snapshot);
+      if (snapshot.empty) {
+        console.log("Snapshot is empty");
+      } else {
+        snapshot.forEach((doc) => {
+          const docdata = doc.data();
+          const row = document.createElement("tr");
+          if (docdata.status === "Rejected") {
+            row.setAttribute(`${permittype}-num`, doc.id);
+            if(permittype === "wildlife"){
+              type = 'Wildlife Registration';
+            }else if(permittype === "plantation"){
+              type = 'Private Tree Plantation Registration';
+            }else{
+              type = 'Transport Permit';
+            }
+            row.innerHTML = `
+              <td>${docdata.client}</td>
+              <td>${doc.id}</td>
+              <td>${type}</td>
+              <td><span class="status">${docdata.status}</span></td>
+              <td>${docdata.rejected_by}</td>
+              <td>${docdata.rejected_at
+                .toDate()
+                .toLocaleDateString("en-US", options)}</td>
+              <td>${docdata.current_location}</td>
+              <td>${docdata.uploadedAt
+                .toDate()
+                .toLocaleDateString("en-US", options)}</td>
+            `;
+            console.log(docdata.uploadedAt);
+
+            // Add event listener for modal
+            row.addEventListener("click", () => {
+              getfiles(
+                `${doc.id.toString()}`,
+                requirementsdiv,
+                `${permittype}`
+              ).then((sample) => {
+                // Instead of creating a new div, grab the existing one
+                const actionButtonsDiv =
+                  document.querySelector(".action-buttons");
+
+                // Clear previous content (in case it's already populated)
+                actionButtonsDiv.innerHTML = "";
+
+                // Create the first button: "Mark as Evaluated"
+                const createOOPBtn = document.createElement("button");
+                createOOPBtn.id = "createOOPBtn";
+                createOOPBtn.textContent = "Create Order of Payment";
+                createOOPBtn.onclick = function () {
+                  console.log("Creating order of payment...");
+                  window.open(`/orderofpayment/${docdata.client}`);
+                };
+
+                document.getElementById("modalClient").textContent =
+                  docdata.client;
+                document.getElementById("modalAddress").textContent =
+                  docdata.address;
+                document.getElementById("modalTitle").textContent = doc.id;
+                document.getElementById("modalDate").textContent =
+                  docdata.uploadedAt
+                    .toDate()
+                    .toLocaleDateString("en-US", options);
+
+                document
+                  .getElementById("permitModal")
+                  .classList.remove("hidden");
+                actionButtonsDiv.appendChild(createOOPBtn);
+              });
+            });
+
+            // approvebtn.addEventListener('click', toggleapplication);
+            tablebodyid.appendChild(row);
+          }
+        });
+
+        const allPendingRows = Array.from(tablebodyid.querySelectorAll("tr"));
+        setPermitRows(allPendingRows);
+      }
+    });
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+//chainsaw data fetching
+export async function getpendingpermits_chainsawandtcp(
   permittype,
   requirementsdiv,
   type
@@ -256,7 +462,7 @@ export async function getpendingpermits_chainsawreg(
             row.innerHTML = `
               <td>${docdata.client}</td>
               <td>${doc.id}</td>
-              <td>Transport Permit</td>
+              <td>${docdata.type}</td>
               <td><span class="status">${docdata.status}</span></td>
               <td>${docdata.current_location}</td>
               <td>${docdata.uploadedAt
@@ -332,10 +538,12 @@ export async function getpendingpermits_chainsawreg(
               document.getElementById("permitModal").classList.remove("hidden");
             });
 
-            // approvebtn.addEventListener('click', toggleapplication);
             permittablebody.appendChild(row);
           }
         });
+
+        const allPendingRows = Array.from(permittablebody.querySelectorAll("tr"));
+        setPermitRows(allPendingRows);
       }
     });
   } catch (error) {
@@ -343,10 +551,15 @@ export async function getpendingpermits_chainsawreg(
   }
 }
 
-export async function getevaluatedpermits(permittype, tablebodyid, requirementsdiv) {
+
+export async function getevaluatedpermits_chainsawandtcp(
+  permittype,
+  requirementsdiv,
+  tablebodyid,
+  type
+) {
   const options = { month: "long", day: "numeric", year: "numeric" };
-  console.log('getting evaluated dataa');
-  
+
   try {
     const tpcollectionref = collection(db, `${permittype}`);
     onSnapshot(tpcollectionref, (snapshot) => {
@@ -358,12 +571,12 @@ export async function getevaluatedpermits(permittype, tablebodyid, requirementsd
         snapshot.forEach((doc) => {
           const docdata = doc.data();
           const row = document.createElement("tr");
-          if (docdata.status === "Evaluated") {
+          if (docdata.status === "Evaluated" && docdata.type === `${type}`) {
             row.setAttribute(`${permittype}-num`, doc.id);
             row.innerHTML = `
               <td>${docdata.client}</td>
               <td>${doc.id}</td>
-              <td>Transport Permit</td>
+              <td>${docdata.type}</td>
               <td><span class="status">${docdata.status}</span></td>
               <td>${docdata.evaluated_by}</td>
               <td>${docdata.evaluated_at
@@ -374,7 +587,6 @@ export async function getevaluatedpermits(permittype, tablebodyid, requirementsd
                 .toDate()
                 .toLocaleDateString("en-US", options)}</td>
             `;
-            console.log(docdata.uploadedAt);
 
             // Add event listener for modal
             row.addEventListener("click", () => {
@@ -396,7 +608,7 @@ export async function getevaluatedpermits(permittype, tablebodyid, requirementsd
                 createOOPBtn.textContent = "Create Order of Payment";
                 createOOPBtn.onclick = function () {
                   console.log("Creating order of payment...");
-                  window.open(`/orderofpayment/${docdata.client}`)
+                  window.open(`/orderofpayment/${docdata.client}`);
                 };
 
                 document.getElementById("modalClient").textContent =
@@ -412,18 +624,15 @@ export async function getevaluatedpermits(permittype, tablebodyid, requirementsd
                 document
                   .getElementById("permitModal")
                   .classList.remove("hidden");
-
-                // Append the "Reject" button to the span
-
-                // Append both buttons to the main div
                 actionButtonsDiv.appendChild(createOOPBtn);
               });
             });
 
-            // approvebtn.addEventListener('click', toggleapplication);
             tablebodyid.appendChild(row);
           }
         });
+        const allPendingRows = Array.from(tablebodyid.querySelectorAll("tr"));
+        setPermitRows(allPendingRows);
       }
     });
   } catch (error) {
@@ -432,11 +641,14 @@ export async function getevaluatedpermits(permittype, tablebodyid, requirementsd
 }
 
 
-
-export async function getrejectedpermits(permittype, tablebodyid, requirementsdiv) {
+export async function getrejectedpermits_chainsawandtcp(
+  permittype,
+  requirementsdiv,
+  tablebodyid,
+  type
+) {
   const options = { month: "long", day: "numeric", year: "numeric" };
-  console.log('getting REJECTED dataa');
-  
+
   try {
     const tpcollectionref = collection(db, `${permittype}`);
     onSnapshot(tpcollectionref, (snapshot) => {
@@ -448,12 +660,12 @@ export async function getrejectedpermits(permittype, tablebodyid, requirementsdi
         snapshot.forEach((doc) => {
           const docdata = doc.data();
           const row = document.createElement("tr");
-          if (docdata.status === "Rejected") {
+          if (docdata.status === "Rejected" && docdata.type === `${type}`) {
             row.setAttribute(`${permittype}-num`, doc.id);
             row.innerHTML = `
               <td>${docdata.client}</td>
               <td>${doc.id}</td>
-              <td>Transport Permit</td>
+              <td>${docdata.type}</td>
               <td><span class="status">${docdata.status}</span></td>
               <td>${docdata.rejected_by}</td>
               <td>${docdata.rejected_at
@@ -464,7 +676,6 @@ export async function getrejectedpermits(permittype, tablebodyid, requirementsdi
                 .toDate()
                 .toLocaleDateString("en-US", options)}</td>
             `;
-            console.log(docdata.uploadedAt);
 
             // Add event listener for modal
             row.addEventListener("click", () => {
@@ -486,7 +697,7 @@ export async function getrejectedpermits(permittype, tablebodyid, requirementsdi
                 createOOPBtn.textContent = "Create Order of Payment";
                 createOOPBtn.onclick = function () {
                   console.log("Creating order of payment...");
-                  window.open(`/orderofpayment/${docdata.client}`)
+                  window.open(`/orderofpayment/${docdata.client}`);
                 };
 
                 document.getElementById("modalClient").textContent =
@@ -502,21 +713,19 @@ export async function getrejectedpermits(permittype, tablebodyid, requirementsdi
                 document
                   .getElementById("permitModal")
                   .classList.remove("hidden");
-
-                // Append the "Reject" button to the span
-
-                // Append both buttons to the main div
                 actionButtonsDiv.appendChild(createOOPBtn);
               });
             });
 
-            // approvebtn.addEventListener('click', toggleapplication);
             tablebodyid.appendChild(row);
           }
         });
+        const allPendingRows = Array.from(tablebodyid.querySelectorAll("tr"));
+        setPermitRows(allPendingRows);
       }
     });
   } catch (error) {
     console.log(error);
   }
 }
+

@@ -7,10 +7,13 @@
 
     <div class="main-content">
       <div class="table-container">
-        <h3>Transport Permits</h3>
+        <h2>Transport Permits</h2>
+        <h3 id="typelabel">Pending</h3>
         <br>
         <%- include('partials/tables/table_partials') %>
         <%- include('partials/tables/pendingpermitstable') %>
+        <%- include('partials/tables/evaluatedtable') %>
+        <%- include('partials/tables/rejectedtable') %>
       </div>
     </div>
     <%- include('partials/modals/firstactionmodal') %>

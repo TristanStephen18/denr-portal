@@ -51,4 +51,4 @@ statusfilter.addEventListener("change", () => {
   tablechanger[statusfilter.value].style.display = "table";
 });
 
-window.onload(getpendingpermits("wildlife", requirementsdiv));
+getpendingpermits("wildlife", requirementsdiv);

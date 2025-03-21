@@ -56,8 +56,8 @@ export function displayPDF(base64, filename, elemendId) {
   icon.innerText = "📄";
   const label = document.createElement("h4");
   label.innerText = `${filename}`;
-  wrapper.appendChild(label);
   wrapper.appendChild(icon);
+  wrapper.appendChild(label);
   elemendId.appendChild(wrapper);
 }
 
@@ -66,13 +66,14 @@ export function displayImage(base64, filename, elemendId) {
   wrapper.className = "requirement-item";
 
   const label = document.createElement("p");
-  label.innerText = `🖼️ ${filename}`;
+  label.innerText = `${filename}`;
   const img = document.createElement("img");
   img.src = `data:image/jpeg;base64,${base64}`;
   img.alt = filename;
+  img.id = "imagedisplay";
 
-  wrapper.appendChild(label);
   wrapper.appendChild(img);
+  wrapper.appendChild(label);
   wrapper.onclick = () => {
     const newTab = window.open();
     newTab.document.write(

@@ -18,7 +18,7 @@ export const auth = getAuth(app);
 export const db = getFirestore(app);
 
 
-export function logoutfunction (){
+export function logoutfunction (modal, message){
   signOut(auth)
   .then(() => {
     Swal.fire({

@@ -8,9 +8,53 @@ import {
 const logoutbtn = document.getElementById("logout");
 logoutbtn.addEventListener("click", logoutfunction);
 
+const approvallist = document.getElementById('initial-list');
+const approvalcounter = document.getElementById('panum');
+const pfpid = document.getElementById('pfp');
+
+
+let pendingapprovalcounter = 0;
+
+const collectionsarray = [
+  'plantation',
+  'tree_cutting',
+  'chainsaw',
+  'transport_permit',
+  'wildlife'
+];
+
+async function getforapprovalpermits() {
+  try{
+    collectionsarray.forEach(permittype => {
+      const collectionref = collection(db, `${permittype}`);
+      onSnapshot(collectionref, (snapshot)=>{
+        snapshot.docs.forEach(doc =>{
+          const data = doc.data();
+          if(data.status === "Evaluated"){
+            pendingapprovalcounter = pendingapprovalcounter + 1;
+            console.log(doc.id);
+            const listelement = document.createElement('li');
+            listelement.innerHTML = `${doc.id}`;
+            approvallist.appendChild(listelement);
+            approvalcounter.innerHTML = `${pendingapprovalcounter}`;  
+          }
+        })
+      });
+      
+    });
+  }catch(error){
+    console.error(error);
+  }
+
+}
+
+
+
+getforapprovalpermits();
+
 
 const username = document.getElementById("username");
-sessionchecker(username);
+sessionchecker(username, pfpid);
 
 setInterval(updateDateTime, 1000);
 

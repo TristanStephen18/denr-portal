@@ -5,7 +5,7 @@ import { doc, getDoc} from "https://www.gstatic.com/firebasejs/11.4.0/firebase-f
 
 let id = "";
 
-export function sessionchecker(elemendId) {
+export function sessionchecker(elemendId, pfpid) {
   onAuthStateChanged(auth, async (user) => {
     if (user) {
       console.log("User is logged in");
@@ -20,6 +20,9 @@ export function sessionchecker(elemendId) {
         username = snapshot.data().username;
 
         elemendId.innerText = `${username}`;
+        if(username === 'admin1'){
+          pfpid.src = "../images/admin1.jpg";
+        }
       } catch (error) {
         console.error(error);
       }

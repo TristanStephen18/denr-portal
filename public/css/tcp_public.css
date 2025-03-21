@@ -13,14 +13,19 @@
   
   /* Sidebar */
   .sidebar {
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100vh;
     width: 250px;
     background-color: #0d0e2e;
     color: white;
     padding: 20px 0;
-  }
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    z-index: 100; /* Lower than modal z-index to stay underneath if necessary */
+  }  
   
   .nav-links {
     flex-grow: 1;
@@ -113,6 +118,8 @@
   .main-content {
     flex: 1;
     padding: 20px;
+    overflow-y: scroll;
+    margin-left: 250px;
   }
   
   .topbar {
@@ -260,7 +267,8 @@
   
   .requirement-item,
   .requirement-item-pdf {
-    width: 48%;
+    width: 20%;
+    /* height: 20%; */
     background-color: #f9f9f9;
     border-radius: 10px;
     padding: 12px;
@@ -285,7 +293,7 @@
   
   .requirement-item img {
     max-width: 60px;
-    height: auto;
+    height: 30px;
     border-radius: 6px;
   }
   
@@ -389,4 +397,18 @@
     display: none;
   }
   
+  #createOOPBtn{
+    background-color: green;
+    height: 40px;
+    width: 200px;
+    color: white;
+    border: none;
+    border-radius: 10px;
+  }
+  
+  #createOOPBtn:hover{
+    background-color: rgb(2, 58, 2);
+    border: 1px solid black;
+    cursor: pointer;
+  }
   

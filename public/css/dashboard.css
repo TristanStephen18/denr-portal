@@ -259,10 +259,12 @@ table tbody tr {
   border-radius: 10px;
   padding: 40px;
   min-width: 280px;
-  max-width: 320px;
+  max-width: 400px;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
   align-self: flex-start;
+  margin-bottom: 40px;
 }
+
 
 .side-container h3 {
   margin-bottom: 15px;
@@ -270,3 +272,38 @@ table tbody tr {
   color: #333;
 }
 
+
+.modal {
+  display: none;
+  position: fixed;
+  z-index: 9999;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background-color: rgba(0, 0, 0, 0.5);
+}
+
+.modal-content {
+  position: absolute;
+  top: 40%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: white;
+  padding: 30px 40px;
+  border-radius: 10px;
+  font-size: 18px;
+  text-align: center;
+  color: #333;
+}
+
+#loadergif{
+  height: 150px;
+  width: 150px;
+  margin-bottom: 40px;
+}
+
+#modal-message{
+  color: red;
+}

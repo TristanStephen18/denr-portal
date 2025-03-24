@@ -9,7 +9,6 @@
 
   <div class="page-container">
 
-    <!-- Copy 1 -->
     <div class="form-container">
       <div class="form-header">
         <div>
@@ -31,16 +30,17 @@
 
       <div class="section" id="indented">
         Please issue Official Receipt in favor of
-        <span class="underline"><%= name %></span>
+        <span class="underline" style="width: 100%;"><%= name %></span><br>
+        <span class="small-text" style="margin-left: 60%;">(Name of Payor)</span>
       </div>
 
       <div class="section">
-        <div class="underline">Camp 4, Tuba, Benguet</div><br>
-        <span class="small-text">(Address/Office of Payor)</span>
+        <span class="underline">Camp 4, Tuba, Benguet</span><br>
+        <span class="small-text" style="margin-left: 60%;">(Address/Office of Payor)</span>
       </div>
 
       <div class="section amount-section">
-        In the amount of: <span class="underline">FORTY FIVE THOUSAND ONE HUNDRED FIFTY PESOS</span> (₱ 45,150.00)
+        In the amount of: <span class="underline" id="amount" style="margin-left: 20%;">FORTY FIVE THOUSAND ONE HUNDRED FIFTY PESOS</span> <span class="underline">(₱ 45,150.00)</span>
       </div>
 
       <table class="bordered">
@@ -103,11 +103,10 @@
 
     <!-- Copy 2 (Identical) -->
     <div class="form-container">
-      <!-- Duplicate of Copy 1 -->
       <div class="form-header">
         <div>
-          <strong>Entity Name:</strong> DENR-CAR, PENRO-Benguet<br>
-          <strong>Fund Cluster:</strong> Regular Agency Fund 101
+          <strong>Entity Name:</strong> <a href="#">DENR-CAR, PENRO-Benguet</a><br>
+          <strong>Fund Cluster:</strong> <a href="#">Regular Agency Fund 101</a>
         </div>
         <div style="text-align: right;">
           <strong>Serial No.:</strong> 2025<br>
@@ -117,23 +116,24 @@
 
       <div class="form-title">ORDER OF PAYMENT</div>
 
-      <div class="section">
+      <div class="section" id="sender">
         <strong>The Collecting Officer</strong><br>
         PSU, CENRO-Baguio
       </div>
 
-      <div class="section">
-        Please issue Official Receipt in favor of 
-        <span class="underline"><%= name %></span>
+      <div class="section" id="indented">
+        Please issue Official Receipt in favor of
+        <span class="underline" style="width: 100%;"><%= name %></span><br>
+        <span class="small-text" style="margin-left: 60%;">(Name of Payor)</span>
       </div>
 
       <div class="section">
-        <div class="underline">Camp 4, Tuba, Benguet</div><br>
-        <span class="small-text">(Address/Office of Payor)</span>
+        <span class="underline">Camp 4, Tuba, Benguet</span><br>
+        <span class="small-text" style="margin-left: 60%;">(Address/Office of Payor)</span>
       </div>
 
       <div class="section amount-section">
-        In the amount of: <span class="underline">FORTY FIVE THOUSAND ONE HUNDRED FIFTY PESOS</span> (₱ 45,150.00)
+        In the amount of: <span class="underline" id="amount" style="margin-left: 20%;">FORTY FIVE THOUSAND ONE HUNDRED FIFTY PESOS</span> <span class="underline">(₱ 45,150.00)</span>
       </div>
 
       <table class="bordered">

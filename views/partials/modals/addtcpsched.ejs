@@ -1,0 +1,53 @@
+<div id="scheduleModal" class="modal">
+  <div class="modal-content">
+    <span class="close">&times;</span>
+    <h2>Schedule an Inspection</h2>
+
+    <label for="clientName">Client Name / Subject:</label>
+    <input type="text" id="clientName" name="clientName" placeholder="Enter name or subject" required/>
+    <div class="type">
+        <label for="tcptype">Choose Tree Cutting Permit Type: </label>
+        <select name="tcptype" id="tcptype">
+            <option value="Public Safety Permit">Public Safety Permit</option>
+            <option value="Private Land Timber Permit">Private Land Timber Permit</option>
+            <option value="National Government Agencies">National Government Agencies</option>
+        </select>
+    </div>
+    <div class="dateNpersonnel">
+      <div>
+        <label for="scheduleDate">Schedule Date:</label>
+        <input type="date" id="scheduleDate" name="scheduleDate" required />
+      </div>
+      <div>
+        <label for="personnel">Assign a Personnel:</label>
+        <select name="personnel" id="personnel">
+          <option value="Personnnel 1">Personnnel 1</option>
+          <option value="Personnnel 2">Personnnel 2</option>
+          <option value="Personnnel 3">Personnnel 3</option>
+          <option value="Personnnel 4">Personnnel 4</option>
+          <option value="Any available">Any available</option>
+        </select>
+      </div>
+    </div>
+
+    <label for="locationSearch">Search Location:</label>
+    <div class="autocomplete-wrapper">
+      <div style="display: flex; gap: 10px">
+        <input
+          type="text"
+          id="locationSearch"
+          placeholder="Search location..."
+          style="flex: 1"
+          name="location"
+          required
+        />
+        <button id="searchBtn">Search</button>
+      </div>
+      <ul id="autocompleteResults"></ul>
+    </div>
+
+    <div id="map"></div>
+
+    <button id="addschedbtn" style="margin: auto">Add inspection</button>
+  </div>
+</div>

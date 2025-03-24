@@ -64,8 +64,13 @@
     margin-left: 5px;
   }
 
+  #amount{
+    font-style: italic;
+    margin-right: 100px;
+  }
+
   .begin {
-    /* display: inline-block; */
+    display: inline-block;
     border-bottom: 1px solid black;
     min-width: 250px;
     height: 14px;

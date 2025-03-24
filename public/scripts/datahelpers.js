@@ -9,9 +9,11 @@ import {
 } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-firestore.js";
 
 import { getfiles } from "./decoder.js";
+// import { schedcollection } from "./dashboard.js";
 
 let allRows = [];
 let username = "No user";
+const options = { month: "long", day: "numeric", year: "numeric" };
 
 export function searching(searchfilter) {
   const query = searchfilter.value.toLowerCase();
@@ -139,12 +141,12 @@ export async function getpendingpermits(permittype, requirementsdiv) {
           const row = document.createElement("tr");
           if (docdata.status === "Pending") {
             row.setAttribute(`${permittype}-num`, doc.id);
-            if(permittype === "wildlife"){
-              type = 'Wildlife Registration';
-            }else if(permittype === "plantation"){
-              type = 'Private Tree Plantation Registration';
-            }else{
-              type = 'Transport Permit';
+            if (permittype === "wildlife") {
+              type = "Wildlife Registration";
+            } else if (permittype === "plantation") {
+              type = "Private Tree Plantation Registration";
+            } else {
+              type = "Transport Permit";
             }
             row.innerHTML = `
               <td>${docdata.client}</td>
@@ -263,12 +265,12 @@ export async function getevaluatedpermits(
           const row = document.createElement("tr");
           if (docdata.status === "Evaluated") {
             row.setAttribute(`${permittype}-num`, doc.id);
-            if(permittype === "wildlife"){
-              type = 'Wildlife Registration';
-            }else if(permittype === "plantation"){
-              type = 'Private Tree Plantation Registration';
-            }else{
-              type = 'Transport Permit';
+            if (permittype === "wildlife") {
+              type = "Wildlife Registration";
+            } else if (permittype === "plantation") {
+              type = "Private Tree Plantation Registration";
+            } else {
+              type = "Transport Permit";
             }
             row.innerHTML = `
               <td>${docdata.client}</td>
@@ -361,12 +363,12 @@ export async function getrejectedpermits(
           const row = document.createElement("tr");
           if (docdata.status === "Rejected") {
             row.setAttribute(`${permittype}-num`, doc.id);
-            if(permittype === "wildlife"){
-              type = 'Wildlife Registration';
-            }else if(permittype === "plantation"){
-              type = 'Private Tree Plantation Registration';
-            }else{
-              type = 'Transport Permit';
+            if (permittype === "wildlife") {
+              type = "Wildlife Registration";
+            } else if (permittype === "plantation") {
+              type = "Private Tree Plantation Registration";
+            } else {
+              type = "Transport Permit";
             }
             row.innerHTML = `
               <td>${docdata.client}</td>
@@ -542,7 +544,9 @@ export async function getpendingpermits_chainsawandtcp(
           }
         });
 
-        const allPendingRows = Array.from(permittablebody.querySelectorAll("tr"));
+        const allPendingRows = Array.from(
+          permittablebody.querySelectorAll("tr")
+        );
         setPermitRows(allPendingRows);
       }
     });
@@ -550,7 +554,6 @@ export async function getpendingpermits_chainsawandtcp(
     console.log(error);
   }
 }
-
 
 export async function getevaluatedpermits_chainsawandtcp(
   permittype,
@@ -640,15 +643,12 @@ export async function getevaluatedpermits_chainsawandtcp(
   }
 }
 
-
 export async function getrejectedpermits_chainsawandtcp(
   permittype,
   requirementsdiv,
   tablebodyid,
   type
 ) {
-  const options = { month: "long", day: "numeric", year: "numeric" };
-
   try {
     const tpcollectionref = collection(db, `${permittype}`);
     onSnapshot(tpcollectionref, (snapshot) => {
@@ -729,3 +729,35 @@ export async function getrejectedpermits_chainsawandtcp(
   }
 }
 
+export async function getforinspectiontcps(tablebodyid) {
+  try {
+
+    const schedcollection = collection(db, 'tcpscheds');
+    onSnapshot(schedcollection, (snapshots) => {
+      tablebodyid.innerHTML = "";
+      console.log(snapshots);
+      if (snapshots.empty) {
+        console.log("Collection is empty");
+      } else {
+        console.log("Fetching data");
+        snapshots.forEach((doc) => {
+          const data = doc.data();
+          const row = document.createElement("tr");
+          row.innerHTML = `
+          <td>${data.subject}</td>
+              <td>${data.tcp_type}</td>
+              <td>${data.date
+                .toDate()
+                .toLocaleDateString("en-US", options)}</td>
+              <td>${data.personnel}</td>
+              <td>${data.status}</td>`;
+          tablebodyid.appendChild(row);
+        });
+        const allPendingRows = Array.from(tablebodyid.querySelectorAll("tr"));
+        setPermitRows(allPendingRows);
+      }
+    });
+  } catch (error) {
+    console.log(error);
+  }
+}

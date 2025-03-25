@@ -1,6 +1,64 @@
-<div id="editscheduleModal" class="modal">
-    <div class="modal-content">
-        
+<!-- <div id="editscheduleModal" class="modal">
+  <div class="modal-content">
+    <span class="closeeditmodal">&times;</span>
+    <h2>Schedule an Inspection</h2>
+
+    <label for="editclientName">Client Name / Subject:</label>
+    <input
+      type="text"
+      id="editclientName"
+      name="editclientName"
+      placeholder="Enter name or subject"
+      required
+    />
+    <div class="type">
+      <label for="edittcptype">Choose Tree Cutting Permit Type: </label>
+      <select name="edittcptype" id="edittcptype">
+        <option value="Public Safety Permit">Public Safety Permit</option>
+        <option value="Private Land Timber Permit">
+          Private Land Timber Permit
+        </option>
+        <option value="National Government Agencies">
+          National Government Agencies
+        </option>
+      </select>
     </div>
+    <div class="dateNpersonnel">
+      <div>
+        <label for="editscheduleDate">Schedule Date:</label>
+        <input type="date" id="editscheduleDate" name="editscheduleDate" required />
+      </div>
+      <div>
+        <label for="editpersonnel">Assign a Personnel:</label>
+        <select name="editpersonnel" id="editpersonnel">
+          <option value="Personnnel 1">Personnnel 1</option>
+          <option value="Personnnel 2">Personnnel 2</option>
+          <option value="Personnnel 3">Personnnel 3</option>
+          <option value="Personnnel 4">Personnnel 4</option>
+          <option value="Any available">Any available</option>
+        </select>
+      </div>
+    </div>
+
+    <label for="editlocationSearch">Search Location:</label>
+    <div class="autocomplete-wrapper">
+      <div style="display: flex; gap: 10px">
+        <input
+          type="text"
+          id="editlocationSearch"
+          placeholder="Search location..."
+          style="flex: 1"
+          name="editlocation"
+          required
+        />
+        <button id="editsearchBtn">Search</button>
+      </div>
+      <ul id="autocompleteResults"></ul>
+    </div>
+
+    <div id="editmap"></div>
+
+    <button id="editschedbtn" style="margin: auto">Save Changes</button>
+    <button id="markasdonebtn">Mark as Done</button>
   </div>
-  
+</div> -->

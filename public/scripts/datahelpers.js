@@ -9,6 +9,7 @@ import {
 } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-firestore.js";
 
 import { getfiles } from "./decoder.js";
+// import { updateMap } from "./dashboard.js";
 // import { schedcollection } from "./dashboard.js";
 
 let allRows = [];
@@ -28,26 +29,26 @@ export function searching(searchfilter) {
   });
 }
 
-onAuthStateChanged(auth, async (user) => {
-  if (user) {
-    console.log("User is logged in");
+// onAuthStateChanged(auth, async (user) => {
+//   if (user) {
+//     console.log("User is logged in");
 
-    try {
-      const userdocref = doc(db, "admins", user.uid);
-      console.log(userdocref);
-      const snapshot = await getDoc(userdocref);
-      console.log(snapshot.data());
-      username = snapshot.data().username;
-    } catch (error) {
-      console.error(error);
-    }
-    // window.location.assign("/dashboard");
-  } else {
-    console.log("Nobody is logged in");
-  }
-});
+//     try {
+//       const userdocref = doc(db, "admins", user.uid);
+//       console.log(userdocref);
+//       const snapshot = await getDoc(userdocref);
+//       console.log(snapshot.data());
+//       username = snapshot.data().username;
+//     } catch (error) {
+//       console.error(error);
+//     }
+//     // window.location.assign("/dashboard");
+//   } else {
+//     console.log("Nobody is logged in");
+//   }
+// });
 
-function setPermitRows(rowsArray) {
+export function setPermitRows(rowsArray) {
   allRows = rowsArray;
 }
 
@@ -729,35 +730,51 @@ export async function getrejectedpermits_chainsawandtcp(
   }
 }
 
-export async function getforinspectiontcps(tablebodyid) {
-  try {
+// async function getforinspectiontcps(tablebodyid) {
+//   const modal = document.getElementById("scheduleModal");
 
-    const schedcollection = collection(db, 'tcpscheds');
-    onSnapshot(schedcollection, (snapshots) => {
-      tablebodyid.innerHTML = "";
-      console.log(snapshots);
-      if (snapshots.empty) {
-        console.log("Collection is empty");
-      } else {
-        console.log("Fetching data");
-        snapshots.forEach((doc) => {
-          const data = doc.data();
-          const row = document.createElement("tr");
-          row.innerHTML = `
-          <td>${data.subject}</td>
-              <td>${data.tcp_type}</td>
-              <td>${data.date
-                .toDate()
-                .toLocaleDateString("en-US", options)}</td>
-              <td>${data.personnel}</td>
-              <td>${data.status}</td>`;
-          tablebodyid.appendChild(row);
-        });
-        const allPendingRows = Array.from(tablebodyid.querySelectorAll("tr"));
-        setPermitRows(allPendingRows);
-      }
-    });
-  } catch (error) {
-    console.log(error);
-  }
-}
+//   try {
+//     const schedcollection = collection(db, "tcpscheds");
+//     onSnapshot(schedcollection, (snapshots) => {
+//       tablebodyid.innerHTML = "";
+//       console.log(snapshots);
+//       if (snapshots.empty) {
+//         console.log("Collection is empty");
+//       } else {
+//         console.log("Fetching data");
+//         snapshots.forEach((doc) => {
+//           const data = doc.data();
+//           const row = document.createElement("tr");
+//           row.innerHTML = `
+//           <td>${data.subject}</td>
+//               <td>${data.tcp_type}</td>
+//               <td>${data.address}</td>
+//               <td>${data.date
+//                 .toDate()
+//                 .toLocaleDateString("en-US", options)}</td>
+//               <td>${data.personnel}</td>
+//               <td>${data.status}</td>`;
+//           row.addEventListener("click", () => {
+//             // alert()
+//             modal.style.display = "block";
+//             updateMap(data.coordinates._lat, data.coordinates._long);
+//             addschedbtn.style.display = "none";
+//             actionbuttons.style.display = "";
+//             address.value = data.address;
+//             date.value = data.date.toDate().toISOString().split("T")[0];
+//             subject.value = data.subject;
+//             personnel.value = data.personnel;
+//             tcptype.value = data.tcp_type;
+
+//           });
+
+//           tablebodyid.appendChild(row);
+//         });
+//         const allPendingRows = Array.from(tablebodyid.querySelectorAll("tr"));
+//         setPermitRows(allPendingRows);
+//       }
+//     });
+//   } catch (error) {
+//     console.log(error);
+//   }
+// }

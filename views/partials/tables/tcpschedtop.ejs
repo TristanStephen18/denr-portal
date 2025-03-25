@@ -1,10 +1,18 @@
-<h3>Tree Cutting Application Schedules</h3>
-<button id="openModalBtn">Open Schedule Modal</button>
-<select name="typeFilter" id="typeFilter">
-    <option value="For Inspection">For Inspection</option>
-    <option value="For Implementation">For Implementation</option>
-    <!-- <option value="Rejected">Rejected</option> -->
-
-</select>
-<!-- <label for="tablesearching"></label> -->
- <input type="text" placeholder="Search..." id="tablesearch">
+<div class="schedtable-header">
+    <h2>Tree Cutting Application Schedules</h2>
+    <button id="openModalBtn">&#128197; Add an Inspection Schedule</button>
+  </div>
+  
+  <div class="schedtable-top">
+    <div class="search">
+      <input type="text" placeholder="Search...&#128269;" id="tablesearch" />
+    </div>
+    <div class="drop-down-filters">
+        <label for="typeFilter">Filter by Status: </label>
+      <select name="typeFilter" id="typeFilter">
+        <option value="Inspection">Inspection</option>
+        <option value="Implementation">Approved for Implementation</option>
+      </select>
+    </div>
+  </div>
+  

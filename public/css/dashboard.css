@@ -205,8 +205,9 @@ a {
 /* Table */
 .table-container {
   background-color: #fff;
-  padding: 20px;
+  padding: 40px;
   border-radius: 10px;
+  max-height: 1000px;
 }
 
 table {
@@ -219,7 +220,14 @@ table thead {
   background-color: #f4f6fa;
 }
 
-table th,
+table th {
+  text-align: left;
+  padding: 15px;
+  font-size: 14px;
+  color: #333;
+  position: sticky;
+}
+
 table td {
   text-align: left;
   padding: 15px;
@@ -270,7 +278,7 @@ table tbody tr {
   font-size: 18px;
   color: #333;
 }
-
+/* Modal Background */
 .modal {
   display: none;
   position: fixed;
@@ -283,19 +291,21 @@ table tbody tr {
   background-color: rgba(0, 0, 0, 0.5);
 }
 
+/* Modal Box */
 .modal-content {
   background-color: #fff;
   margin: auto;
   padding: 20px;
   border-radius: 8px;
   width: 90%;
-  max-width: 600px;
+  max-width: 700px; /* Increased width */
   position: relative;
   top: 50%;
   transform: translateY(-50%);
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
 }
 
+/* Close Button */
 .close {
   position: absolute;
   right: 15px;
@@ -304,13 +314,62 @@ table tbody tr {
   cursor: pointer;
 }
 
-#map {
-  height: 300px;
-  width: 100%;
-  margin-top: 10px;
-  border-radius: 4px;
+/* Two-column layout */
+.modal-body {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
 }
 
+/* Left section (Inputs) */
+.modal-left {
+  flex: 1;
+  max-width: 200px;
+}
+
+/* Right section (Search + Map) */
+.modal-right {
+  flex: 1;
+  min-width: 300px;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Labels */
+label {
+  display: block;
+  margin-top: 12px;
+  font-weight: bold;
+}
+
+/* Input fields */
+input[type="text"],
+input[type="date"],
+select {
+  width: 100%;
+  padding: 8px;
+  margin-top: 5px;
+  box-sizing: border-box;
+  border-radius: 4px;
+  border: 1px solid #ccc;
+}
+
+#clientName{
+  height: 50px;
+}
+
+/* Date & Personnel side-by-side */
+.dateNpersonnel {
+  display: flex;
+  gap: 15px;
+  margin-top: 10px;
+}
+
+.dateNpersonnel > div {
+  flex: 1;
+}
+
+/* Search & Autocomplete */
 .autocomplete-wrapper {
   position: relative;
 }
@@ -340,57 +399,199 @@ table tbody tr {
   background-color: #f0f0f0;
 }
 
-label {
-  display: block;
-  margin-top: 15px;
-  font-weight: bold;
-}
-
-input[type="text"],
-input[type="date"] {
-  width: 100%;
-  padding: 8px;
-  margin-top: 5px;
-  box-sizing: border-box;
-  border-radius: 4px;
-  border: 1px solid #ccc;
-}
-
-.dateNpersonnel {
+/* Search Bar */
+.search-location {
   display: flex;
-  gap: 15px;
-  margin-top: 15px;
-  align-items: flex-end;
-  flex-wrap: wrap;
+  gap: 10px;
+  align-items: center;
+  margin-bottom: 10px;
 }
 
-.dateNpersonnel label {
-  margin-top: 0;
-  font-weight: bold;
-  width: 100%;
-}
-
-.dateNpersonnel input[type="date"],
-.dateNpersonnel select {
+.search-location input {
   flex: 1;
-  min-width: 120px;
   padding: 8px;
-  border-radius: 4px;
   border: 1px solid #ccc;
-  box-sizing: border-box;
-  margin-top: 5px;
+  border-radius: 4px;
 }
 
-.dateNpersonnel > div {
-  flex: 1;
-  min-width: 45%;
+.search-location button {
+  padding: 8px 12px;
+  border: none;
+  background-color: #007bff;
+  color: white;
+  cursor: pointer;
+  border-radius: 4px;
 }
 
-table tbody tr {
-  border-bottom: 1px solid #eee;
+.search-location button:hover {
+  background-color: #0056b3;
+}
+
+#searchBtn{
+  width: 90px;
+  height: 40px;
+  background-color: green;
+  color: white;
+  border-radius: 5px;
+  border: none;
+  cursor: pointer;
+}
+
+#searchBtn:hover{
+  background-color: rgba(3, 148, 3, 0.678);
+  color: black;
+}
+
+/* Map */
+#map {
+  height: 300px;
+  width: 100%;
+  border-radius: 4px;
+  margin-top: 10px;
+  margin-bottom: 20px;
+}
+
+/* Buttons */
+#action-buttons {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+#addschedbtn {
+  padding: 10px 15px;
+  border: none;
+  background-color: #007bff;
+  color: white;
+  cursor: pointer;
+  border-radius: 4px;
+}
+
+#addschedbtn:hover {
+  background-color: #0056b3;
+}
+
+#savebtn{
+  padding: 10px 15px;
+  border: none;
+  background-color: green;
+  color: white;
+  cursor: pointer;
+  border-radius: 4px;
+}
+
+#markasdone{
+  padding: 10px 15px;
+  border: none;
+  background-color: #007bff;
+  color: white;
+  cursor: pointer;
+  border-radius: 4px;
+}
+
+#action-buttons button:hover{
+  cursor: pointer;
+  background-color: white;
+  color: black;
+  /* border: 0.5px solid black; */
+}
+
+
+tbody tr {
+  display: table;
+  width: 100%;
+  table-layout: fixed;
+}
+
+thead,
+tbody tr,
+tfoot {
+  display: table;
+  width: 100%;
+  table-layout: fixed; /* Ensures proper alignment */
 }
 
 table tbody tr:hover {
   background-color: rgb(206, 203, 203);
   cursor: pointer;
 }
+
+#schedtablebody {
+  display: block;
+  max-height: 400px; /* Adjust height of tbody */
+  overflow-y: auto;
+}
+/* Header: h3 on the left, button on the right */
+.schedtable-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin-bottom: 20px;
+}
+
+/* Ensures h3 takes available space */
+.schedtable-header h3 {
+  margin: 0;
+  flex-grow: 1;
+}
+
+.schedtable-header button {
+  white-space: nowrap;
+  padding: 0.5rem 1rem;
+  background-color: green;
+  color: white;
+  border-radius:8px;
+  border: none;
+}
+
+.schedtable-header button:hover{
+  color: black;
+  background-color: white;
+  cursor: pointer;
+}
+
+/* Search on left, dropdown on right */
+.schedtable-top {
+  display: flex;
+  justify-content: space-between; /* Pushes elements to far ends */
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+/* Search bar takes available space */
+.search {
+  flex-grow: 1;
+  display: flex;
+  align-items: center;
+}
+
+.search input {
+  flex: 1;
+  padding: 0.4rem;
+  box-sizing: border-box;
+  max-width: 700px;
+}
+/* Wrap label and dropdown in a flex container */
+.drop-down-filters {
+  display: flex;
+  align-items: center; /* Align vertically */
+  gap: 0.5rem; /* Adds spacing between label and dropdown */
+}
+
+/* Optional: Adjust label styling */
+.drop-down-filters label {
+  font-weight: bold; /* Makes label bold */
+  white-space: nowrap; /* Prevents wrapping */
+}
+
+/* Ensure dropdown width remains consistent */
+.drop-down-filters select {
+  padding: 0.4rem;
+  min-width: 200px;
+  flex: 1; /* Allows it to take available space */
+}
+

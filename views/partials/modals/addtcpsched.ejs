@@ -2,9 +2,9 @@
   <div class="modal-content">
     <span class="close">&times;</span>
     <h3 id="modal-title">Schedule an Inspection</h3>
-    <div class="modal-body">
+    <div class="modal-body" id="datadisplayer">
       <div class="modal-left">
-        <label for="clientName">Client Name / Subject:</label>
+        <label for="clientName" id="clientNamelabel">Client Name / Subject:</label>
         <input
           type="text"
           id="clientName"
@@ -13,7 +13,7 @@
           required
         />
         <div class="type">
-          <label for="tcptype">Choose Tree Cutting Permit Type: </label>
+          <label for="tcptype" id="tcptypelabel">Choose Tree Cutting Permit Type: </label>
           <select name="tcptype" id="tcptype">
             <option value="Public Safety Permit">Public Safety Permit</option>
             <option value="Private Land Timber Permit">
@@ -26,12 +26,12 @@
         </div>
         <div class="dateNpersonnel">
           <div>
-            <label for="scheduleDate">Schedule Date:</label>
+            <label for="scheduleDate" id="datelabel">Schedule Date:</label>
             <input type="date" id="scheduleDate" name="scheduleDate" required />
           </div>
         </div>
         <div>
-          <label for="personnel">Assign a Personnel:</label>
+          <label for="personnel" id="personnellabel">Assign a Personnel:</label>
           <select name="personnel" id="personnel">
             <option value="Personnnel 1">Personnnel 1</option>
             <option value="Personnnel 2">Personnnel 2</option>
@@ -43,7 +43,7 @@
       </div>
 
       <div class="modal-right">
-        <label for="locationSearch">Search Location:</label>
+        <label for="locationSearch" id="locationlabel">Search Location:</label>
         <div class="autocomplete-wrapper">
           <div style="display: flex; gap: 10px">
             <input
@@ -66,6 +66,16 @@
           <button id="savebtn">&#128427; Save Changes</button>
           <button id="markasdone">&#10004; Mark as Done</button>
         </div>
+        <button id="markasapproved">&#128077; Mark as Approved</button>
+      </div>
+    </div>
+    <div class="modal-body" id="implementationdater" style="display: none; padding: 100px;">
+      <label for="implementationdate">Set Implementation Date: </label>
+      <input type="date" name="implementationdate" id="implementationdate">
+
+      <div class="implementation-buttons">
+        <button id="backbutton">Back</button>
+        <button id="setimplementationbtn">Ok</button>
       </div>
     </div>
   </div>

@@ -778,3 +778,14 @@ export async function getrejectedpermits_chainsawandtcp(
 //     console.log(error);
 //   }
 // }
+
+export async function updatetreecuttingdetails(tcpdoc, data) {
+  console.log(tcpdoc.data);
+  try{
+    await updateDoc(tcpdoc, data).then(ctrl => {
+      console.log('Document Updated');
+    });
+  }catch(error){
+    console.error(error);
+  }
+}

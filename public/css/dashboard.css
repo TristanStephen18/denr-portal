@@ -354,7 +354,7 @@ select {
   border: 1px solid #ccc;
 }
 
-#clientName{
+#clientName {
   height: 50px;
 }
 
@@ -427,7 +427,7 @@ select {
   background-color: #0056b3;
 }
 
-#searchBtn{
+#searchBtn {
   width: 90px;
   height: 40px;
   background-color: green;
@@ -437,7 +437,7 @@ select {
   cursor: pointer;
 }
 
-#searchBtn:hover{
+#searchBtn:hover {
   background-color: rgba(3, 148, 3, 0.678);
   color: black;
 }
@@ -472,7 +472,7 @@ select {
   background-color: #0056b3;
 }
 
-#savebtn{
+#savebtn {
   padding: 10px 15px;
   border: none;
   background-color: green;
@@ -481,7 +481,7 @@ select {
   border-radius: 4px;
 }
 
-#markasdone{
+#markasdone {
   padding: 10px 15px;
   border: none;
   background-color: #007bff;
@@ -490,13 +490,67 @@ select {
   border-radius: 4px;
 }
 
-#action-buttons button:hover{
+#markasapproved {
+  padding: 10px 15px;
+  border: none;
+  background-color: #007bff;
+  color: white;
+  cursor: pointer;
+  border-radius: 4px;
+  /* display: none; */
+}
+
+#markasapproved:hover {
+  cursor: pointer;
+  background-color: white;
+  color: black;
+}
+
+.implementation-buttons {
+  margin-left: 50%;
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+}
+
+#setimplementationbtn {
+  padding: 10px 15px;
+  border: none;
+  width: 100px;
+  background-color: #007bff;
+  color: white;
+  cursor: pointer;
+  border-radius: 4px;
+}
+
+#setimplementationbtn:hover {
+  cursor: pointer;
+  background-color: white;
+  color: black;
+}
+
+#backbutton {
+  padding: 10px 15px;
+  border: none;
+  width: 100px;
+  background-color: grey;
+  color: white;
+  cursor: pointer;
+  border-radius: 4px;
+}
+
+#backbutton:hover {
+  cursor: pointer;
+  background-color: white;
+  color: black;
+}
+
+#action-buttons button:hover {
   cursor: pointer;
   background-color: white;
   color: black;
   /* border: 0.5px solid black; */
 }
-
 
 tbody tr {
   display: table;
@@ -543,11 +597,11 @@ table tbody tr:hover {
   padding: 0.5rem 1rem;
   background-color: green;
   color: white;
-  border-radius:8px;
+  border-radius: 8px;
   border: none;
 }
 
-.schedtable-header button:hover{
+.schedtable-header button:hover {
   color: black;
   background-color: white;
   cursor: pointer;
@@ -594,4 +648,3 @@ table tbody tr:hover {
   min-width: 200px;
   flex: 1; /* Allows it to take available space */
 }
-

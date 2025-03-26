@@ -1,18 +1,23 @@
 <div class="schedtable-header">
-    <h2>Tree Cutting Application Schedules</h2>
-    <button id="openModalBtn">&#128197; Add an Inspection Schedule</button>
+  <h2>Tree Cutting Application Schedules</h2>
+  <button id="openModalBtn">&#128197; Add an Inspection Schedule</button>
+</div>
+
+<div class="schedtable-top">
+  <div class="search">
+    <input type="text" placeholder="Search...&#128269;" id="tablesearch" />
   </div>
-  
-  <div class="schedtable-top">
-    <div class="search">
-      <input type="text" placeholder="Search...&#128269;" id="tablesearch" />
-    </div>
-    <div class="drop-down-filters">
-        <label for="typeFilter">Filter by Status: </label>
-      <select name="typeFilter" id="typeFilter">
-        <option value="Inspection">Inspection</option>
-        <option value="Implementation">Approved for Implementation</option>
-      </select>
-    </div>
+  <div class="drop-down-filters">
+    <label for="typeFilter">Filter by Status: </label>
+    <select name="typeFilter" id="typeFilter">
+      <option value="For Inspection">For Inspection</option>
+      <option value="Inspected">Inspected</option>
+      <option value="Approved for Implementation">
+        Approved for Implementation
+      </option>
+      <option value="Implemented">
+        Implemented TCP's
+      </option>
+    </select>
   </div>
-  
+</div>

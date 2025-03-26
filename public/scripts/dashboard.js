@@ -8,9 +8,14 @@ import {
   updateDoc,
   query,
   orderBy,
+  doc,
 } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-firestore.js";
 
-import { searching, setPermitRows } from "./datahelpers.js";
+import {
+  searching,
+  setPermitRows,
+  updatetreecuttingdetails,
+} from "./datahelpers.js";
 
 const logoutbtn = document.getElementById("logout");
 logoutbtn.addEventListener("click", logoutfunction);
@@ -36,7 +41,71 @@ const address = document.getElementById("locationSearch");
 const actionbuttons = document.getElementById("action-buttons");
 const modaltitle = document.getElementById("modal-title");
 const savebtn = document.getElementById("savebtn");
+const markasdone = document.getElementById("markasdone");
+const markasapproved = document.getElementById("markasapproved");
+const typeFilter = document.getElementById("typeFilter");
+const implementationdaterdiv = document.getElementById("implementationdater");
+const datadisplayerdiv = document.getElementById("datadisplayer");
+const scheduleimplementationbtn = document.getElementById(
+  "setimplementationbtn"
+);
+const implementationdateinput = document.getElementById("implementationdate");
+const backbutton = document.getElementById("backbutton");
+const tableheader = document.getElementById('tablehead');
 
+backbutton.addEventListener("click", () => {
+  togglemodaldisplay("view");
+});
+
+scheduleimplementationbtn.addEventListener("click", () => {
+  if (implementationdateinput.value === "") {
+    alert("Choose a date of implementation");
+  } else {
+    const docid = modal.getAttribute("tcpid");
+    const tcpdoc = doc(db, `tcpscheds`, `${docid}`);
+    const updatedata = {
+      status: "Approved for Implementation",
+      implementation_date: new Date(implementationdateinput.value),
+    };
+    updatetreecuttingdetails(tcpdoc, updatedata);
+    togglemodaldisplay("view");
+    modal.style.display = "none";
+  }
+});
+
+typeFilter.addEventListener("change", (e) => {
+  // console.log(typeFilter.value);
+  getforinspectiontcps(`${typeFilter.value}`);
+  tableheadetoggler(typeFilter.value);
+});
+
+savebtn.addEventListener("click", () => {
+  const docid = modal.getAttribute("tcpid");
+  const tcpdoc = doc(db, `tcpscheds`, `${docid}`);
+  const updatedata = {
+    address: address.value,
+    coordinates: new GeoPoint(selectedLat, selectedLon),
+    date: new Date(date.value),
+    personnel: personnel.value,
+    subject: subject.value,
+    tcp_type: tcptype.value,
+  };
+  updatetreecuttingdetails(tcpdoc, updatedata);
+});
+
+markasdone.addEventListener("click", () => {
+  const docid = modal.getAttribute("tcpid");
+  const tcpdoc = doc(db, `tcpscheds`, `${docid}`);
+  updatetreecuttingdetails(tcpdoc, { status: "Inspected" });
+});
+
+markasapproved.addEventListener("click", () => {
+  const docid = modal.getAttribute("tcpid");
+  const tcpdoc = doc(db, `tcpscheds`, `${docid}`);
+  implementationdaterdiv.style.display = "";
+  datadisplayerdiv.style.display = "none";
+  // updatetreecuttingdetails(tcpdoc, { status: "Approved for Implementation" });
+});
 
 const tablesearch = document.getElementById("tablesearch");
 
@@ -50,17 +119,13 @@ function initializepage() {
   setInterval(updateDateTime, 1000);
   Object.entries(collectionsToListen).forEach(([col, el]) => {
     setupSnapshotListener(col, el);
-    getforinspectiontcps();
+    getforinspectiontcps("For Inspection");
   });
 }
 
 const schedcollection = collection(db, "tcpscheds");
 
-// sessionchecker(username, pfpid);
-
 const options = { month: "long", day: "numeric", year: "numeric" };
-
-// setInterval(updateDateTime, 1000);
 
 const collectionsToListen = {
   transport_permit: "tpnum",
@@ -79,10 +144,6 @@ function setupSnapshotListener(collectionName, elementId) {
     element.innerHTML = `${snapshot.docs.length}`;
   });
 }
-
-// Object.entries(collectionsToListen).forEach(([col, el]) => {
-//   setupSnapshotListener(col, el);
-// });
 
 async function fetchAutocomplete(query) {
   const apiKey = "pk.b0f5e288ece5a120e06b41f5b56d7d12";
@@ -111,10 +172,10 @@ function initMap() {
   marker = new google.maps.Marker({
     map: map,
     position: initialPosition,
-    draggable: false, // Prevent manual dragging, allow clicking
+    draggable: false,
     icon: {
       url: "../images/marker.png", // URL of the custom icon
-      scaledSize: new google.maps.Size(40, 40), // Resize the icon (optional)
+      scaledSize: new google.maps.Size(40, 40),
     },
   });
 
@@ -194,6 +255,7 @@ openBtn.onclick = () => {
   modal.style.display = "block";
   addschedbtn.style.display = "";
   actionbuttons.style.display = "none";
+  markasapproved.style.display = "none";
   address.value = "";
   date.value = "";
   subject.value = "";
@@ -201,6 +263,7 @@ openBtn.onclick = () => {
   tcptype.value = "";
   updateMap(16.404234843328066, 120.59804057928649);
   modaltitle.innerHTML = "Add an Inspection Schedule";
+  togglebuttons("add");
 };
 
 closeBtn.onclick = () => {
@@ -238,18 +301,10 @@ addschedbtn.addEventListener("click", async () => {
     } catch (error) {
       console.error(error);
     }
-    console.log(
-      subject.value + tcptype.value,
-      date.value,
-      personnel.value,
-      address.value,
-      selectedLat,
-      selectedLon
-    );
   }
 });
 
-async function getforinspectiontcps() {
+async function getforinspectiontcps(statusfilter) {
   const modal = document.getElementById("scheduleModal");
 
   try {
@@ -260,57 +315,101 @@ async function getforinspectiontcps() {
 
     onSnapshot(q, (snapshots) => {
       schedtable.innerHTML = "";
-      console.log(snapshots);
+      // console.log(snapshots);
       if (snapshots.empty) {
-        console.log("Collection is empty");
+        // console.log("Collection is empty");
       } else {
-        console.log("Fetching data");
+        // console.log("Fetching data");
         snapshots.forEach((doc) => {
           const data = doc.data();
-          const row = document.createElement("tr");
-          const inspectiondate = data.date.toDate().toLocaleDateString("en-US", options);
-          row.innerHTML = `
+          if (data.status === `${statusfilter}`) {
+            let rowstring = "";
+            const fielddata = {
+              address: data.address,
+              subject: data.subject,
+              date: data.date.toDate().toISOString().split("T")[0],
+              tcp_type: data.tcp_type,
+              personnel: data.personnel,
+            };
+
+            if (statusfilter === "Approved for Implementation") {
+              rowstring = `
+            <td>${data.subject}</td>
+            <td>${data.tcp_type}</td>
+            <td>${data.address}</td>
+            <td>${data.implementation_date
+              .toDate()
+              .toLocaleDateString("en-US", options)}</td>
+            <td>${data.status}</td>`;
+            } else {
+              rowstring = `
             <td>${data.subject}</td>
             <td>${data.tcp_type}</td>
             <td>${data.address}</td>
             <td>${data.date.toDate().toLocaleDateString("en-US", options)}</td>
             <td>${data.personnel}</td>
             <td>${data.status}</td>`;
+            }
 
-          row.id = `${doc.id}`;
+            const row = document.createElement("tr");
+            const inspectiondate = data.date
+              .toDate()
+              .toLocaleDateString("en-US", options);
+            row.innerHTML = rowstring;
 
-          const datenow = new Date().toLocaleDateString("en-US", options);
+            row.id = `${doc.id}`;
 
-          if (datenow > inspectiondate) {
-            console.log("This inspection has been missed");
-            trcolor = "rgb(253, 133, 133)";
-            row.style.background = trcolor;
-            console.log(data.subject);
-          } else if (datenow == inspectiondate) {
-            console.log("This inspection should be done now");
-            trcolor = "rgb(152, 250, 165)";
-            console.log(data.subject);
+            // console.log(new Date(), inspectiondate);
+            if (statusfilter === "For Inspection") {
+              const datenow = new Date().toLocaleDateString("en-US", options);
+              if (datenow > inspectiondate) {
+                // console.log("This inspection has been missed");
+                trcolor = "rgb(253, 133, 133)";
+                row.style.background = trcolor;
+                // console.log(data.subject);
+              } else if (datenow == inspectiondate) {
+                // console.log("This inspection should be done now");
+                trcolor = "rgb(152, 250, 165)";
+                // console.log(data.subject);
 
-            row.style.background = trcolor;
+                row.style.background = trcolor;
+              }
+              row.addEventListener("click", () => {
+                // console.log(row.getAttribute("id"));
+                modal.setAttribute("tcpid", `${doc.id}`);
+                modal.style.display = "block";
+                setfielddata(fielddata);
+                updateMap(data.coordinates._lat, data.coordinates._long);
+                modaltitle.innerHTML = `${data.subject}'s Tree Cutting Permit Info`;
+                togglefields(false);
+                togglebuttons("edit");
+              });
+            } else if (statusfilter === "Inspected") {
+              row.addEventListener("click", () => {
+                // alert("Inspected");
+                // console.log(row.getAttribute("id"));
+                setfielddata(fielddata);
+                modal.setAttribute("tcpid", `${doc.id}`);
+                modal.style.display = "block";
+                updateMap(data.coordinates._lat, data.coordinates._long);
+                modaltitle.innerHTML = `${data.subject}'s Tree Cutting Permit Info`;
+                togglefields(true);
+                togglebuttons("approval");
+              });
+            } else {
+              row.addEventListener("click", () => {
+                modal.setAttribute("tcpid", `${doc.id}`);
+                modal.style.display = "block";
+                setfielddata(fielddata);
+                updateMap(data.coordinates._lat, data.coordinates._long);
+                modaltitle.innerHTML = `${data.subject}'s Tree Cutting Permit Info`;
+                togglefields(true);
+                togglebuttons("Approved");
+              });
+            }
+
+            schedtable.appendChild(row);
           }
-
-          console.log(new Date(), inspectiondate);
-          row.addEventListener("click", () => {
-            console.log(row.getAttribute('id'));
-            
-            modal.style.display = "block";
-            updateMap(data.coordinates._lat, data.coordinates._long);
-            addschedbtn.style.display = "none";
-            actionbuttons.style.display = "";
-            address.value = data.address;
-            date.value = data.date.toDate().toISOString().split("T")[0];
-            subject.value = data.subject;
-            personnel.value = data.personnel;
-            tcptype.value = data.tcp_type;
-            modaltitle.innerHTML = `${data.subject}'s Tree Cutting Permit Info`;
-          });
-
-          schedtable.appendChild(row);
         });
 
         const allPendingRows = Array.from(schedtable.querySelectorAll("tr"));
@@ -318,9 +417,85 @@ async function getforinspectiontcps() {
       }
     });
   } catch (error) {
-    console.log(error);
+    // console.log(error);
   }
 }
 
+function togglefields(toggle) {
+  address.disabled = toggle;
+  subject.disabled = toggle;
+  tcptype.disabled = toggle;
+  personnel.disabled = toggle;
+  date.disabled = toggle;
+}
+
+function togglebuttons(filter) {
+  if (filter === "add") {
+    addschedbtn.style.display = "";
+    actionbuttons.style.display = "none";
+    markasapproved.style.display = "none";
+  } else if (filter === "edit") {
+    addschedbtn.style.display = "none";
+    actionbuttons.style.display = "";
+    markasapproved.style.display = "none";
+  } else if (filter === "approval") {
+    addschedbtn.style.display = "none";
+    actionbuttons.style.display = "none";
+    markasapproved.style.display = "";
+  } else {
+    addschedbtn.style.display = "none";
+    actionbuttons.style.display = "none";
+    markasapproved.style.display = "none";
+  }
+}
+
+function setfielddata(data) {
+  address.value = data.address;
+  date.value = data.date;
+  subject.value = data.subject;
+  personnel.value = data.personnel;
+  tcptype.value = data.tcp_type;
+}
+
+function togglemodaldisplay(purpose) {
+  if (purpose === "view") {
+    datadisplayerdiv.style.display = "";
+    implementationdaterdiv.style.display = "none";
+  } else {
+    datadisplayerdiv.style.display = "none";
+    implementationdaterdiv.style.display = "";
+  }
+}
+
+function tableheadetoggler(filter){
+  tableheader.innerHTML = "";
+  let headerreplacerstring = "";
+  if(filter === "For Inspection"){
+    headerreplacerstring = `
+    <th>Client/Subject</th>
+      <th>Type</th>
+      <th>Address</th>
+      <th>Inspection Date</th>
+      <th>Assigned Personnel</th>
+      <th>Status</th>`;
+  }else if(filter === "Inspected"){
+    headerreplacerstring = `
+    <th>Client/Subject</th>
+    <th>Type</th>
+    <th>Address</th>
+    <th>Inspected At</th>
+    <th>Inspected By</th>
+    <th>Status</th>`;
+  }else{
+    headerreplacerstring = `
+    <th>Client/Subject</th>
+    <th>Type</th>
+    <th>Address</th>
+    <th>Implementation Date</th>
+    <th>Status</th>`;
+  }
+
+  tableheader.innerHTML = headerreplacerstring;
+}
 // getforinspectiontcps();
 window.onload = initializepage();

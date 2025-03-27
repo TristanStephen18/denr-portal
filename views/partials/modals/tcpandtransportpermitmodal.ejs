@@ -8,9 +8,18 @@
     <input type="text" name="modalAddress" id="modalAddress" />
     <label for="modalDate">Application Date: </label>
     <input type="text" name="modalDate" id="modalDate" />
+    <h4>Location:</h4>
+    <div id="map"></div>
+    <div class="action-buttons" id="initial-abtns">
+      <button id="viewrequirementsbtn">View Requirements</button>
+    </div>
+  </div>
+
+  <div class="modal-content" id="requirements-displayer" style="display: none">
     <h3 style="margin-top: 20px">Requirements Submitted by The Client</h3>
+    <p id="backbtn"><-Back</p>
     <div id="requirements" class="requirements-grid"></div>
-    <div class="action-buttons">
+    <div class="action-buttons" id="pending-abtns">
       <button id="approvebtn">Mark as Evaluated</button>
       <button id="rejectbtn">Reject</button>
     </div>
@@ -18,9 +27,4 @@
       <button id="createOOPbtn">Create Order of Payment</button>
     </div>
   </div>
-
-  <!-- <div class="modal-content" id="requirements-displayer" style="display: none">
-    <h3 style="margin-top: 20px">Requirements Submitted by The Client</h3>
-    <div id="requirements" class="requirements-grid"></div>
-  </div> -->
 </div>

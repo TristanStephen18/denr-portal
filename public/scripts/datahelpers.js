@@ -9,8 +9,7 @@ import {
 } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-firestore.js";
 
 import { getfiles } from "./decoder.js";
-// import { updateMap } from "./dashboard.js";
-// import { schedcollection } from "./dashboard.js";
+import { initMap } from "./maphelper.js";
 
 let allRows = [];
 let username = "No user";
@@ -20,33 +19,14 @@ export function searching(searchfilter) {
   const query = searchfilter.value.toLowerCase();
 
   allRows.forEach((row) => {
-    const textContent = row.textContent.toLowerCase();
-    if (textContent.includes(query)) {
+    const rowContent = row.rowContent.toLowerCase();
+    if (rowContent.includes(query)) {
       row.style.display = ""; // show the row
     } else {
       row.style.display = "none"; // hide the row
     }
   });
 }
-
-// onAuthStateChanged(auth, async (user) => {
-//   if (user) {
-//     console.log("User is logged in");
-
-//     try {
-//       const userdocref = doc(db, "admins", user.uid);
-//       console.log(userdocref);
-//       const snapshot = await getDoc(userdocref);
-//       console.log(snapshot.data());
-//       username = snapshot.data().username;
-//     } catch (error) {
-//       console.error(error);
-//     }
-//     // window.location.assign("/dashboard");
-//   } else {
-//     console.log("Nobody is logged in");
-//   }
-// });
 
 export function setPermitRows(rowsArray) {
   allRows = rowsArray;
@@ -125,9 +105,29 @@ export async function toggleapplication(
   }
 }
 
+onAuthStateChanged(auth, async (user) => {
+  if (user) {
+    console.log("User is logged in");
+
+    try {
+      const userdocref = doc(db, "admins", user.uid);
+      console.log(userdocref);
+      const snapshot = await getDoc(userdocref);
+      console.log(snapshot.data());
+      username = snapshot.data().username;
+    } catch (error) {
+      console.error(error);
+    }
+    // window.location.assign("/dashboard");
+  } else {
+    console.log("Nobody is logged in");
+  }
+});
+
 export async function getpendingpermits(permittype, requirementsdiv) {
   const options = { month: "long", day: "numeric", year: "numeric" };
   let type = "";
+  const modal = document.getElementById("permitModal");
 
   try {
     const tpcollectionref = collection(db, `${permittype}`);
@@ -159,77 +159,31 @@ export async function getpendingpermits(permittype, requirementsdiv) {
                 .toDate()
                 .toLocaleDateString("en-US", options)}</td>
             `;
+
             console.log(docdata.uploadedAt);
 
-            // Add event listener for modal
             row.addEventListener("click", () => {
+              modal.setAttribute(`permit-id`, `${doc.id}`);
+              modal.setAttribute("user-id", docdata.userID);
+              modal.setAttribute("client", docdata.client);
+              modal.setAttribute("permittype", permittype);
+              modal.setAttribute("permit-status", docdata.status);
               getfiles(
                 `${doc.id.toString()}`,
                 requirementsdiv,
                 `${permittype}`
-              ).then((sample) => {
-                // Instead of creating a new div, grab the existing one
-                const actionButtonsDiv =
-                  document.querySelector(".action-buttons");
+              );
 
-                // Clear previous content (in case it's already populated)
-                actionButtonsDiv.innerHTML = "";
-
-                // Create the first button: "Mark as Evaluated"
-                const approveBtn = document.createElement("button");
-                approveBtn.id = "approvebtn";
-                approveBtn.textContent = "Mark as Evaluated";
-                approveBtn.onclick = function () {
-                  console.log("Marked as Evaluated");
-                  toggleapplication(
-                    doc.id,
-                    docdata.userID,
-                    "approve",
-                    `${permittype}`,
-                    docdata.client
-                  );
-                };
-
-                // Create the span wrapper for the second button
-                const rejectSpan = document.createElement("span");
-
-                // Create the second button: "Reject"
-                const rejectBtn = document.createElement("button");
-                rejectBtn.id = "rejectbtn";
-                rejectBtn.textContent = "Reject";
-                rejectBtn.onclick = function () {
-                  console.log("Rejected");
-                  toggleapplication(
-                    doc.id,
-                    docdata.userID,
-                    "reject",
-                    `${permittype}`,
-                    docdata.client
-                  );
-                };
-
-                // Append the "Reject" button to the span
-                rejectSpan.appendChild(rejectBtn);
-
-                // Append both buttons to the main div
-                actionButtonsDiv.appendChild(approveBtn);
-                actionButtonsDiv.appendChild(rejectSpan);
-              });
-
-              document.getElementById("modalClient").textContent =
-                docdata.client;
-              document.getElementById("modalAddress").textContent =
-                docdata.address;
+              document.getElementById("modalClient").value = docdata.client;
+              document.getElementById("modalAddress").value = docdata.address;
               document.getElementById("modalTitle").textContent = doc.id;
-              document.getElementById("modalDate").textContent =
-                docdata.uploadedAt
-                  .toDate()
-                  .toLocaleDateString("en-US", options);
+              document.getElementById("modalDate").value = docdata.uploadedAt
+                .toDate()
+                .toLocaleDateString("en-US", options);
 
               document.getElementById("permitModal").classList.remove("hidden");
             });
 
-            // approvebtn.addEventListener('click', toggleapplication);
             permittablebody.appendChild(row);
           }
         });
@@ -252,6 +206,7 @@ export async function getevaluatedpermits(
   const options = { month: "long", day: "numeric", year: "numeric" };
   console.log("getting evaluated dataa");
   let type = "";
+  const modal = document.getElementById("permitModal");
 
   try {
     const tpcollectionref = collection(db, `${permittype}`);
@@ -287,49 +242,35 @@ export async function getevaluatedpermits(
                 .toDate()
                 .toLocaleDateString("en-US", options)}</td>
             `;
+
             console.log(docdata.uploadedAt);
 
             // Add event listener for modal
             row.addEventListener("click", () => {
+              modal.setAttribute(`permit-id`, `${doc.id}`);
+              modal.setAttribute("user-id", docdata.userID);
+              modal.setAttribute("client", docdata.client);
+              modal.setAttribute("permittype", permittype);
+              modal.setAttribute("permit-status", docdata.status);
+
               getfiles(
                 `${doc.id.toString()}`,
                 requirementsdiv,
                 `${permittype}`
               ).then((sample) => {
-                // Instead of creating a new div, grab the existing one
-                const actionButtonsDiv =
-                  document.querySelector(".action-buttons");
-
-                // Clear previous content (in case it's already populated)
-                actionButtonsDiv.innerHTML = "";
-
-                // Create the first button: "Mark as Evaluated"
-                const createOOPBtn = document.createElement("button");
-                createOOPBtn.id = "createOOPBtn";
-                createOOPBtn.textContent = "Create Order of Payment";
-                createOOPBtn.onclick = function () {
-                  console.log("Creating order of payment...");
-                  window.open(`/orderofpayment/${docdata.client}`);
-                };
-
-                document.getElementById("modalClient").textContent =
-                  docdata.client;
-                document.getElementById("modalAddress").textContent =
-                  docdata.address;
+                document.getElementById("modalClient").value = docdata.client;
+                document.getElementById("modalAddress").value = docdata.address;
                 document.getElementById("modalTitle").textContent = doc.id;
-                document.getElementById("modalDate").textContent =
-                  docdata.uploadedAt
-                    .toDate()
-                    .toLocaleDateString("en-US", options);
+                document.getElementById("modalDate").value = docdata.uploadedAt
+                  .toDate()
+                  .toLocaleDateString("en-US", options);
 
                 document
                   .getElementById("permitModal")
                   .classList.remove("hidden");
-                actionButtonsDiv.appendChild(createOOPBtn);
               });
             });
 
-            // approvebtn.addEventListener('click', toggleapplication);
             tablebodyid.appendChild(row);
           }
         });
@@ -350,6 +291,7 @@ export async function getrejectedpermits(
   const options = { month: "long", day: "numeric", year: "numeric" };
   console.log("getting REJECTED dataa");
   let type = "";
+  const modal = document.getElementById("permitModal");
 
   try {
     const tpcollectionref = collection(db, `${permittype}`);
@@ -389,45 +331,30 @@ export async function getrejectedpermits(
 
             // Add event listener for modal
             row.addEventListener("click", () => {
+              modal.setAttribute(`permit-id`, `${doc.id}`);
+              modal.setAttribute("user-id", docdata.userID);
+              modal.setAttribute("client", docdata.client);
+              modal.setAttribute("permittype", permittype);
+              modal.setAttribute("permit-status", docdata.status);
+
               getfiles(
                 `${doc.id.toString()}`,
                 requirementsdiv,
                 `${permittype}`
               ).then((sample) => {
-                // Instead of creating a new div, grab the existing one
-                const actionButtonsDiv =
-                  document.querySelector(".action-buttons");
-
-                // Clear previous content (in case it's already populated)
-                actionButtonsDiv.innerHTML = "";
-
-                // Create the first button: "Mark as Evaluated"
-                const createOOPBtn = document.createElement("button");
-                createOOPBtn.id = "createOOPBtn";
-                createOOPBtn.textContent = "Create Order of Payment";
-                createOOPBtn.onclick = function () {
-                  console.log("Creating order of payment...");
-                  window.open(`/orderofpayment/${docdata.client}`);
-                };
-
-                document.getElementById("modalClient").textContent =
-                  docdata.client;
-                document.getElementById("modalAddress").textContent =
-                  docdata.address;
+                document.getElementById("modalClient").value = docdata.client;
+                document.getElementById("modalAddress").value = docdata.address;
                 document.getElementById("modalTitle").textContent = doc.id;
-                document.getElementById("modalDate").textContent =
-                  docdata.uploadedAt
-                    .toDate()
-                    .toLocaleDateString("en-US", options);
+                document.getElementById("modalDate").value = docdata.uploadedAt
+                  .toDate()
+                  .toLocaleDateString("en-US", options);
 
                 document
                   .getElementById("permitModal")
                   .classList.remove("hidden");
-                actionButtonsDiv.appendChild(createOOPBtn);
               });
             });
 
-            // approvebtn.addEventListener('click', toggleapplication);
             tablebodyid.appendChild(row);
           }
         });
@@ -441,13 +368,17 @@ export async function getrejectedpermits(
   }
 }
 
-//chainsaw data fetching
 export async function getpendingpermits_chainsawandtcp(
   permittype,
   requirementsdiv,
   type
 ) {
   const options = { month: "long", day: "numeric", year: "numeric" };
+  const modal = document.getElementById("permitModal");
+  const datadisplayerdiv = document.getElementById("data-displayer");
+  const requirementsdisplayerdiv = document.getElementById(
+    "requirements-displayer"
+  );
 
   try {
     const tpcollectionref = collection(db, `${permittype}`);
@@ -475,68 +406,38 @@ export async function getpendingpermits_chainsawandtcp(
 
             // Add event listener for modal
             row.addEventListener("click", () => {
+              initMap(`${docdata.location._lat}`, `${docdata.location._long}`);
+              if (permittype === "tree_cutting") {
+                datadisplayerdiv.style.display = "";
+                requirementsdisplayerdiv.style.display = "none";
+              }
+              modal.setAttribute(`permit-id`, `${doc.id}`);
+              modal.setAttribute("user-id", docdata.userID);
+              modal.setAttribute("client", docdata.client);
+              modal.setAttribute("permittype", permittype);
+              modal.setAttribute("permit-status", docdata.status);
+              modal.setAttribute(
+                "tcp-location-lat",
+                `${docdata.location._lat}`
+              );
+              modal.setAttribute(
+                "tcp-location-long",
+                `${docdata.location._long}`
+              );
+              console.log(docdata.location);
+
               getfiles(
                 `${doc.id.toString()}`,
                 requirementsdiv,
                 `${permittype}`
-              ).then((sample) => {
-                // Instead of creating a new div, grab the existing one
-                const actionButtonsDiv =
-                  document.querySelector(".action-buttons");
+              );
 
-                // Clear previous content (in case it's already populated)
-                actionButtonsDiv.innerHTML = "";
-
-                // Create the first button: "Mark as Evaluated"
-                const approveBtn = document.createElement("button");
-                approveBtn.id = "approvebtn";
-                approveBtn.textContent = "Mark as Evaluated";
-                approveBtn.onclick = function () {
-                  console.log("Marked as Evaluated");
-                  toggleapplication(
-                    doc.id,
-                    docdata.userID,
-                    "approve",
-                    `${permittype}`,
-                    docdata.client
-                  );
-                };
-
-                // Create the span wrapper for the second button
-                const rejectSpan = document.createElement("span");
-
-                // Create the second button: "Reject"
-                const rejectBtn = document.createElement("button");
-                rejectBtn.id = "rejectbtn";
-                rejectBtn.textContent = "Reject";
-                rejectBtn.onclick = function () {
-                  console.log("Rejected");
-                  toggleapplication(
-                    doc.id,
-                    docdata.userID,
-                    "reject",
-                    `${permittype}`,
-                    docdata.client
-                  );
-                };
-
-                // Append the "Reject" button to the span
-                rejectSpan.appendChild(rejectBtn);
-
-                // Append both buttons to the main div
-                actionButtonsDiv.appendChild(approveBtn);
-                actionButtonsDiv.appendChild(rejectSpan);
-              });
-
-              document.getElementById("modalClient").textContent =
-                docdata.client;
-              document.getElementById("modalAddress").textContent =
-                docdata.address;
+              document.getElementById("modalClient").value = docdata.client;
+              document.getElementById("modalAddress").value = docdata.address;
               document.getElementById("modalTitle").textContent = doc.id;
-              document.getElementById("modalDate").textContent =
-                docdata.uploadedAt
-                  .toDate()
-                  .toLocaleDateString("en-US", options);
+              document.getElementById("modalDate").value = docdata.uploadedAt
+                .toDate()
+                .toLocaleDateString("en-US", options);
 
               document.getElementById("permitModal").classList.remove("hidden");
             });
@@ -563,6 +464,11 @@ export async function getevaluatedpermits_chainsawandtcp(
   type
 ) {
   const options = { month: "long", day: "numeric", year: "numeric" };
+  const modal = document.getElementById("permitModal");
+  const datadisplayerdiv = document.getElementById("data-displayer");
+  const requirementsdisplayerdiv = document.getElementById(
+    "requirements-displayer"
+  );
 
   try {
     const tpcollectionref = collection(db, `${permittype}`);
@@ -594,41 +500,41 @@ export async function getevaluatedpermits_chainsawandtcp(
 
             // Add event listener for modal
             row.addEventListener("click", () => {
+              initMap(`${docdata.location._lat}`, `${docdata.location._long}`);
+              if (permittype === "tree_cutting") {
+                datadisplayerdiv.style.display = "";
+                requirementsdisplayerdiv.style.display = "none";
+              }
+              modal.setAttribute(`permit-id`, `${doc.id}`);
+              modal.setAttribute("user-id", docdata.userID);
+              modal.setAttribute("client", docdata.client);
+              modal.setAttribute("permittype", permittype);
+              modal.setAttribute("permit-status", docdata.status);
+              modal.setAttribute(
+                "tcp-location-lat",
+                `${docdata.location._lat}`
+              );
+              modal.setAttribute(
+                "tcp-location-long",
+                `${docdata.location._long}`
+              );
+              console.log(docdata.location);
+
               getfiles(
                 `${doc.id.toString()}`,
                 requirementsdiv,
                 `${permittype}`
               ).then((sample) => {
-                // Instead of creating a new div, grab the existing one
-                const actionButtonsDiv =
-                  document.querySelector(".action-buttons");
-
-                // Clear previous content (in case it's already populated)
-                actionButtonsDiv.innerHTML = "";
-
-                // Create the first button: "Mark as Evaluated"
-                const createOOPBtn = document.createElement("button");
-                createOOPBtn.id = "createOOPBtn";
-                createOOPBtn.textContent = "Create Order of Payment";
-                createOOPBtn.onclick = function () {
-                  console.log("Creating order of payment...");
-                  window.open(`/orderofpayment/${docdata.client}`);
-                };
-
-                document.getElementById("modalClient").textContent =
-                  docdata.client;
-                document.getElementById("modalAddress").textContent =
-                  docdata.address;
+                document.getElementById("modalClient").value = docdata.client;
+                document.getElementById("modalAddress").value = docdata.address;
                 document.getElementById("modalTitle").textContent = doc.id;
-                document.getElementById("modalDate").textContent =
-                  docdata.uploadedAt
-                    .toDate()
-                    .toLocaleDateString("en-US", options);
+                document.getElementById("modalDate").value = docdata.uploadedAt
+                  .toDate()
+                  .toLocaleDateString("en-US", options);
 
                 document
                   .getElementById("permitModal")
                   .classList.remove("hidden");
-                actionButtonsDiv.appendChild(createOOPBtn);
               });
             });
 
@@ -650,6 +556,12 @@ export async function getrejectedpermits_chainsawandtcp(
   tablebodyid,
   type
 ) {
+  const modal = document.getElementById("permitModal");
+  const datadisplayerdiv = document.getElementById("data-displayer");
+  const requirementsdisplayerdiv = document.getElementById(
+    "requirements-displayer"
+  );
+
   try {
     const tpcollectionref = collection(db, `${permittype}`);
     onSnapshot(tpcollectionref, (snapshot) => {
@@ -680,41 +592,39 @@ export async function getrejectedpermits_chainsawandtcp(
 
             // Add event listener for modal
             row.addEventListener("click", () => {
+              if (permittype === "tree_cutting") {
+                datadisplayerdiv.style.display = "";
+                requirementsdisplayerdiv.style.display = "none";
+              }
+              modal.setAttribute(`permit-id`, `${doc.id}`);
+              modal.setAttribute("user-id", docdata.userID);
+              modal.setAttribute("client", docdata.client);
+              modal.setAttribute("permittype", permittype);
+              modal.setAttribute("permit-status", docdata.status);
+              // modal.setAttribute(
+              //   "tcp-location-lat",
+              //   `${docdata.location._lat}`
+              // );
+              // modal.setAttribute(
+              //   "tcp-location-long",
+              //   `${docdata.location._long}`
+              // );
+              console.log(docdata.location);
               getfiles(
                 `${doc.id.toString()}`,
                 requirementsdiv,
                 `${permittype}`
               ).then((sample) => {
-                // Instead of creating a new div, grab the existing one
-                const actionButtonsDiv =
-                  document.querySelector(".action-buttons");
-
-                // Clear previous content (in case it's already populated)
-                actionButtonsDiv.innerHTML = "";
-
-                // Create the first button: "Mark as Evaluated"
-                const createOOPBtn = document.createElement("button");
-                createOOPBtn.id = "createOOPBtn";
-                createOOPBtn.textContent = "Create Order of Payment";
-                createOOPBtn.onclick = function () {
-                  console.log("Creating order of payment...");
-                  window.open(`/orderofpayment/${docdata.client}`);
-                };
-
-                document.getElementById("modalClient").textContent =
-                  docdata.client;
-                document.getElementById("modalAddress").textContent =
-                  docdata.address;
+                document.getElementById("modalClient").value = docdata.client;
+                document.getElementById("modalAddress").value = docdata.address;
                 document.getElementById("modalTitle").textContent = doc.id;
-                document.getElementById("modalDate").textContent =
-                  docdata.uploadedAt
-                    .toDate()
-                    .toLocaleDateString("en-US", options);
+                document.getElementById("modalDate").value = docdata.uploadedAt
+                  .toDate()
+                  .toLocaleDateString("en-US", options);
 
                 document
                   .getElementById("permitModal")
                   .classList.remove("hidden");
-                actionButtonsDiv.appendChild(createOOPBtn);
               });
             });
 
@@ -730,62 +640,13 @@ export async function getrejectedpermits_chainsawandtcp(
   }
 }
 
-// async function getforinspectiontcps(tablebodyid) {
-//   const modal = document.getElementById("scheduleModal");
-
-//   try {
-//     const schedcollection = collection(db, "tcpscheds");
-//     onSnapshot(schedcollection, (snapshots) => {
-//       tablebodyid.innerHTML = "";
-//       console.log(snapshots);
-//       if (snapshots.empty) {
-//         console.log("Collection is empty");
-//       } else {
-//         console.log("Fetching data");
-//         snapshots.forEach((doc) => {
-//           const data = doc.data();
-//           const row = document.createElement("tr");
-//           row.innerHTML = `
-//           <td>${data.subject}</td>
-//               <td>${data.tcp_type}</td>
-//               <td>${data.address}</td>
-//               <td>${data.date
-//                 .toDate()
-//                 .toLocaleDateString("en-US", options)}</td>
-//               <td>${data.personnel}</td>
-//               <td>${data.status}</td>`;
-//           row.addEventListener("click", () => {
-//             // alert()
-//             modal.style.display = "block";
-//             updateMap(data.coordinates._lat, data.coordinates._long);
-//             addschedbtn.style.display = "none";
-//             actionbuttons.style.display = "";
-//             address.value = data.address;
-//             date.value = data.date.toDate().toISOString().split("T")[0];
-//             subject.value = data.subject;
-//             personnel.value = data.personnel;
-//             tcptype.value = data.tcp_type;
-
-//           });
-
-//           tablebodyid.appendChild(row);
-//         });
-//         const allPendingRows = Array.from(tablebodyid.querySelectorAll("tr"));
-//         setPermitRows(allPendingRows);
-//       }
-//     });
-//   } catch (error) {
-//     console.log(error);
-//   }
-// }
-
 export async function updatetreecuttingdetails(tcpdoc, data) {
   console.log(tcpdoc.data);
-  try{
-    await updateDoc(tcpdoc, data).then(ctrl => {
-      console.log('Document Updated');
+  try {
+    await updateDoc(tcpdoc, data).then((ctrl) => {
+      console.log("Document Updated");
     });
-  }catch(error){
+  } catch (error) {
     console.error(error);
   }
 }

@@ -11,6 +11,8 @@ import {
   doc,
 } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-firestore.js";
 
+import { markerAndLabels, marcoshighwayCoords, upperagno, lowerAgno, mt_pulagCoords } from "./constants/mapconstants.js";
+
 import {
   searching,
   setPermitRows,
@@ -51,7 +53,7 @@ const scheduleimplementationbtn = document.getElementById(
 );
 const implementationdateinput = document.getElementById("implementationdate");
 const backbutton = document.getElementById("backbutton");
-const tableheader = document.getElementById('tablehead');
+const tableheader = document.getElementById("tablehead");
 
 backbutton.addEventListener("click", () => {
   togglemodaldisplay("view");
@@ -161,6 +163,7 @@ async function fetchAutocomplete(query) {
     return [];
   }
 }
+
 function initMap() {
   const initialPosition = { lat: 16.404234843328066, lng: 120.59804057928649 };
 
@@ -174,7 +177,7 @@ function initMap() {
     position: initialPosition,
     draggable: false,
     icon: {
-      url: "../images/marker.png", // URL of the custom icon
+      url: "../images/marker.png",
       scaledSize: new google.maps.Size(40, 40),
     },
   });
@@ -187,16 +190,82 @@ function initMap() {
     // Move the marker to the clicked location
     updateMap(clickedLat, clickedLng);
 
-    // Fetch address using reverse geocoding
     const address = await getAddressFromCoordinates(clickedLat, clickedLng);
     if (address) {
       searchinput.value = address; // Update search input with new address
     }
 
-    // Store selected coordinates
     selectedLat = clickedLat;
     selectedLon = clickedLng;
   });
+
+  for (const [label, position] of Object.entries(markerAndLabels)) {
+    const marker = new google.maps.Marker({
+      position,
+      map,
+      title: label,
+    });
+
+    const infoWindow = new google.maps.InfoWindow({
+      content: `<h3>${label}</h3>`,
+    });
+
+    marker.addListener("click", () => {
+      infoWindow.open(map, marker);
+    });
+  }
+
+  var upperagnogeofence = new google.maps.Polygon({
+    paths: upperagno,
+    strokeColor: "#e033ff",
+    strokeOpacity: 0.8,
+    strokeWeight: 2,
+    fillColor: "#e033ff",
+    fillOpacity: 0.35,
+  });
+
+  // Create first polygon
+  var marcoshighway = new google.maps.Polygon({
+    paths: marcoshighwayCoords,
+    strokeColor: "#FF0000",
+    strokeOpacity: 0.8,
+    strokeWeight: 2,
+    fillColor: "#FF0000",
+    fillOpacity: 0.35,
+  });
+
+  var _lowerAgno = new google.maps.Polygon({
+    paths: lowerAgno,
+    strokeColor: "#44453f",
+    strokeOpacity: 0.8,
+    strokeWeight: 2,
+    fillColor: "#FFFFFF",
+    fillOpacity: 0.35,
+  });
+
+  // var _lowerAgno2 = new google.maps.Polygon({
+  //   paths: lowerAgno2,
+  //   strokeColor: "#FF0000",
+  //   strokeOpacity: 0.8,
+  //   strokeWeight: 2,
+  //   fillColor: "#FF0000",
+  //   fillOpacity: 0.35,
+  // });
+
+  // Create second polygon
+  var mt_pulag = new google.maps.Polygon({
+    paths: mt_pulagCoords,
+    strokeColor: "#33ff3c",
+    strokeOpacity: 0.8,
+    strokeWeight: 2,
+    fillColor: "#33ff3c",
+    fillOpacity: 0.35,
+  });
+
+  marcoshighway.setMap(map);
+  mt_pulag.setMap(map);
+  upperagnogeofence.setMap(map);
+  _lowerAgno.setMap(map);
 }
 
 async function getAddressFromCoordinates(lat, lon) {
@@ -264,6 +333,7 @@ openBtn.onclick = () => {
   updateMap(16.404234843328066, 120.59804057928649);
   modaltitle.innerHTML = "Add an Inspection Schedule";
   togglebuttons("add");
+  togglemodaldisplay('view');
 };
 
 closeBtn.onclick = () => {
@@ -405,6 +475,7 @@ async function getforinspectiontcps(statusfilter) {
                 modaltitle.innerHTML = `${data.subject}'s Tree Cutting Permit Info`;
                 togglefields(true);
                 togglebuttons("Approved");
+                togglemodaldisplay('view');
               });
             }
 
@@ -467,10 +538,10 @@ function togglemodaldisplay(purpose) {
   }
 }
 
-function tableheadetoggler(filter){
+function tableheadetoggler(filter) {
   tableheader.innerHTML = "";
   let headerreplacerstring = "";
-  if(filter === "For Inspection"){
+  if (filter === "For Inspection") {
     headerreplacerstring = `
     <th>Client/Subject</th>
       <th>Type</th>
@@ -478,7 +549,7 @@ function tableheadetoggler(filter){
       <th>Inspection Date</th>
       <th>Assigned Personnel</th>
       <th>Status</th>`;
-  }else if(filter === "Inspected"){
+  } else if (filter === "Inspected") {
     headerreplacerstring = `
     <th>Client/Subject</th>
     <th>Type</th>
@@ -486,7 +557,7 @@ function tableheadetoggler(filter){
     <th>Inspected At</th>
     <th>Inspected By</th>
     <th>Status</th>`;
-  }else{
+  } else {
     headerreplacerstring = `
     <th>Client/Subject</th>
     <th>Type</th>

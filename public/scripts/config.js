@@ -18,11 +18,10 @@ export const auth = getAuth(app);
 export const db = getFirestore(app);
 
 
-export function logoutfunction (modal, message){
+export function logoutfunction (){
   signOut(auth)
   .then(() => {
     Swal.fire({
-      title: "Sample",
       text: "Log out successful",
       icon: "success",
     }).then(async (result) => {

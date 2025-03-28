@@ -1175,7 +1175,7 @@ export const lowerAgno = [
 
 ];
 
-export const marcoshighwayCoords = [
+export const mt_pulagCoords = [
   { lat: 16.70231147656999, lng: 120.8998786065803 },
   { lat: 16.70796802055422, lng: 120.880996984595 },
   { lat: 16.7056943435429, lng: 120.8633429406037 },
@@ -1263,7 +1263,7 @@ export const marcoshighwayCoords = [
 ];
 
 // Second geofence polygon coordinates
-export const mt_pulagCoords = [
+export const marcoshighwayCoords = [
   { lat: 16.40240783400511, lng: 120.5959755963186 },
   { lat: 16.44394607598064, lng: 120.5789715282792 },
   { lat: 16.4416376157747, lng: 120.5667876840442 },

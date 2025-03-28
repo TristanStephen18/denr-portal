@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+  <%- include('../partials/head', {title: 'DENR PORTAL RPS',
+  csslink:'../css/rpschief/rpschief.css'}) %>
+  <body>
+    <div class="main-content">
+      <%- include('../partials/topbar') %>
+
+      <h2>Permits from RPU for Recommending Approval</h2>
+
+      <%- include('../partials/dashboardcards') %>
+      <div class="table-container">
+        <%- include('../partials/tables/table_partials_d') %>
+        <%- include('../partials/tables/evaluatedtable') %>
+    </div>
+    </div>
+
+    <script
+      src="../scripts/rpschief_scripts/dashboard.js"
+      type="module"
+    ></script>
+  </body>
+</html>

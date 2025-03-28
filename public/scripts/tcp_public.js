@@ -7,10 +7,6 @@ import {
   toggleapplication,
 } from "./datahelpers.js";
 
-import { initMap } from "./maphelper.js";
-
-// console.log(permitmodal.getAttribute('permit-id'),permitmodal.getAttribute('user-id'), permitmodal.getAttribute('client'), permitmodal.getAttribute('permittype'), permitmodal.getAttribute('permit-status'));
-
 const logoutbtn = document.getElementById("logout");
 logoutbtn.addEventListener("click", logoutfunction);
 
@@ -28,7 +24,6 @@ const datadisplayerdiv = document.getElementById("data-displayer");
 const requirementsdisplayerdiv = document.getElementById(
   "requirements-displayer"
 );
-//action-buttons
 const viewreqsbutton = document.getElementById("viewrequirementsbtn");
 const approverbtn = document.getElementById("approvebtn");
 const rejectbtn = document.getElementById("rejectbtn");

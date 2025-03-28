@@ -22,8 +22,11 @@ export function sessionchecker(elemendId, pfpid) {
         elemendId.innerText = `${username}`;
         if(username === 'admin1'){
           pfpid.src = "../images/admin1.jpg";
+        }
+        else if(username === "RPS Chief"){
+          pfpid.src = "../images/rpschieficon_d.jpg";
         }else{
-          pfpid.src = "../images/adminp.jpg";
+          pfpid.src = "../images/adminp.png";
         }
       } catch (error) {
         console.error(error);

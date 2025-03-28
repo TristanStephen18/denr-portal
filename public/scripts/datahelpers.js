@@ -19,7 +19,7 @@ export function searching(searchfilter) {
   const query = searchfilter.value.toLowerCase();
 
   allRows.forEach((row) => {
-    const rowContent = row.rowContent.toLowerCase();
+    const rowContent = row.textContent.toLowerCase();
     if (rowContent.includes(query)) {
       row.style.display = ""; // show the row
     } else {
@@ -163,6 +163,17 @@ export async function getpendingpermits(permittype, requirementsdiv) {
             console.log(docdata.uploadedAt);
 
             row.addEventListener("click", () => {
+              if (type === "Transport Permit") {
+                initMap(
+                  "",
+                  "",
+                  "Transport Permit",
+                  `${docdata.from._lat}`,
+                  `${docdata.from._long}`,
+                  `${docdata.to._lat}`,
+                  `${docdata.to._long}`
+                );
+              }
               modal.setAttribute(`permit-id`, `${doc.id}`);
               modal.setAttribute("user-id", docdata.userID);
               modal.setAttribute("client", docdata.client);
@@ -247,6 +258,17 @@ export async function getevaluatedpermits(
 
             // Add event listener for modal
             row.addEventListener("click", () => {
+              if (type === "Transport Permit") {
+                initMap(
+                  "",
+                  "",
+                  "Transport Permit",
+                  `${docdata.from._lat}`,
+                  `${docdata.from._long}`,
+                  `${docdata.to._lat}`,
+                  `${docdata.to._long}`
+                );
+              }
               modal.setAttribute(`permit-id`, `${doc.id}`);
               modal.setAttribute("user-id", docdata.userID);
               modal.setAttribute("client", docdata.client);
@@ -331,6 +353,17 @@ export async function getrejectedpermits(
 
             // Add event listener for modal
             row.addEventListener("click", () => {
+              if (type === "Transport Permit") {
+                initMap(
+                  "",
+                  "",
+                  "Transport Permit",
+                  `${docdata.from._lat}`,
+                  `${docdata.from._long}`,
+                  `${docdata.to._lat}`,
+                  `${docdata.to._long}`
+                );
+              }
               modal.setAttribute(`permit-id`, `${doc.id}`);
               modal.setAttribute("user-id", docdata.userID);
               modal.setAttribute("client", docdata.client);
@@ -406,8 +439,12 @@ export async function getpendingpermits_chainsawandtcp(
 
             // Add event listener for modal
             row.addEventListener("click", () => {
-              initMap(`${docdata.location._lat}`, `${docdata.location._long}`);
               if (permittype === "tree_cutting") {
+                initMap(
+                  `${docdata.location._lat}`,
+                  `${docdata.location._long}`,
+                  "Tree Cutting"
+                );
                 datadisplayerdiv.style.display = "";
                 requirementsdisplayerdiv.style.display = "none";
               }
@@ -416,15 +453,6 @@ export async function getpendingpermits_chainsawandtcp(
               modal.setAttribute("client", docdata.client);
               modal.setAttribute("permittype", permittype);
               modal.setAttribute("permit-status", docdata.status);
-              modal.setAttribute(
-                "tcp-location-lat",
-                `${docdata.location._lat}`
-              );
-              modal.setAttribute(
-                "tcp-location-long",
-                `${docdata.location._long}`
-              );
-              console.log(docdata.location);
 
               getfiles(
                 `${doc.id.toString()}`,
@@ -500,8 +528,14 @@ export async function getevaluatedpermits_chainsawandtcp(
 
             // Add event listener for modal
             row.addEventListener("click", () => {
-              initMap(`${docdata.location._lat}`, `${docdata.location._long}`);
               if (permittype === "tree_cutting") {
+                initMap(
+                  `${docdata.location._lat}`,
+                  `${docdata.location._long}`,
+                  "Tree Cutting",
+                  "0.1",
+                  "0.1"
+                );
                 datadisplayerdiv.style.display = "";
                 requirementsdisplayerdiv.style.display = "none";
               }
@@ -510,15 +544,6 @@ export async function getevaluatedpermits_chainsawandtcp(
               modal.setAttribute("client", docdata.client);
               modal.setAttribute("permittype", permittype);
               modal.setAttribute("permit-status", docdata.status);
-              modal.setAttribute(
-                "tcp-location-lat",
-                `${docdata.location._lat}`
-              );
-              modal.setAttribute(
-                "tcp-location-long",
-                `${docdata.location._long}`
-              );
-              console.log(docdata.location);
 
               getfiles(
                 `${doc.id.toString()}`,
@@ -593,6 +618,13 @@ export async function getrejectedpermits_chainsawandtcp(
             // Add event listener for modal
             row.addEventListener("click", () => {
               if (permittype === "tree_cutting") {
+                initMap(
+                  `${docdata.location._lat}`,
+                  `${docdata.location._long}`,
+                  "Tree Cutting",
+                  "0.1",
+                  "0.1"
+                );
                 datadisplayerdiv.style.display = "";
                 requirementsdisplayerdiv.style.display = "none";
               }

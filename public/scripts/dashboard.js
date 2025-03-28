@@ -5,13 +5,20 @@ import {
   onSnapshot,
   GeoPoint,
   addDoc,
-  updateDoc,
   query,
   orderBy,
   doc,
 } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-firestore.js";
 
-import { markerAndLabels, marcoshighwayCoords, upperagno, lowerAgno, mt_pulagCoords } from "./constants/mapconstants.js";
+import {
+  markerAndLabels,
+  marcoshighwayCoords,
+  upperagno,
+  lowerAgno,
+  mt_pulagCoords,
+} from "./constants/mapconstants.js";
+
+import { collectionsToListen } from "./constants/firebaseconstants.js";
 
 import {
   searching,
@@ -129,13 +136,6 @@ const schedcollection = collection(db, "tcpscheds");
 
 const options = { month: "long", day: "numeric", year: "numeric" };
 
-const collectionsToListen = {
-  transport_permit: "tpnum",
-  chainsaw: "crnum",
-  tree_cutting: "tcpnum",
-  wildlife: "wrnum",
-  plantation: "pwprnum",
-};
 
 function setupSnapshotListener(collectionName, elementId) {
   const colRef = collection(db, collectionName);
@@ -182,17 +182,15 @@ function initMap() {
     },
   });
 
-  // Add click event listener to the map
   map.addListener("click", async (event) => {
     const clickedLat = event.latLng.lat();
     const clickedLng = event.latLng.lng();
 
-    // Move the marker to the clicked location
     updateMap(clickedLat, clickedLng);
 
     const address = await getAddressFromCoordinates(clickedLat, clickedLng);
     if (address) {
-      searchinput.value = address; // Update search input with new address
+      searchinput.value = address; 
     }
 
     selectedLat = clickedLat;
@@ -333,7 +331,7 @@ openBtn.onclick = () => {
   updateMap(16.404234843328066, 120.59804057928649);
   modaltitle.innerHTML = "Add an Inspection Schedule";
   togglebuttons("add");
-  togglemodaldisplay('view');
+  togglemodaldisplay("view");
 };
 
 closeBtn.onclick = () => {
@@ -432,18 +430,15 @@ async function getforinspectiontcps(statusfilter) {
             // console.log(new Date(), inspectiondate);
             if (statusfilter === "For Inspection") {
               const datenow = new Date().toLocaleDateString("en-US", options);
-              if (datenow > inspectiondate) {
-                // console.log("This inspection has been missed");
+              if (new Date(datenow) > new Date(inspectiondate)) {
                 trcolor = "rgb(253, 133, 133)";
-                row.style.background = trcolor;
-                // console.log(data.subject);
               } else if (datenow == inspectiondate) {
                 // console.log("This inspection should be done now");
                 trcolor = "rgb(152, 250, 165)";
-                // console.log(data.subject);
-
-                row.style.background = trcolor;
+              } else {
+                trcolor = "white";
               }
+              row.style.background = trcolor;
               row.addEventListener("click", () => {
                 // console.log(row.getAttribute("id"));
                 modal.setAttribute("tcpid", `${doc.id}`);
@@ -475,7 +470,7 @@ async function getforinspectiontcps(statusfilter) {
                 modaltitle.innerHTML = `${data.subject}'s Tree Cutting Permit Info`;
                 togglefields(true);
                 togglebuttons("Approved");
-                togglemodaldisplay('view');
+                togglemodaldisplay("view");
               });
             }
 

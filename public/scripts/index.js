@@ -6,8 +6,7 @@ import {
   collection,
 } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-firestore.js";
 
-
-const loaderchanger = document.getElementById('loadergif');
+const loaderchanger = document.getElementById("loadergif");
 
 function showModal(message) {
   const modal = document.getElementById("custom-modal");
@@ -33,16 +32,18 @@ async function login(username, password) {
       const data = user.data();
       if (username === data.username && password === data.password) {
         userFound = true;
-        signInWithEmailAndPassword(auth, data.email, data.password).then(
-          () => {
-            loaderchanger.src = "../images/ok.png";
-            showModal(`Login successful! Welcome ${data.username}`);
-            setTimeout(() => {
-              hideModal();
+        signInWithEmailAndPassword(auth, data.email, data.password).then(() => {
+          loaderchanger.src = "../images/ok.png";
+          showModal(`Login successful! Welcome ${data.username}`);
+          setTimeout(() => {
+            hideModal();
+            if (username === "RPS Chief") {
+              window.location.assign("/rpschiefdashboard");
+            } else {
               window.location.assign("/dashboard");
-            }, 1500);
-          }
-        );
+            }
+          }, 1500);
+        });
       } else if (username === data.username && password !== data.password) {
         userFound = true;
         loaderchanger.src = "../images/error2.png";
@@ -62,7 +63,6 @@ async function login(username, password) {
     setTimeout(hideModal, 2000);
   }
 }
-
 
 const loginform = document.getElementById("login-form");
 loginform.addEventListener("submit", (e) => {

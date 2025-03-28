@@ -25,6 +25,8 @@ app.get("/orderofpayment/:name", (req, res) => {
   const name = req.params.name;
   res.render("./templates/order_of_payment", { name: name });
 });
+app.get("/rpschiefdashboard", (req, res) => res.render("rpschief_views/rpschiefdashboard"));
+
 
 app.listen(port, () =>
   console.log(`App is listening on http://localhost:3000/`)

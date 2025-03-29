@@ -61,6 +61,13 @@ const scheduleimplementationbtn = document.getElementById(
 const implementationdateinput = document.getElementById("implementationdate");
 const backbutton = document.getElementById("backbutton");
 const tableheader = document.getElementById("tablehead");
+const clientNameLabel = document.getElementById('clientNamelabel');
+const tcptypelabel = document.getElementById('tcptypelabel');
+const datelabel = document.getElementById('datelabel');
+const personnellabel = document.getElementById('personnellabel');
+const locationlabel = document.getElementById('locationlabel');
+const searchbtn = document.getElementById("searchBtn");
+
 
 backbutton.addEventListener("click", () => {
   togglemodaldisplay("view");
@@ -86,6 +93,7 @@ typeFilter.addEventListener("change", (e) => {
   // console.log(typeFilter.value);
   getforinspectiontcps(`${typeFilter.value}`);
   tableheadetoggler(typeFilter.value);
+  tablesearch.value = "";
 });
 
 savebtn.addEventListener("click", () => {
@@ -312,7 +320,7 @@ searchinput.addEventListener("input", async (e) => {
   }
 });
 
-document.getElementById("searchBtn").addEventListener("click", () => {
+searchbtn.addEventListener("click", () => {
   if (selectedLat && selectedLon) {
     updateMap(selectedLat, selectedLon);
   }
@@ -332,6 +340,8 @@ openBtn.onclick = () => {
   modaltitle.innerHTML = "Add an Inspection Schedule";
   togglebuttons("add");
   togglemodaldisplay("view");
+  togglefieldlabelsandsearchbtn('For adding');
+  togglefields(false);
 };
 
 closeBtn.onclick = () => {
@@ -448,6 +458,7 @@ async function getforinspectiontcps(statusfilter) {
                 modaltitle.innerHTML = `${data.subject}'s Tree Cutting Permit Info`;
                 togglefields(false);
                 togglebuttons("edit");
+                togglefieldlabelsandsearchbtn('For Inspection');
               });
             } else if (statusfilter === "Inspected") {
               row.addEventListener("click", () => {
@@ -460,6 +471,7 @@ async function getforinspectiontcps(statusfilter) {
                 modaltitle.innerHTML = `${data.subject}'s Tree Cutting Permit Info`;
                 togglefields(true);
                 togglebuttons("approval");
+                togglefieldlabelsandsearchbtn('Inspected');
               });
             } else {
               row.addEventListener("click", () => {
@@ -471,6 +483,7 @@ async function getforinspectiontcps(statusfilter) {
                 togglefields(true);
                 togglebuttons("Approved");
                 togglemodaldisplay("view");
+                togglefieldlabelsandsearchbtn('For Implementation');
               });
             }
 
@@ -549,7 +562,7 @@ function tableheadetoggler(filter) {
     <th>Client/Subject</th>
     <th>Type</th>
     <th>Address</th>
-    <th>Inspected At</th>
+    <th>Date of Inspection</th>
     <th>Inspected By</th>
     <th>Status</th>`;
   } else {
@@ -563,5 +576,36 @@ function tableheadetoggler(filter) {
 
   tableheader.innerHTML = headerreplacerstring;
 }
+
+
+function togglefieldlabelsandsearchbtn(status){
+  switch (status) {
+    case 'Inspected':
+      datelabel.innerHTML = "Date of Inspection: ";
+      clientNameLabel.innerHTML = "Client / Subject: ";
+      locationlabel.innerHTML = "Location of Inspection: ";
+      personnellabel.innerHTML = "Inspected by: ";
+      tcptypelabel.innerHTML = "Tree Cutting Permit Type: ";
+      searchbtn.style.display = "none";
+      break;
+    case 'For Implementation':
+      datelabel.innerHTML = "Date of Inspection: ";
+      clientNameLabel.innerHTML = "Client / Subject: ";
+      locationlabel.innerHTML = "Location of Inspection: ";
+      personnellabel.innerHTML = "Inspected by: ";
+      tcptypelabel.innerHTML = "Tree Cutting Permit Type: ";
+      searchbtn.style.display = "none";
+      break;
+    default:
+      datelabel.innerHTML = "Choose date for Inspection: ";
+      clientNameLabel.innerHTML = "Name of the Client / Subject: ";
+      locationlabel.innerHTML = "Location of Inspection: ";
+      personnellabel.innerHTML = "Choose a personnel: ";
+      tcptypelabel.innerHTML = "Choose Tree Cutting Permit Type: ";
+      searchbtn.style.display = "";
+      break;
+  }
+}
+
 // getforinspectiontcps();
 window.onload = initializepage();

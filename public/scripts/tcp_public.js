@@ -11,7 +11,7 @@ const logoutbtn = document.getElementById("logout");
 logoutbtn.addEventListener("click", logoutfunction);
 
 const modal = new bootstrap.Modal(document.getElementById("permitModal"));
-const permitmodal = document.getElementById("permitModal");
+export const permitmodal = document.getElementById("permitModal");
 const searchfilter = document.getElementById("searchdata");
 const requirementsdiv = document.getElementById("requirements");
 const statusfilter = document.getElementById("status");

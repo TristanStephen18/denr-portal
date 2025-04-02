@@ -10,6 +10,8 @@ const requirementsdiv = document.querySelector('requirements');
 export async function getfiles(id, elemendId, collectionname) {
   elemendId.innerHTML = "";
   console.log("fetching");
+  console.log(collectionname);
+  
   try {
     const filecollection = collection(
       db,

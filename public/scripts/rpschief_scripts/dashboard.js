@@ -12,18 +12,28 @@ import {
 } from "../constants/firebaseconstants.js";
 // import { status } from "express/lib/response.js";
 
-import { setPermitRows, searching } from "../datahelpers.js";
+import { setPermitRows, searching, markasinitialized } from "../datahelpers.js";
+import { getfiles } from "../decoder.js";
 
 const options = { month: "long", day: "numeric", year: "numeric" };
 const tablebodyid = document.getElementById("evaluatedtbody");
 const modal = document.getElementById("evaluatedmodal");
 const statusfilter = document.getElementById("status");
 const searchdata = document.getElementById("searchdata");
+const requirementsdiv = document.getElementById('requirements');
+const client = document.getElementById('modalClient');
+const address = document.getElementById('modalAddress');
+const appdate = document.getElementById('modalDate');
+const initializedbtn = document.getElementById('initializedbtn');
 
 searchdata.addEventListener("input", () => {
   // console.log(searchdata.value);
 
   searching(searchdata);
+});
+
+initializedbtn.addEventListener('click', ()=>{
+  markasinitialized(`${modal.getAttribute('permit-id')}`, `${modal.getAttribute('permit-type')}`, `${modal.getAttribute('client')}`);
 });
 
 async function updaterow(updateto) {
@@ -70,6 +80,8 @@ function setupSnapshotListener(collectionName) {
 
       if (data.status === "Evaluated") {
         const permit = {
+          collectionname : collectionName,
+          address: data.address,
           id: doc.id,
           client: data.client,
           permit_number: doc.id,
@@ -160,7 +172,14 @@ function renderTable(filter) {
 
       // Click event to update status to "Pending"
       row.addEventListener("click", async () => {
+        modal.setAttribute('permit-id', `${permit.id}`);
+        modal.setAttribute('permit-type', `${permit.collectionname}`);
+        modal.setAttribute('client', `${permit.client}`);
         modal.style.display = "block";
+        client.value = `${permit.client}`;
+        address.value = `${permit.address}`;
+        appdate.value = `${new Date(permit.date_created).toISOString().split("T")[0]}`;
+        getfiles(`${permit.permit_number}`, requirementsdiv, `${permit.collectionname}`);
       });
     }
 
@@ -174,8 +193,6 @@ function renderTable(filter) {
 //filtering
 
 statusfilter.addEventListener("change", () => {
-  // console.log("changed");
-  // console.log(statusfilter.value);
-
   renderTable(statusfilter.value);
+  searchdata.value = "";
 });

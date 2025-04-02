@@ -105,6 +105,45 @@ export async function toggleapplication(
   }
 }
 
+export async function markasinitialized(
+  permitid,
+  permittype,
+  client
+) {
+  const admindoc = doc(db, `${permittype}`, permitid);
+  // const userdoc = doc(db, `mobile_users/${userid}/applications`, permitid);
+
+  try {
+    Swal.fire({
+      title: "Mark as initialized?",
+      showCancelButton: true,
+      confirmButtonText: "Yes",
+      denyButtonText: "No",
+      customClass: {
+        actions: "my-actions",
+        cancelButton: "order-1 right-gap",
+        confirmButton: "order-2",
+      },
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        await updateDoc(admindoc, {
+          status: "Initialized by RPS Chief",
+          evaluated_by: username,
+          evaluated_at: new Date(),
+          current_location: "Pending CENRO Approval",
+        });
+        Swal.fire(
+          `The Application of ${client} was initialized`,
+          "",
+          "success"
+        );
+      }
+    });
+  } catch (error) {
+    console.error(error);
+  }
+}
+
 onAuthStateChanged(auth, async (user) => {
   if (user) {
     console.log("User is logged in");
@@ -128,6 +167,10 @@ export async function getpendingpermits(permittype, requirementsdiv) {
   const options = { month: "long", day: "numeric", year: "numeric" };
   let type = "";
   const modal = document.getElementById("permitModal");
+  const datadisplayerdiv = document.getElementById("data-displayer");
+  const requirementsdisplayerdiv = document.getElementById(
+    "requirements-displayer"
+  );
 
   try {
     const tpcollectionref = collection(db, `${permittype}`);
@@ -173,6 +216,8 @@ export async function getpendingpermits(permittype, requirementsdiv) {
                   `${docdata.to._lat}`,
                   `${docdata.to._long}`
                 );
+                datadisplayerdiv.style.display = "";
+                requirementsdisplayerdiv.style.display = "none";
               }
               modal.setAttribute(`permit-id`, `${doc.id}`);
               modal.setAttribute("user-id", docdata.userID);
@@ -218,6 +263,10 @@ export async function getevaluatedpermits(
   console.log("getting evaluated dataa");
   let type = "";
   const modal = document.getElementById("permitModal");
+  const datadisplayerdiv = document.getElementById("data-displayer");
+  const requirementsdisplayerdiv = document.getElementById(
+    "requirements-displayer"
+  );
 
   try {
     const tpcollectionref = collection(db, `${permittype}`);
@@ -230,7 +279,7 @@ export async function getevaluatedpermits(
         snapshot.forEach((doc) => {
           const docdata = doc.data();
           const row = document.createElement("tr");
-          if (docdata.status === "Evaluated") {
+          if (docdata.status === "Evaluated" || docdata.status === "Initialized by RPS Chief") {
             row.setAttribute(`${permittype}-num`, doc.id);
             if (permittype === "wildlife") {
               type = "Wildlife Registration";
@@ -268,6 +317,8 @@ export async function getevaluatedpermits(
                   `${docdata.to._lat}`,
                   `${docdata.to._long}`
                 );
+                datadisplayerdiv.style.display = "";
+                requirementsdisplayerdiv.style.display = "none";
               }
               modal.setAttribute(`permit-id`, `${doc.id}`);
               modal.setAttribute("user-id", docdata.userID);
@@ -314,6 +365,10 @@ export async function getrejectedpermits(
   console.log("getting REJECTED dataa");
   let type = "";
   const modal = document.getElementById("permitModal");
+  const datadisplayerdiv = document.getElementById("data-displayer");
+  const requirementsdisplayerdiv = document.getElementById(
+    "requirements-displayer"
+  );
 
   try {
     const tpcollectionref = collection(db, `${permittype}`);
@@ -363,6 +418,8 @@ export async function getrejectedpermits(
                   `${docdata.to._lat}`,
                   `${docdata.to._long}`
                 );
+                datadisplayerdiv.style.display = "";
+                requirementsdisplayerdiv.style.display = "none";
               }
               modal.setAttribute(`permit-id`, `${doc.id}`);
               modal.setAttribute("user-id", docdata.userID);
@@ -633,14 +690,7 @@ export async function getrejectedpermits_chainsawandtcp(
               modal.setAttribute("client", docdata.client);
               modal.setAttribute("permittype", permittype);
               modal.setAttribute("permit-status", docdata.status);
-              // modal.setAttribute(
-              //   "tcp-location-lat",
-              //   `${docdata.location._lat}`
-              // );
-              // modal.setAttribute(
-              //   "tcp-location-long",
-              //   `${docdata.location._long}`
-              // );
+
               console.log(docdata.location);
               getfiles(
                 `${doc.id.toString()}`,

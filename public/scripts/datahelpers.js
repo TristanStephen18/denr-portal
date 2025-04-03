@@ -566,7 +566,7 @@ export async function getevaluatedpermits_chainsawandtcp(
         snapshot.forEach((doc) => {
           const docdata = doc.data();
           const row = document.createElement("tr");
-          if (docdata.status === "Evaluated" && docdata.type === `${type}`) {
+          if (docdata.status === "Evaluated" && docdata.type === `${type}` || docdata.status === "Initialized by RPS Chief") {
             row.setAttribute(`${permittype}-num`, doc.id);
             row.innerHTML = `
               <td>${docdata.client}</td>

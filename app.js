@@ -26,6 +26,8 @@ app.get("/orderofpayment/:name", (req, res) => {
   res.render("./templates/order_of_payment", { name: name });
 });
 app.get("/rpschiefdashboard", (req, res) => res.render("rpschief_views/rpschiefdashboard"));
+app.get("/walkin", (req, res) => res.render("walk_in_permits/menu"));
+
 
 
 app.listen(port, () =>

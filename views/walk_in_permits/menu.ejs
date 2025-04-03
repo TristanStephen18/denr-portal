@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+  <%- include('../partials/head', {title: 'Walk In Permits',
+  csslink:'../css/walk_in/menu.css'}) %>
+  <body>
+    <%- include('../partials/sidebar') %>
+    <div class="main-content">
+      <%- include('../partials/topbar') %>
+      <h2>Choose Permit / Registration Type</h2>
+      <br />
+      <br />
+      <div class="menu-container">
+        <div class="menu-grid">
+          <div class="menu-box">
+            (Tree Cutting) <br />
+            Public Safety Permit
+          </div>
+          <div class="menu-box">
+            (Tree Cutting) <br />
+            Private Land Timber Permit
+          </div>
+          <div class="menu-box">
+            (Tree Cutting) <br />
+            National Government Agencies Permit
+          </div>
+          <div class="menu-box">
+            (Chainsaw) <br />
+            Registration
+          </div>
+          <div class="menu-box">
+            (Chainsaw) <br />
+            Permit to sell
+          </div>
+          <div class="menu-box">
+            (Chainsaw) <br />
+            Permit to purchase
+          </div>
+          <div class="menu-box">
+            Plantation and Wood Processing Registration
+          </div>
+          <div class="menu-box">Wildlife Registration</div>
+          <div class="menu-box">Transport Permit</div>
+        </div>
+      </div>
+    </div>
+
+    <script type="module">
+      import {
+        updateDateTime,
+        sessionchecker,
+      } from "../scripts/sessionchecker.js";
+
+      const pfpid = document.getElementById("pfp");
+      const username = document.getElementById("username");
+
+      sessionchecker(username, pfpid);
+      setInterval(updateDateTime, 1000);
+    </script>
+  </body>
+</html>

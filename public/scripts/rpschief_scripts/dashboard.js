@@ -46,6 +46,7 @@ async function updaterow(updateto) {
   }
 }
 
+
 allpermitscollectionref.forEach((collectionref) => {
   console.log(collectionref);
 });

@@ -298,7 +298,9 @@ h3 {
 }
 
 #viewrequirementsbtn:hover {
-  background-color: #0056b3;
+  background-color: white;
+  border: 1px solid black;
+  color: black;
   transform: scale(1.05);
 }
 
@@ -307,7 +309,9 @@ h3 {
 }
 
 #createOOPbtn:hover {
-  background-color: #545b62;
+  background-color: white;
+  border: 1px solid black;
+  color: black; 
   transform: scale(1.05);
 }
 
@@ -316,7 +320,9 @@ h3 {
 }
 
 #approvebtn:hover {
-  background-color: #218838;
+  background-color: white;
+  border: 1px solid black;
+  color: black;
   transform: scale(1.05);
 }
 
@@ -325,7 +331,9 @@ h3 {
 }
 
 #rejectbtn:hover {
-  background-color: #c82333;
+  background-color: white;
+  border: 1px solid black;
+  color: black;
   transform: scale(1.05);
 }
 

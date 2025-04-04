@@ -105,11 +105,7 @@ export async function toggleapplication(
   }
 }
 
-export async function markasinitialized(
-  permitid,
-  permittype,
-  client
-) {
+export async function markasinitialized(permitid, permittype, client) {
   const admindoc = doc(db, `${permittype}`, permitid);
   // const userdoc = doc(db, `mobile_users/${userid}/applications`, permitid);
 
@@ -224,6 +220,7 @@ export async function getpendingpermits(permittype, requirementsdiv) {
               modal.setAttribute("client", docdata.client);
               modal.setAttribute("permittype", permittype);
               modal.setAttribute("permit-status", docdata.status);
+              modal.setAttribute("permit-address", docdata.address);
               getfiles(
                 `${doc.id.toString()}`,
                 requirementsdiv,
@@ -279,7 +276,10 @@ export async function getevaluatedpermits(
         snapshot.forEach((doc) => {
           const docdata = doc.data();
           const row = document.createElement("tr");
-          if (docdata.status === "Evaluated" || docdata.status === "Initialized by RPS Chief") {
+          if (
+            docdata.status === "Evaluated" ||
+            docdata.status === "Initialized by RPS Chief"
+          ) {
             row.setAttribute(`${permittype}-num`, doc.id);
             if (permittype === "wildlife") {
               type = "Wildlife Registration";
@@ -325,6 +325,7 @@ export async function getevaluatedpermits(
               modal.setAttribute("client", docdata.client);
               modal.setAttribute("permittype", permittype);
               modal.setAttribute("permit-status", docdata.status);
+              modal.setAttribute("permit-address", docdata.address);
 
               getfiles(
                 `${doc.id.toString()}`,
@@ -426,6 +427,7 @@ export async function getrejectedpermits(
               modal.setAttribute("client", docdata.client);
               modal.setAttribute("permittype", permittype);
               modal.setAttribute("permit-status", docdata.status);
+              modal.setAttribute("permit-address", docdata.address);
 
               getfiles(
                 `${doc.id.toString()}`,
@@ -510,6 +512,7 @@ export async function getpendingpermits_chainsawandtcp(
               modal.setAttribute("client", docdata.client);
               modal.setAttribute("permittype", permittype);
               modal.setAttribute("permit-status", docdata.status);
+              modal.setAttribute("permit-address", docdata.address);
 
               getfiles(
                 `${doc.id.toString()}`,
@@ -566,7 +569,10 @@ export async function getevaluatedpermits_chainsawandtcp(
         snapshot.forEach((doc) => {
           const docdata = doc.data();
           const row = document.createElement("tr");
-          if (docdata.status === "Evaluated" && docdata.type === `${type}` || docdata.status === "Initialized by RPS Chief") {
+          if (
+            (docdata.status === "Evaluated" && docdata.type === `${type}`) ||
+            docdata.status === "Initialized by RPS Chief"
+          ) {
             row.setAttribute(`${permittype}-num`, doc.id);
             row.innerHTML = `
               <td>${docdata.client}</td>
@@ -601,6 +607,7 @@ export async function getevaluatedpermits_chainsawandtcp(
               modal.setAttribute("client", docdata.client);
               modal.setAttribute("permittype", permittype);
               modal.setAttribute("permit-status", docdata.status);
+              modal.setAttribute("permit-address", docdata.address);
 
               getfiles(
                 `${doc.id.toString()}`,
@@ -690,6 +697,7 @@ export async function getrejectedpermits_chainsawandtcp(
               modal.setAttribute("client", docdata.client);
               modal.setAttribute("permittype", permittype);
               modal.setAttribute("permit-status", docdata.status);
+              modal.setAttribute("permit-address", docdata.address);
 
               console.log(docdata.location);
               getfiles(

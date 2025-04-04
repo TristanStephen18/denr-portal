@@ -1,4 +1,4 @@
-const { name } = require("ejs");
+// const { name } = require("ejs");
 const express = require("express");
 const path = require("path");
 const app = express();
@@ -21,9 +21,10 @@ app.get("/chainsaw/permittopurchase", (req, res) => res.render("chainsaw_ptp"));
 app.get("/dashboard", (req, res) => res.render("dashboard"));
 app.get("/transportpermits", (req, res) => res.render("transport_permits"));
 app.get("/decoder", (req, res) => res.render("decoder"));
-app.get("/orderofpayment/:name", (req, res) => {
+app.get("/orderofpayment/:name/:address", (req, res) => {
   const name = req.params.name;
-  res.render("./templates/order_of_payment", { name: name });
+  const address = req.params.address;
+  res.render("./templates/order_of_payment", { name: name, address: address });
 });
 app.get("/rpschiefdashboard", (req, res) => res.render("rpschief_views/rpschiefdashboard"));
 app.get("/walkin", (req, res) => res.render("walk_in_permits/menu"));

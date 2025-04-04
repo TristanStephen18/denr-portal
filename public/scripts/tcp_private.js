@@ -33,7 +33,7 @@ const pendingabtnsdiv = document.getElementById("pending-abtns");
 const evaluatedabtns = document.getElementById("evaluated-abtns");
 
 createOOPbtn.addEventListener("click", () => {
-  window.open(`/orderofpayment/${permitmodal.getAttribute("client")}`);
+  window.open(`/orderofpayment/${permitmodal.getAttribute("client")}/${permitmodal.getAttribute("permit-address")}`);
 });
 
 approverbtn.addEventListener("click", () => {
@@ -86,7 +86,7 @@ viewreqsbutton.addEventListener("click", () => {
   let purpose = "";
   if (permitmodal.getAttribute("permit-status") === "Pending") {
     purpose = "see requirements";
-  } else if (permitmodal.getAttribute("permit-status") === "Evaluated") {
+  } else if (permitmodal.getAttribute("permit-status") === "Evaluated" || permitmodal.getAttribute("permit-status") === "Initialized by RPS Chief") {
     purpose = "evaluated";
   } else {
     purpose = "rejected";

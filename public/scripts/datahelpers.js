@@ -13,7 +13,8 @@ import { initMap } from "./maphelper.js";
 
 let allRows = [];
 let username = "No user";
-const options = { month: "long", day: "numeric", year: "numeric" };
+
+import { options } from "./constants/dateconstants.js";
 
 export function searching(searchfilter) {
   const query = searchfilter.value.toLowerCase();
@@ -216,6 +217,7 @@ export async function getpendingpermits(permittype, requirementsdiv) {
                 requirementsdisplayerdiv.style.display = "none";
               }
               modal.setAttribute(`permit-id`, `${doc.id}`);
+              modal.setAttribute(`permit-subtype`, ``);
               modal.setAttribute("user-id", docdata.userID);
               modal.setAttribute("client", docdata.client);
               modal.setAttribute("permittype", permittype);
@@ -321,6 +323,7 @@ export async function getevaluatedpermits(
                 requirementsdisplayerdiv.style.display = "none";
               }
               modal.setAttribute(`permit-id`, `${doc.id}`);
+              modal.setAttribute(`permit-subtype`, ``);
               modal.setAttribute("user-id", docdata.userID);
               modal.setAttribute("client", docdata.client);
               modal.setAttribute("permittype", permittype);
@@ -423,6 +426,7 @@ export async function getrejectedpermits(
                 requirementsdisplayerdiv.style.display = "none";
               }
               modal.setAttribute(`permit-id`, `${doc.id}`);
+              modal.setAttribute(`permit-subtype`, ``);
               modal.setAttribute("user-id", docdata.userID);
               modal.setAttribute("client", docdata.client);
               modal.setAttribute("permittype", permittype);
@@ -507,6 +511,7 @@ export async function getpendingpermits_chainsawandtcp(
                 datadisplayerdiv.style.display = "";
                 requirementsdisplayerdiv.style.display = "none";
               }
+              modal.setAttribute(`permit-subtype`, `${docdata.type}`);
               modal.setAttribute(`permit-id`, `${doc.id}`);
               modal.setAttribute("user-id", docdata.userID);
               modal.setAttribute("client", docdata.client);
@@ -602,6 +607,7 @@ export async function getevaluatedpermits_chainsawandtcp(
                 datadisplayerdiv.style.display = "";
                 requirementsdisplayerdiv.style.display = "none";
               }
+              modal.setAttribute(`permit-subtype`, `${docdata.type}`);
               modal.setAttribute(`permit-id`, `${doc.id}`);
               modal.setAttribute("user-id", docdata.userID);
               modal.setAttribute("client", docdata.client);
@@ -692,6 +698,8 @@ export async function getrejectedpermits_chainsawandtcp(
                 datadisplayerdiv.style.display = "";
                 requirementsdisplayerdiv.style.display = "none";
               }
+              modal.setAttribute(`permit-subtype`, `${docdata.type}`);
+
               modal.setAttribute(`permit-id`, `${doc.id}`);
               modal.setAttribute("user-id", docdata.userID);
               modal.setAttribute("client", docdata.client);

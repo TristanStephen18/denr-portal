@@ -7,6 +7,8 @@ import {
   toggleapplication,
 } from "./datahelpers.js";
 
+import { modalcontenttoggler } from "./helpers/togglers.js";
+
 const logoutbtn = document.getElementById("logout");
 logoutbtn.addEventListener("click", logoutfunction);
 
@@ -20,20 +22,15 @@ const evaluatedtablebody = document.getElementById("evaluatedtbody");
 const rejectedtable = document.getElementById("rejected-table");
 const rejectedtablebody = document.getElementById("rejectedtbody");
 const typelabel = document.getElementById("typelabel");
-const datadisplayerdiv = document.getElementById("data-displayer");
-const requirementsdisplayerdiv = document.getElementById(
-  "requirements-displayer"
-);
+
 const viewreqsbutton = document.getElementById("viewrequirementsbtn");
 const approverbtn = document.getElementById("approvebtn");
 const rejectbtn = document.getElementById("rejectbtn");
 const createOOPbtn = document.getElementById("createOOPbtn");
 const backbtn = document.getElementById("backbtn");
-const pendingabtnsdiv = document.getElementById("pending-abtns");
-const evaluatedabtns = document.getElementById("evaluated-abtns");
 
 createOOPbtn.addEventListener("click", () => {
-  window.open(`/orderofpayment/${permitmodal.getAttribute("client")}/${permitmodal.getAttribute("permit-address")}`);
+  window.open(`/orderofpayment/${permitmodal.getAttribute("client")}/${permitmodal.getAttribute("permit-address")}/${permitmodal.getAttribute("permittype")}/${permitmodal.getAttribute("permit-subtype")}`);
 });
 
 approverbtn.addEventListener("click", () => {
@@ -55,28 +52,6 @@ rejectbtn.addEventListener("click", () => {
     permitmodal.getAttribute("client")
   );
 });
-
-function modalcontenttoggler(purpose) {
-  if (purpose === "see requirements") {
-    datadisplayerdiv.style.display = "none";
-    requirementsdisplayerdiv.style.display = "";
-    evaluatedabtns.style.display = "none";
-    pendingabtnsdiv.style.display = "";
-  } else if (purpose === "back") {
-    datadisplayerdiv.style.display = "";
-    requirementsdisplayerdiv.style.display = "none";
-  } else if (purpose === "evaluated") {
-    datadisplayerdiv.style.display = "none";
-    requirementsdisplayerdiv.style.display = "";
-    evaluatedabtns.style.display = "";
-    pendingabtnsdiv.style.display = "none";
-  } else {
-    datadisplayerdiv.style.display = "none";
-    requirementsdisplayerdiv.style.display = "";
-    evaluatedabtns.style.display = "none";
-    pendingabtnsdiv.style.display = "none";
-  }
-}
 
 backbtn.addEventListener("click", () => {
   modalcontenttoggler("back");

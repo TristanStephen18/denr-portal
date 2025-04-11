@@ -37,11 +37,15 @@ app.get(
     const name = req.params.name;
     const address = req.params.address;
 
-    datatodisplay = amounttoword.getdatatodisplay(name, address, permittype, permitsubtype);
+    datatodisplay = amounttoword.getdatatodisplay(
+      name,
+      address,
+      permittype,
+      permitsubtype
+    );
 
     console.log(datatodisplay);
 
-    
     res.render("./templates/order_of_payment", { data: datatodisplay });
   }
 );
@@ -49,6 +53,10 @@ app.get("/rpschiefdashboard", (req, res) =>
   res.render("rpschief_views/rpschiefdashboard")
 );
 app.get("/walkin", (req, res) => res.render("walk_in_permits/menu"));
+app.get("/application/:client/:sn/:apptype/:maintype", (req, res) => {
+  const client = req.params.client;
+  res.render("application_viewer", { client: client, sn: req.params.sn, apptype: req.params.apptype, permittype: req.params.maintype });
+});
 
 app.listen(port, () =>
   console.log(`App is listening on http://localhost:3000/`)

@@ -17,6 +17,8 @@ export function initMap(
   tptolat,
   tptolong
 ) {
+  console.log(tcpmarkerlat + "" + tcpmarkerlong);
+  
   let connectorref, connector;
   const initialPosition = { lat: 16.404234843328066, lng: 120.59804057928649 };
 
@@ -33,7 +35,7 @@ export function initMap(
       },
       draggable: false,
       icon: {
-        url: "../images/marker.png",
+        url: "/images/marker.png",
         scaledSize: new google.maps.Size(40, 40),
       },
     });

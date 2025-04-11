@@ -1,3 +1,5 @@
+export const map = document.getElementById('map');
+
 export const upperagno = [
   { lat: 16.84746799283433, lng: 120.8680618104184 },
   { lat: 16.84819202090545, lng: 120.8659686229348 },

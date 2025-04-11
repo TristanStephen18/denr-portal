@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title><%= client.toUpperCase() + " " + apptype.toUpperCase() %></title>
+    <link rel="icon" href="/images/logo.png" type="image/x-icon" />
+    <link rel="stylesheet" href="/css/applicationviewer.css" />
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://unpkg.com/boxicons@2.1.4/dist/boxicons.js"></script>
+  </head>
+  <body>
+    <div class="main-content">
+      <div class="left-side">
+        <h2 id="permit-title">Permit/Registration Application Type</h2>
+
+        <div class="client-info">
+          <div class="pfp">
+            <img src="/images/pfp.jpg" alt="Profile" id="pfp" />
+            <div id="nopfp">
+              <h1 id="initials"></h1>
+            </div>
+          </div>
+          <div class="info-container">
+            <div class="info-holder">
+              <div class="client-info-container">
+                <div class="info">
+                  <label for="clientname">Client Name: </label>
+                  <input
+                    type="text"
+                    name="clientname"
+                    id="clientname"
+                    readonly
+                  />
+                </div>
+                <div class="info">
+                  <label for="clientaddress">Client Address: </label>
+                  <input
+                    type="text"
+                    name="clientaddress"
+                    id="clientaddress"
+                    readonly
+                  />
+                </div>
+              </div>
+              <div class="client-info-container">
+                <div class="info">
+                  <label for="clientcontact">Contact Number: </label>
+                  <input
+                    type="text"
+                    name="clientcontact"
+                    id="clientcontact"
+                    readonly
+                  />
+                </div>
+                <div class="info">
+                  <label for="clientemail">Client Email: </label>
+                  <input
+                    type="text"
+                    name="clientemail"
+                    id="clientemail"
+                    readonly
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="data-container">
+          <div class="map-info">
+            <h2>Tree Cutting Address</h2>
+            <div id="map"></div>
+            <div class="addresses">
+              <div class="address">
+                <label for="address"> Address: </label>
+                <input type="text" id="tcp_address" name="address" />
+              </div>
+            </div>
+          </div>
+          <div class="files">
+            <h2>Requirements Submitted by the Client</h2>
+            <div class="requirements-div" id="requirements-div">
+              <div class="filebox"></div>
+              <div class="filebox"></div>
+              <div class="filebox"></div>
+              <div class="filebox"></div>
+              <div class="filebox"></div>
+              <div class="filebox"></div>
+              <div class="filebox"></div>
+              <div class="filebox"></div>
+              <div class="filebox"></div>
+              <div class="filebox"></div>
+              <div class="filebox"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="right-side">
+        <div class="oop">
+          <h2>Order of Payment</h2>
+          <div class="file-holder">
+            <h2>No file yet</h2>
+          </div>
+          <button id="cna_oopbtn">Create Order of Payment</button>
+        </div>
+        <div class="date-setter">
+          <div class="dater">
+            <label for="submission"> Set Submission Date: </label>
+            <input type="date" name="submissiondate" id="submissiondate" />
+            <button id="setsubmission">Set Submission Date</button>
+          </div>
+          <div class="dater">
+            <label for="inspection1"> Set Inspection date: </label>
+            <input
+              type="date"
+              name="inspectiondate1"
+              id="inspectiondate1"
+              required
+            />
+            <input type="date" name="inspectiondate2" id="inspectiondate2" />
+            <button id="setinspection">Set Inspection Date</button>
+          </div>
+        </div>
+        <button id="f_evaluation">Finish evaluation</button>
+      </div>
+    </div>
+    <script
+      src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAIMuBkc8a_ciIOnIBA5n-3z5A85agZfQ0&callback=initMap"
+      async
+      defer
+    ></script>
+
+    <script>
+      let permitlabel = "";
+      var permitid ='<%- JSON.stringify(sn) %>';
+      var colref = '<%- JSON.stringify(permittype) %>';
+      var appsubtype = '<%- JSON.stringify(apptype) %>';
+      const permittype = appsubtype.replaceAll('"', "");
+      const permitcollection = colref.replaceAll('"', "");
+      console.log(permittype);
+      switch (permitcollection) {
+        case "tree_cutting":
+          permitlabel = `Tree Cutting (${permittype})`;
+
+          break;
+        case "chainsaw":
+          permitlabel = `Chainsaw (${permittype})`;
+
+          break;
+        default:
+          permitlabel = `${permittype}`;
+          break;
+      }
+
+      document.getElementById('permit-title').innerHTML = permitlabel;
+      window.newpermitid = permitid.replaceAll('"', "");
+      window.newpermittype = permitcollection;
+
+      document.getElementById("f_evaluation").addEventListener("click", () => {
+        window.close();
+      });
+    </script>
+    <script type="module" src="/scripts/appviewer.js"></script>
+  </body>
+</html>

@@ -8,18 +8,24 @@ import {
   getDoc,
 } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-firestore.js";
 
-import { getfiles } from "./decoder.js";
-import { initMap } from "./maphelper.js";
-
-let allRows = [];
+let allRowspending = [];
+//configure searching for flexible api calls
+let allRowseval = [];
+let allRowsrejected = [];
 let username = "No user";
 
 import { options } from "./constants/dateconstants.js";
 
+import {
+  permittablebody,
+  evaluatedtablebody,
+  rejectedtablebody,
+} from "./constants/tableconstants.js";
+
 export function searching(searchfilter) {
   const query = searchfilter.value.toLowerCase();
 
-  allRows.forEach((row) => {
+  allRowspending.forEach((row) => {
     const rowContent = row.textContent.toLowerCase();
     if (rowContent.includes(query)) {
       row.style.display = ""; // show the row
@@ -30,7 +36,7 @@ export function searching(searchfilter) {
 }
 
 export function setPermitRows(rowsArray) {
-  allRows = rowsArray;
+  allRowspending = rowsArray;
 }
 
 export async function toggleapplication(
@@ -154,20 +160,14 @@ onAuthStateChanged(auth, async (user) => {
     } catch (error) {
       console.error(error);
     }
-    // window.location.assign("/dashboard");
   } else {
     console.log("Nobody is logged in");
   }
 });
 
-export async function getpendingpermits(permittype, requirementsdiv) {
+export async function getpendingpermits(permittype) {
   const options = { month: "long", day: "numeric", year: "numeric" };
   let type = "";
-  const modal = document.getElementById("permitModal");
-  const datadisplayerdiv = document.getElementById("data-displayer");
-  const requirementsdisplayerdiv = document.getElementById(
-    "requirements-displayer"
-  );
 
   try {
     const tpcollectionref = collection(db, `${permittype}`);
@@ -200,45 +200,6 @@ export async function getpendingpermits(permittype, requirementsdiv) {
                 .toLocaleDateString("en-US", options)}</td>
             `;
 
-            console.log(docdata.uploadedAt);
-
-            row.addEventListener("click", () => {
-              if (type === "Transport Permit") {
-                initMap(
-                  "",
-                  "",
-                  "Transport Permit",
-                  `${docdata.from._lat}`,
-                  `${docdata.from._long}`,
-                  `${docdata.to._lat}`,
-                  `${docdata.to._long}`
-                );
-                datadisplayerdiv.style.display = "";
-                requirementsdisplayerdiv.style.display = "none";
-              }
-              modal.setAttribute(`permit-id`, `${doc.id}`);
-              modal.setAttribute(`permit-subtype`, ``);
-              modal.setAttribute("user-id", docdata.userID);
-              modal.setAttribute("client", docdata.client);
-              modal.setAttribute("permittype", permittype);
-              modal.setAttribute("permit-status", docdata.status);
-              modal.setAttribute("permit-address", docdata.address);
-              getfiles(
-                `${doc.id.toString()}`,
-                requirementsdiv,
-                `${permittype}`
-              );
-
-              document.getElementById("modalClient").value = docdata.client;
-              document.getElementById("modalAddress").value = docdata.address;
-              document.getElementById("modalTitle").textContent = doc.id;
-              document.getElementById("modalDate").value = docdata.uploadedAt
-                .toDate()
-                .toLocaleDateString("en-US", options);
-
-              document.getElementById("permitModal").classList.remove("hidden");
-            });
-
             permittablebody.appendChild(row);
           }
         });
@@ -253,24 +214,15 @@ export async function getpendingpermits(permittype, requirementsdiv) {
   }
 }
 
-export async function getevaluatedpermits(
-  permittype,
-  tablebodyid,
-  requirementsdiv
-) {
+export async function getevaluatedpermits(permittype) {
   const options = { month: "long", day: "numeric", year: "numeric" };
   console.log("getting evaluated dataa");
   let type = "";
-  const modal = document.getElementById("permitModal");
-  const datadisplayerdiv = document.getElementById("data-displayer");
-  const requirementsdisplayerdiv = document.getElementById(
-    "requirements-displayer"
-  );
 
   try {
     const tpcollectionref = collection(db, `${permittype}`);
     onSnapshot(tpcollectionref, (snapshot) => {
-      tablebodyid.innerHTML = "";
+      evaluatedtablebody.innerHTML = "";
       console.log(snapshot);
       if (snapshot.empty) {
         console.log("Snapshot is empty");
@@ -305,53 +257,12 @@ export async function getevaluatedpermits(
                 .toLocaleDateString("en-US", options)}</td>
             `;
 
-            console.log(docdata.uploadedAt);
-
-            // Add event listener for modal
-            row.addEventListener("click", () => {
-              if (type === "Transport Permit") {
-                initMap(
-                  "",
-                  "",
-                  "Transport Permit",
-                  `${docdata.from._lat}`,
-                  `${docdata.from._long}`,
-                  `${docdata.to._lat}`,
-                  `${docdata.to._long}`
-                );
-                datadisplayerdiv.style.display = "";
-                requirementsdisplayerdiv.style.display = "none";
-              }
-              modal.setAttribute(`permit-id`, `${doc.id}`);
-              modal.setAttribute(`permit-subtype`, ``);
-              modal.setAttribute("user-id", docdata.userID);
-              modal.setAttribute("client", docdata.client);
-              modal.setAttribute("permittype", permittype);
-              modal.setAttribute("permit-status", docdata.status);
-              modal.setAttribute("permit-address", docdata.address);
-
-              getfiles(
-                `${doc.id.toString()}`,
-                requirementsdiv,
-                `${permittype}`
-              ).then((sample) => {
-                document.getElementById("modalClient").value = docdata.client;
-                document.getElementById("modalAddress").value = docdata.address;
-                document.getElementById("modalTitle").textContent = doc.id;
-                document.getElementById("modalDate").value = docdata.uploadedAt
-                  .toDate()
-                  .toLocaleDateString("en-US", options);
-
-                document
-                  .getElementById("permitModal")
-                  .classList.remove("hidden");
-              });
-            });
-
-            tablebodyid.appendChild(row);
+            evaluatedtablebody.appendChild(row);
           }
         });
-        const allPendingRows = Array.from(tablebodyid.querySelectorAll("tr"));
+        const allPendingRows = Array.from(
+          evaluatedtablebody.querySelectorAll("tr")
+        );
         setPermitRows(allPendingRows);
       }
     });
@@ -360,24 +271,15 @@ export async function getevaluatedpermits(
   }
 }
 
-export async function getrejectedpermits(
-  permittype,
-  tablebodyid,
-  requirementsdiv
-) {
+export async function getrejectedpermits(permittype) {
   const options = { month: "long", day: "numeric", year: "numeric" };
   console.log("getting REJECTED dataa");
   let type = "";
-  const modal = document.getElementById("permitModal");
-  const datadisplayerdiv = document.getElementById("data-displayer");
-  const requirementsdisplayerdiv = document.getElementById(
-    "requirements-displayer"
-  );
 
   try {
     const tpcollectionref = collection(db, `${permittype}`);
     onSnapshot(tpcollectionref, (snapshot) => {
-      tablebodyid.innerHTML = "";
+      rejectedtablebody.innerHTML = "";
       console.log(snapshot);
       if (snapshot.empty) {
         console.log("Snapshot is empty");
@@ -410,52 +312,13 @@ export async function getrejectedpermits(
             `;
             console.log(docdata.uploadedAt);
 
-            // Add event listener for modal
-            row.addEventListener("click", () => {
-              if (type === "Transport Permit") {
-                initMap(
-                  "",
-                  "",
-                  "Transport Permit",
-                  `${docdata.from._lat}`,
-                  `${docdata.from._long}`,
-                  `${docdata.to._lat}`,
-                  `${docdata.to._long}`
-                );
-                datadisplayerdiv.style.display = "";
-                requirementsdisplayerdiv.style.display = "none";
-              }
-              modal.setAttribute(`permit-id`, `${doc.id}`);
-              modal.setAttribute(`permit-subtype`, ``);
-              modal.setAttribute("user-id", docdata.userID);
-              modal.setAttribute("client", docdata.client);
-              modal.setAttribute("permittype", permittype);
-              modal.setAttribute("permit-status", docdata.status);
-              modal.setAttribute("permit-address", docdata.address);
-
-              getfiles(
-                `${doc.id.toString()}`,
-                requirementsdiv,
-                `${permittype}`
-              ).then((sample) => {
-                document.getElementById("modalClient").value = docdata.client;
-                document.getElementById("modalAddress").value = docdata.address;
-                document.getElementById("modalTitle").textContent = doc.id;
-                document.getElementById("modalDate").value = docdata.uploadedAt
-                  .toDate()
-                  .toLocaleDateString("en-US", options);
-
-                document
-                  .getElementById("permitModal")
-                  .classList.remove("hidden");
-              });
-            });
-
-            tablebodyid.appendChild(row);
+            rejectedtablebody.appendChild(row);
           }
         });
 
-        const allPendingRows = Array.from(tablebodyid.querySelectorAll("tr"));
+        const allPendingRows = Array.from(
+          rejectedtablebody.querySelectorAll("tr")
+        );
         setPermitRows(allPendingRows);
       }
     });
@@ -464,18 +327,8 @@ export async function getrejectedpermits(
   }
 }
 
-export async function getpendingpermits_chainsawandtcp(
-  permittype,
-  requirementsdiv,
-  type
-) {
+export async function getpendingpermits_chainsawandtcp(permittype, type) {
   const options = { month: "long", day: "numeric", year: "numeric" };
-  const modal = document.getElementById("permitModal");
-  const datadisplayerdiv = document.getElementById("data-displayer");
-  const requirementsdisplayerdiv = document.getElementById(
-    "requirements-displayer"
-  );
-
   try {
     const tpcollectionref = collection(db, `${permittype}`);
     onSnapshot(tpcollectionref, (snapshot) => {
@@ -487,6 +340,20 @@ export async function getpendingpermits_chainsawandtcp(
         snapshot.forEach((doc) => {
           const docdata = doc.data();
           const row = document.createElement("tr");
+          const evaluatebtn = document.createElement("button");
+          evaluatebtn.innerHTML = "Evaluate";
+          evaluatebtn.id = "e-btn";
+          evaluatebtn.style =
+            "color: white; background-color: green; border: none; padding: 8px; border-radius: 10px; width: 100px; cursor:pointer;";
+          evaluatebtn.addEventListener("mouseenter", () => {
+            evaluatebtn.style.backgroundColor = "rgb(162, 212, 162)";
+            evaluatebtn.style.color = "black";
+          });
+
+          evaluatebtn.addEventListener("mouseleave", () => {
+            evaluatebtn.style =
+              "color: white; background-color: green; border: none; padding: 8px; border-radius: 10px; width: 100px; cursor:pointer;";
+          });
           if (docdata.status === "Pending" && docdata.type === `${type}`) {
             row.setAttribute(`${permittype}-num`, doc.id);
             row.innerHTML = `
@@ -500,39 +367,13 @@ export async function getpendingpermits_chainsawandtcp(
                 .toLocaleDateString("en-US", options)}</td>
             `;
 
-            // Add event listener for modal
-            row.addEventListener("click", () => {
-              if (permittype === "tree_cutting") {
-                initMap(
-                  `${docdata.location._lat}`,
-                  `${docdata.location._long}`,
-                  "Tree Cutting"
-                );
-                datadisplayerdiv.style.display = "";
-                requirementsdisplayerdiv.style.display = "none";
-              }
-              modal.setAttribute(`permit-subtype`, `${docdata.type}`);
-              modal.setAttribute(`permit-id`, `${doc.id}`);
-              modal.setAttribute("user-id", docdata.userID);
-              modal.setAttribute("client", docdata.client);
-              modal.setAttribute("permittype", permittype);
-              modal.setAttribute("permit-status", docdata.status);
-              modal.setAttribute("permit-address", docdata.address);
+            const td = document.createElement("td");
+            td.appendChild(evaluatebtn);
+            row.appendChild(td);
 
-              getfiles(
-                `${doc.id.toString()}`,
-                requirementsdiv,
-                `${permittype}`
-              );
-
-              document.getElementById("modalClient").value = docdata.client;
-              document.getElementById("modalAddress").value = docdata.address;
-              document.getElementById("modalTitle").textContent = doc.id;
-              document.getElementById("modalDate").value = docdata.uploadedAt
-                .toDate()
-                .toLocaleDateString("en-US", options);
-
-              document.getElementById("permitModal").classList.remove("hidden");
+            evaluatebtn.addEventListener("click", () => {
+              // console.log(`${doc.id}`);
+              window.open(`/application/${docdata.client}/${doc.id}/${docdata.type}/${permittype}`);
             });
 
             permittablebody.appendChild(row);
@@ -550,23 +391,13 @@ export async function getpendingpermits_chainsawandtcp(
   }
 }
 
-export async function getevaluatedpermits_chainsawandtcp(
-  permittype,
-  requirementsdiv,
-  tablebodyid,
-  type
-) {
+export async function getevaluatedpermits_chainsawandtcp(permittype, type) {
   const options = { month: "long", day: "numeric", year: "numeric" };
-  const modal = document.getElementById("permitModal");
-  const datadisplayerdiv = document.getElementById("data-displayer");
-  const requirementsdisplayerdiv = document.getElementById(
-    "requirements-displayer"
-  );
 
   try {
     const tpcollectionref = collection(db, `${permittype}`);
     onSnapshot(tpcollectionref, (snapshot) => {
-      tablebodyid.innerHTML = "";
+      evaluatedtablebody.innerHTML = "";
       console.log(snapshot);
       if (snapshot.empty) {
         console.log("Snapshot is empty");
@@ -574,6 +405,20 @@ export async function getevaluatedpermits_chainsawandtcp(
         snapshot.forEach((doc) => {
           const docdata = doc.data();
           const row = document.createElement("tr");
+          const viewbtn = document.createElement("button");
+          viewbtn.innerHTML = "View";
+          viewbtn.id = "e-btn";
+          viewbtn.style =
+            "color: white; background-color: blue; border: none; padding: 8px; border-radius: 10px; width: 100px; cursor:pointer;";
+          viewbtn.addEventListener("mouseenter", () => {
+            viewbtn.style.backgroundColor = "rgb(162, 212, 162)";
+            viewbtn.style.color = "black";
+          });
+
+          viewbtn.addEventListener("mouseleave", () => {
+            viewbtn.style =
+              "color: white; background-color: blue; border: none; padding: 8px; border-radius: 10px; width: 100px; cursor:pointer;";
+          });
           if (
             (docdata.status === "Evaluated" && docdata.type === `${type}`) ||
             docdata.status === "Initialized by RPS Chief"
@@ -594,49 +439,16 @@ export async function getevaluatedpermits_chainsawandtcp(
                 .toLocaleDateString("en-US", options)}</td>
             `;
 
-            // Add event listener for modal
-            row.addEventListener("click", () => {
-              if (permittype === "tree_cutting") {
-                initMap(
-                  `${docdata.location._lat}`,
-                  `${docdata.location._long}`,
-                  "Tree Cutting",
-                  "0.1",
-                  "0.1"
-                );
-                datadisplayerdiv.style.display = "";
-                requirementsdisplayerdiv.style.display = "none";
-              }
-              modal.setAttribute(`permit-subtype`, `${docdata.type}`);
-              modal.setAttribute(`permit-id`, `${doc.id}`);
-              modal.setAttribute("user-id", docdata.userID);
-              modal.setAttribute("client", docdata.client);
-              modal.setAttribute("permittype", permittype);
-              modal.setAttribute("permit-status", docdata.status);
-              modal.setAttribute("permit-address", docdata.address);
+            const td = document.createElement("td");
+            td.appendChild(viewbtn);
+            row.appendChild(td);
 
-              getfiles(
-                `${doc.id.toString()}`,
-                requirementsdiv,
-                `${permittype}`
-              ).then((sample) => {
-                document.getElementById("modalClient").value = docdata.client;
-                document.getElementById("modalAddress").value = docdata.address;
-                document.getElementById("modalTitle").textContent = doc.id;
-                document.getElementById("modalDate").value = docdata.uploadedAt
-                  .toDate()
-                  .toLocaleDateString("en-US", options);
-
-                document
-                  .getElementById("permitModal")
-                  .classList.remove("hidden");
-              });
-            });
-
-            tablebodyid.appendChild(row);
+            evaluatedtablebody.appendChild(row);
           }
         });
-        const allPendingRows = Array.from(tablebodyid.querySelectorAll("tr"));
+        const allPendingRows = Array.from(
+          evaluatedtablebody.querySelectorAll("tr")
+        );
         setPermitRows(allPendingRows);
       }
     });
@@ -645,22 +457,11 @@ export async function getevaluatedpermits_chainsawandtcp(
   }
 }
 
-export async function getrejectedpermits_chainsawandtcp(
-  permittype,
-  requirementsdiv,
-  tablebodyid,
-  type
-) {
-  const modal = document.getElementById("permitModal");
-  const datadisplayerdiv = document.getElementById("data-displayer");
-  const requirementsdisplayerdiv = document.getElementById(
-    "requirements-displayer"
-  );
-
+export async function getrejectedpermits_chainsawandtcp(permittype, type) {
   try {
     const tpcollectionref = collection(db, `${permittype}`);
     onSnapshot(tpcollectionref, (snapshot) => {
-      tablebodyid.innerHTML = "";
+      rejectedtablebody.innerHTML = "";
       console.log(snapshot);
       if (snapshot.empty) {
         console.log("Snapshot is empty");
@@ -685,51 +486,12 @@ export async function getrejectedpermits_chainsawandtcp(
                 .toLocaleDateString("en-US", options)}</td>
             `;
 
-            // Add event listener for modal
-            row.addEventListener("click", () => {
-              if (permittype === "tree_cutting") {
-                initMap(
-                  `${docdata.location._lat}`,
-                  `${docdata.location._long}`,
-                  "Tree Cutting",
-                  "0.1",
-                  "0.1"
-                );
-                datadisplayerdiv.style.display = "";
-                requirementsdisplayerdiv.style.display = "none";
-              }
-              modal.setAttribute(`permit-subtype`, `${docdata.type}`);
-
-              modal.setAttribute(`permit-id`, `${doc.id}`);
-              modal.setAttribute("user-id", docdata.userID);
-              modal.setAttribute("client", docdata.client);
-              modal.setAttribute("permittype", permittype);
-              modal.setAttribute("permit-status", docdata.status);
-              modal.setAttribute("permit-address", docdata.address);
-
-              console.log(docdata.location);
-              getfiles(
-                `${doc.id.toString()}`,
-                requirementsdiv,
-                `${permittype}`
-              ).then((sample) => {
-                document.getElementById("modalClient").value = docdata.client;
-                document.getElementById("modalAddress").value = docdata.address;
-                document.getElementById("modalTitle").textContent = doc.id;
-                document.getElementById("modalDate").value = docdata.uploadedAt
-                  .toDate()
-                  .toLocaleDateString("en-US", options);
-
-                document
-                  .getElementById("permitModal")
-                  .classList.remove("hidden");
-              });
-            });
-
-            tablebodyid.appendChild(row);
+            rejectedtablebody.appendChild(row);
           }
         });
-        const allPendingRows = Array.from(tablebodyid.querySelectorAll("tr"));
+        const allPendingRows = Array.from(
+          rejectedtablebody.querySelectorAll("tr")
+        );
         setPermitRows(allPendingRows);
       }
     });

@@ -4,14 +4,14 @@ import {
   collection,
 } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-firestore.js";
 
-const requirementsdiv = document.querySelector('requirements');
+// const requirementsdiv = document.querySelector("requirements");
+import { requirementsdiv } from "./constants/appviewerconstants.js";
 
-
-export async function getfiles(id, elemendId, collectionname) {
-  elemendId.innerHTML = "";
+export async function getfiles(id, collectionname) {
+  requirementsdiv.innerHTML = "";
   console.log("fetching");
   console.log(collectionname);
-  
+
   try {
     const filecollection = collection(
       db,
@@ -28,7 +28,7 @@ export async function getfiles(id, elemendId, collectionname) {
       if (fileExtension === ".pdf") {
         console.log("pdf found");
 
-        displayPDF(file, fdoc.id, elemendId);
+        displayPDF(file, fdoc.id);
       } else if (
         fileExtension === ".jpg" ||
         fileExtension === ".jpeg" ||
@@ -36,7 +36,7 @@ export async function getfiles(id, elemendId, collectionname) {
       ) {
         console.log("images found");
 
-        displayImage(file, fdoc.id, elemendId);
+        displayImage(file, fdoc.id);
       }
     });
   } catch (error) {
@@ -44,7 +44,13 @@ export async function getfiles(id, elemendId, collectionname) {
   }
 }
 
-export function displayPDF(base64, filename, elemendId) {
+function createFileBox() {
+  const fileBox = document.createElement("div");
+  fileBox.className = "filebox";
+  return fileBox;
+}
+
+export function displayPDF(base64, filename) {
   const byteCharacters = atob(base64);
   const byteNumbers = Array.from(byteCharacters, (char) => char.charCodeAt(0));
   const byteArray = new Uint8Array(byteNumbers);
@@ -52,38 +58,45 @@ export function displayPDF(base64, filename, elemendId) {
   const blobUrl = URL.createObjectURL(blob);
 
   const icon = document.createElement("h1");
+  icon.innerText = "📄";
+
+  const label = document.createElement("h6");
+  label.innerText = filename;
+
   const wrapper = document.createElement("div");
   wrapper.className = "requirement-item-pdf";
   wrapper.onclick = () => window.open(blobUrl, "_blank");
-  icon.innerText = "📄";
-  const label = document.createElement("h4");
-  label.innerText = `${filename}`;
   wrapper.appendChild(icon);
   wrapper.appendChild(label);
-  elemendId.appendChild(wrapper);
+
+  const fileBox = createFileBox();
+  fileBox.appendChild(wrapper);
+  requirementsdiv.appendChild(fileBox);
 }
 
-export function displayImage(base64, filename, elemendId) {
-  const wrapper = document.createElement("div");
-  wrapper.className = "requirement-item";
-
-  const label = document.createElement("p");
-  label.innerText = `${filename}`;
+export function displayImage(base64, filename) {
   const img = document.createElement("img");
   img.src = `data:image/jpeg;base64,${base64}`;
   img.alt = filename;
   img.id = "imagedisplay";
 
-  wrapper.appendChild(img);
-  wrapper.appendChild(label);
+  const label = document.createElement("h6");
+  label.innerText = filename;
+
+  const wrapper = document.createElement("div");
+  wrapper.className = "requirement-item";
   wrapper.onclick = () => {
     const newTab = window.open();
     newTab.document.write(
       `<img src="${img.src}" style="width:100%;height:auto;">`
     );
   };
+  wrapper.appendChild(img);
+  wrapper.appendChild(label);
 
-  elemendId.appendChild(wrapper);
+  const fileBox = createFileBox();
+  fileBox.appendChild(wrapper);
+  requirementsdiv.appendChild(fileBox);
 }
 
 // const sampleBase64 = 'JVBERi0xLjQKJc...'; // full base64 of a small PDF
@@ -91,7 +104,7 @@ export function displayImage(base64, filename, elemendId) {
 
 getfiles();
 
-const printbtn = document.getElementById('sample');
+const printbtn = document.getElementById("sample");
 // printbtn.addEventListener('click', ()=>{
 //   print();
 // })

@@ -15,7 +15,7 @@ logoutbtn.addEventListener("click", logoutfunction);
 const modal = new bootstrap.Modal(document.getElementById("permitModal"));
 const permitmodal = document.getElementById("permitModal");
 const searchfilter = document.getElementById("searchdata");
-const requirementsdiv = document.getElementById("requirements");
+// const requirementsdiv = document.getElementById("requirements");
 const statusfilter = document.getElementById("status");
 const evaluatedtable = document.getElementById("evaluated-table");
 const evaluatedtablebody = document.getElementById("evaluatedtbody");
@@ -96,27 +96,10 @@ statusfilter.addEventListener("change", () => {
   searchfilter.value = "";
   if (statusfilter.value === "pending") {
     typelabel.innerText = "Pending";
-    getpendingpermits_chainsawandtcp(
-      "tree_cutting",
-      requirementsdiv,
-      "National Government Agencies"
-    );
   } else if (statusfilter.value === "evaluated") {
     typelabel.innerText = "Evaluated";
-    getevaluatedpermits_chainsawandtcp(
-      "tree_cutting",
-      requirementsdiv,
-      evaluatedtablebody,
-      "National Government Agencies"
-    );
   } else {
     typelabel.innerText = "Rejected";
-    getrejectedpermits_chainsawandtcp(
-      "tree_cutting",
-      requirementsdiv,
-      rejectedtablebody,
-      "National Government Agencies"
-    );
   }
   tablechanger[beforechange].style.display = "none";
   console.log(beforechange);
@@ -127,7 +110,16 @@ statusfilter.addEventListener("change", () => {
 function initializepage() {
   getpendingpermits_chainsawandtcp(
     "tree_cutting",
-    requirementsdiv,
+    "National Government Agencies"
+  );
+  getevaluatedpermits_chainsawandtcp(
+    "tree_cutting",
+    evaluatedtablebody,
+    "National Government Agencies"
+  );
+  getrejectedpermits_chainsawandtcp(
+    "tree_cutting",
+    rejectedtablebody,
     "National Government Agencies"
   );
 }

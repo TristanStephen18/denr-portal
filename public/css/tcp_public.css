@@ -189,10 +189,10 @@ table tbody tr {
   font-size: 12px;
 }
 
-table tbody tr:hover {
+/* table tbody tr:hover {
   background-color: rgb(206, 203, 203);
   cursor: pointer;
-}
+} */
 /* Modal Visibility */
 .modal.hidden {
   display: none;
@@ -465,4 +465,10 @@ h3 {
   background-color: rgb(2, 58, 2);
   border: 1px solid black;
   cursor: pointer;
+}
+
+.hover-effect:hover{
+  color: black;
+  background-color: white;
+  border: none;
 }

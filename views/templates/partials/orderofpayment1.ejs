@@ -16,11 +16,10 @@
       <strong>Serial No.:2025 - ___________</strong><br />
       <strong
         >Date:
-        <strong
-          id="datenow"
-          style="border-bottom: 1px solid black"
-        ><%= data.datenow %></strong
-      ></strong>
+        <strong id="datenow" style="border-bottom: 1px solid black"
+          ><%= data.datenow %></strong
+        ></strong
+      >
     </div>
   </div>
 
@@ -47,7 +46,8 @@
           id="clientdata"
         >
           &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-          <%= data.client %>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          <%= data.client
+          %>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
         </td>
       </tr>
       <tr>
@@ -71,7 +71,7 @@
           "
           id="clientdata"
         >
-        <%= data.address %>
+          <%= data.address %>
         </td>
       </tr>
       <tr>
@@ -133,24 +133,29 @@
       >
         <strong id="fee"
           >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<%= data.fee1 %>
-           &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</strong
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<%=
+          data.fee1 %>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</strong
         >
       </td>
       <td style="border-bottom: 1px solid black">-</td>
       <td style="border-bottom: 1px solid black">&#x20B1;</td>
-      <td
-        style="text-align: left; border-bottom: 1px solid black"
-        id="amount"
-      >
-      <%= data.fee1_amount %>
+      <td style="text-align: left; border-bottom: 1px solid black" id="amount">
+        <%= data.fee1_amount %>
       </td>
     </tr>
     <tr>
       <td style="border-right: 1px solid black">
+        <% if(data.permitsubtype != "") {%>
         <strong style="border-bottom: 1px solid black; font-style: italic"
-          >- <%= data.permittype %> (TCP)</strong
-        >
+          >- <%= data.permittype %> 
+          (<%= data.permitsubtype %>) 
+        </strong>
+        <% } else {%>
+        <strong style="border-bottom: 1px solid black; font-style: italic"
+          >- <%= data.permittype %>
+        </strong>
+        <% } %>
       </td>
       <td>/</td>
       <td
@@ -162,27 +167,22 @@
       >
         <strong id="fee"
           >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<%= data.fee2 %>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<%=
+          data.fee2 %>
           &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</strong
         >
       </td>
       <td style="border-bottom: 1px solid black">-</td>
       <td style="border-bottom: 1px solid black">&#x20B1;</td>
-      <td
-        style="border-bottom: 1px solid black; text-align: left"
-        id="amount"
-      ><%= data.fee2_amount %></td>
+      <td style="border-bottom: 1px solid black; text-align: left" id="amount">
+        <%= data.fee2_amount %>
+      </td>
     </tr>
     <tr>
       <td
-        style="
-          border-right: 1px solid black;
-          border-bottom: 1px solid black;
-        "
+        style="border-right: 1px solid black; border-bottom: 1px solid black"
       ></td>
-      <td style="text-align: center; border-bottom: 1px solid black">
-        /
-      </td>
+      <td style="text-align: center; border-bottom: 1px solid black">/</td>
       <td
         style="
           border-bottom: 1px solid black;
@@ -192,16 +192,16 @@
       >
         <strong id="fee"
           >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <%= data.fee3 %>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          <%= data.fee3 %>
           &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</strong
         >
       </td>
       <td style="border-bottom: 1px solid black">-</td>
       <td style="border-bottom: 1px solid black">&#x20B1;</td>
-      <td
-        style="border-bottom: 1px solid black; text-align: left"
-        id="amount"
-      ><%= data.fee3_amount %></td>
+      <td style="border-bottom: 1px solid black; text-align: left" id="amount">
+        <%= data.fee3_amount %>
+      </td>
     </tr>
     <tr>
       <td></td>
@@ -237,9 +237,7 @@
         </td>
 
         <td style="text-align: center">
-          <a href="#" style="color: black"
-            >LBP-Calderon St., Baguio City</a
-          >
+          <a href="#" style="color: black">LBP-Calderon St., Baguio City</a>
         </td>
         <td style="text-align: right">
           &#x20B1;<a

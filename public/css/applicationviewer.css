@@ -36,6 +36,7 @@ h4 {
 
 .right-side {
   flex: 1;
+   text-align: center;
 }
 
 /* Client Info Section */
@@ -149,16 +150,17 @@ h4 {
 }
 
 .filebox {
+  flex-grow: 1;
   background-color: #f0f0f0;
   border-radius: 8px;
   border: 1px dashed #aaa;
-  display: inline-flex; /* allows sizing to content */
+  display: inline-flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   padding: 8px;
   gap: 4px;
-  max-width: 100%; /* prevents it from going beyond container */
+  max-width: 100%; 
   box-sizing: border-box;
   text-align: center;
 }
@@ -217,13 +219,13 @@ button:hover {
   background-color: #0056b3;
 }
 
-.date-setter {
+.date-setter{
   display: flex;
   flex-direction: column;
   gap: 20px;
 }
 
-.dater {
+.dater, form {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -238,6 +240,13 @@ button:hover {
   padding: 8px;
   border-radius: 8px;
   width: 50%;
+  border: 1px solid #ccc;
+}
+
+form input {
+  padding: 8px;
+  border-radius: 8px;
+  width: 100%;
   border: 1px solid #ccc;
 }
 
@@ -260,3 +269,18 @@ button:hover {
   border: 1px solid black;
   color: black;
 }
+
+#exit {
+  align-self: center;
+  margin-top: auto;
+  width: 40%;
+  font-size: large;
+  background-color: red;
+}
+
+#exit:hover {
+  background-color: white;
+  border: 1px solid black;
+  color: black;
+}
+

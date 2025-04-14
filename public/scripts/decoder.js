@@ -5,7 +5,7 @@ import {
 } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-firestore.js";
 
 // const requirementsdiv = document.querySelector("requirements");
-import { requirementsdiv } from "./constants/appviewerconstants.js";
+import { requirementsdiv, pfpimage } from "./constants/appviewerconstants.js";
 
 export async function getfiles(id, collectionname) {
   requirementsdiv.innerHTML = "";
@@ -80,7 +80,10 @@ export function displayImage(base64, filename) {
   img.alt = filename;
   img.id = "imagedisplay";
 
-  const label = document.createElement("h6");
+  const label = document.createElement("h5");
+  label.style.background = 'black';
+  label.style.color = 'white';
+  label.style.textTransform = 'uppercase';
   label.innerText = filename;
 
   const wrapper = document.createElement("div");
@@ -91,16 +94,26 @@ export function displayImage(base64, filename) {
       `<img src="${img.src}" style="width:100%;height:auto;">`
     );
   };
-  wrapper.appendChild(img);
   wrapper.appendChild(label);
 
   const fileBox = createFileBox();
+  // file.style.background-image:
+  fileBox.style.backgroundImage = `url(${img.src})`;
+  fileBox.style.backgroundSize = "cover"; // Ensure the image covers the entire box
+  fileBox.style.backgroundPosition = "center"; // Center the image
   fileBox.appendChild(wrapper);
   requirementsdiv.appendChild(fileBox);
 }
 
-// const sampleBase64 = 'JVBERi0xLjQKJc...'; // full base64 of a small PDF
-// displayPDF(sampleBase64, 'Test PDF');
+// export function displayclientpfp(base64){
+//   const img = document.createElement("img");
+//   img.src = `data:image/jpeg;base64,${base64}`;
+//   img.id = "imagedisplay";
+
+//   return img;
+// }
+
+
 
 getfiles();
 

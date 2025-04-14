@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <title>Order of Payment - DENR</title>
+    <title><%= data.client  %> - Order of Payment</title>
     <link rel="stylesheet" href="/css/templatescss/orderofpayment.css" />
   </head>
   <body>
@@ -14,19 +14,5 @@
       <%- include('./partials/orderofpayment1') %>
     </div>
 
-    <!-- <script>
-      const options = { month: "long", day: "numeric", year: "numeric" };
-
-      let datenow;
-      const dateholder = document.getElementById("datenow");
-      const dateholder1 = document.getElementById("datenow1");
-
-      function gettodaysdate() {
-        datenow = new Date().toLocaleDateString("en-US", options);
-        dateholder.textContent = `${datenow}    `;
-        dateholder1.textContent = `${datenow}    `;
-      }
-      window.onload = gettodaysdate;
-    </script> -->
   </body>
 </html>

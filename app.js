@@ -3,6 +3,20 @@ const path = require("path");
 const app = express();
 const port = 3000;
 const amounttoword = require("./modules");
+const multer = require('multer');
+
+const storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, 'uploads/'); // Make sure this folder exists
+  },
+  filename: function (req, file, cb) {
+    const uniqueName = Date.now() + '-' + file.originalname;
+    cb(null, uniqueName);
+  },
+});
+
+const upload = multer({ storage });
+
 
 app.set("view engine", "ejs");
 app.use(express.static(path.join(__dirname, "public")));
@@ -53,9 +67,16 @@ app.get("/rpschiefdashboard", (req, res) =>
   res.render("rpschief_views/rpschiefdashboard")
 );
 app.get("/walkin", (req, res) => res.render("walk_in_permits/menu"));
-app.get("/application/:client/:sn/:apptype/:maintype", (req, res) => {
+app.get("/application/:client/:sn/:apptype/:maintype/:purpose", (req, res) => {
   const client = req.params.client;
-  res.render("application_viewer", { client: client, sn: req.params.sn, apptype: req.params.apptype, permittype: req.params.maintype });
+  res.render("application_viewer", { client: client, sn: req.params.sn, apptype: req.params.apptype, permittype: req.params.maintype, purpose: req.params.purpose });
+});
+
+app.post('/sample', upload.single('oopfile'),(req, res) => {
+  // Handle file upload
+  // res.send('sample')
+  console.log(req.file);
+  
 });
 
 app.listen(port, () =>

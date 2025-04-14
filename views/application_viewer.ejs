@@ -3,7 +3,18 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <% if(apptype != 'undefined') {%>
     <title><%= client.toUpperCase() + " " + apptype.toUpperCase() %></title>
+    <% } else { if(permittype === 'wildlife'){%>
+    <title><%= client.toUpperCase() + " " + 'WILDLIFE REGISTRATION' %></title>
+    <% } else if(permittype === 'transport_permit') { %>
+    <title><%= client.toUpperCase() + " " + 'TRANSPORT PERMIT' %></title>
+    <% } else {%>
+    <title>
+      <%= client.toUpperCase() + " " + 'PLANTATION AND WOOD PROCESSING REGISTRATION' %>
+    </title>
+
+    <% } %> <% } %>
     <link rel="icon" href="/images/logo.png" type="image/x-icon" />
     <link rel="stylesheet" href="/css/applicationviewer.css" />
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
@@ -67,6 +78,15 @@
             </div>
           </div>
         </div>
+        <% if(permittype != 'tree_cutting' && permittype != 'transport_permit')
+        {%>
+        <div class="data-container">
+          <div class="files">
+            <h2>Requirements Submitted by the Client</h2>
+            <div class="requirements-div" id="requirements-div"></div>
+          </div>
+        </div>
+        <% }else if(permittype === 'tree_cutting'){ %>
         <div class="data-container">
           <div class="map-info">
             <h2>Tree Cutting Address</h2>
@@ -80,36 +100,55 @@
           </div>
           <div class="files">
             <h2>Requirements Submitted by the Client</h2>
-            <div class="requirements-div" id="requirements-div">
-              <div class="filebox"></div>
-              <div class="filebox"></div>
-              <div class="filebox"></div>
-              <div class="filebox"></div>
-              <div class="filebox"></div>
-              <div class="filebox"></div>
-              <div class="filebox"></div>
-              <div class="filebox"></div>
-              <div class="filebox"></div>
-              <div class="filebox"></div>
-              <div class="filebox"></div>
-            </div>
+            <div class="requirements-div" id="requirements-div"></div>
           </div>
         </div>
+        <% } else { %>
+        <div class="data-container">
+          <div class="map-info">
+            <h2>Starting Point and Destination</h2>
+            <div id="map"></div>
+            <div class="addresses">
+              <div class="address">
+                <label for="start"> From: </label>
+                <input type="text" id="start" name="start" />
+              </div>
+              <div class="address">
+                <label for="end"> To: </label>
+                <input type="text" id="end" name="end" />
+              </div>
+            </div>
+          </div>
+          <div class="files">
+            <h2>Requirements Submitted by the Client</h2>
+            <div class="requirements-div" id="requirements-div"></div>
+          </div>
+        </div>
+        <% } %>
       </div>
+      <% if(purpose === 'evaluation') {%>
       <div class="right-side">
-        <div class="oop">
+        <div class="oop" id="no_oop">
           <h2>Order of Payment</h2>
           <div class="file-holder">
-            <h2>No file yet</h2>
+            <h2>No order of payment yet</h2>
           </div>
           <button id="cna_oopbtn">Create Order of Payment</button>
         </div>
-        <div class="date-setter">
-          <div class="dater">
-            <label for="submission"> Set Submission Date: </label>
-            <input type="date" name="submissiondate" id="submissiondate" />
-            <button id="setsubmission">Set Submission Date</button>
+        <div class="oop" id="insert_oop" style="display: none;">
+          <h2>Order of Payment</h2>
+          <div class="file-holder">
+            <input type="file" name="oopfile" id="oopfile">
           </div>
+          <br>
+          <button id="attach_oopbtn">Attach Order of Payment</button>
+        </div>
+        <div class="date-setter">
+            <form action="" method="post" class="dater">
+              <label for="submission"> Set Submission Date: </label>
+              <input type="date" name="submissiondate" id="submissiondate" />
+              <button id="setsubmission" type="submit">Set Submission Date</button>
+            </form>
           <div class="dater">
             <label for="inspection1"> Set Inspection date: </label>
             <input
@@ -124,6 +163,33 @@
         </div>
         <button id="f_evaluation">Finish evaluation</button>
       </div>
+      <% } else { %>
+      <div class="right-side">
+        <div class="oop">
+          <h2>Order of Payment</h2>
+          <div class="file-holder">
+            <div class="filebox">OOP HERE</div>
+          </div>
+        </div>
+        <div class="date-setter">
+          <div class="dater">
+            <label for="submission"> Set Submission Date: </label>
+            <input type="date" name="submissiondate" id="submissiondate" />
+          </div>
+          <div class="dater">
+            <label for="inspection1"> Set Inspection date: </label>
+            <input
+              type="date"
+              name="inspectiondate1"
+              id="inspectiondate1"
+              required
+            />
+            <input type="date" name="inspectiondate2" id="inspectiondate2" />
+          </div>
+        </div>
+        <button id="exit">Exit</button>
+      </div>
+      <% } %>
     </div>
     <script
       src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAIMuBkc8a_ciIOnIBA5n-3z5A85agZfQ0&callback=initMap"
@@ -136,9 +202,14 @@
       var permitid ='<%- JSON.stringify(sn) %>';
       var colref = '<%- JSON.stringify(permittype) %>';
       var appsubtype = '<%- JSON.stringify(apptype) %>';
+      var purposivecommunication = '<%- JSON.stringify(purpose) %>';
+      var p = purposivecommunication.replaceAll('"', "");
+      // var purposivecommunication =
       const permittype = appsubtype.replaceAll('"', "");
       const permitcollection = colref.replaceAll('"', "");
-      console.log(permittype);
+
+
+      console.log(permitcollection);
       switch (permitcollection) {
         case "tree_cutting":
           permitlabel = `Tree Cutting (${permittype})`;
@@ -148,18 +219,54 @@
           permitlabel = `Chainsaw (${permittype})`;
 
           break;
+
+        case "plantation":
+          permitlabel = "Plantation and Wood Processing Registration";
+          break;
+        case "wildlife":
+          permitlabel = "Wildlife Registration";
+          break;
+
         default:
-          permitlabel = `${permittype}`;
+          permitlabel = `Transport Permit`;
           break;
       }
 
-      document.getElementById('permit-title').innerHTML = permitlabel;
+      document.getElementById("permit-title").innerHTML = permitlabel;
       window.newpermitid = permitid.replaceAll('"', "");
       window.newpermittype = permitcollection;
 
-      document.getElementById("f_evaluation").addEventListener("click", () => {
-        window.close();
-      });
+      console.log(newpermittype, newpermitid);
+
+      if (p === "evaluation") {
+        document
+          .getElementById("f_evaluation")
+          .addEventListener("click", () => {
+            window.close();
+          });
+
+          document.getElementById('attach_oopbtn').addEventListener('click', ()=>{
+            const file = document.getElementById('oopfile').files[0];
+            if(file){
+              const reader = new FileReader();
+
+            reader.onload = function (e) {
+              const base64String = e.target.result;
+              console.log(base64String.replace('data:application/pdf;base64,', ""));
+            }
+
+            reader.readAsDataURL(file);
+            }else{
+              alert('You have not yet chosen a file to upload')
+            }
+            
+          })
+
+      } else {
+        document.getElementById("exit").addEventListener("click", () => {
+          window.close();
+        });
+      }
     </script>
     <script type="module" src="/scripts/appviewer.js"></script>
   </body>

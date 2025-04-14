@@ -49,7 +49,7 @@ export function initMap(
       position: { lat: parseFloat(tpfromlat), lng: parseFloat(tpfromlong) },
       draggable: false,
       icon: {
-        url: "../images/fromicon.png",
+        url: "/images/fromicon.png",
         scaledSize: new google.maps.Size(40, 40),
       },
     });
@@ -58,7 +58,7 @@ export function initMap(
       position: { lat: parseFloat(tptolat), lng: parseFloat(tptolong) },
       draggable: false,
       icon: {
-        url: "../images/toicon.png",
+        url: "/images/toicon.png",
         scaledSize: new google.maps.Size(40, 40),
       },
     });
@@ -67,21 +67,21 @@ export function initMap(
       content: `<p>Starting Point</p>`,
     });
 
-    infoWindow1.open(map, marker);
+    // infoWindow1.open(map, marker);
 
-    // marker.addListener("click", () => {
-    //   infoWindow1.open(map, marker);
-    // });
+    marker.addListener("click", () => {
+      infoWindow1.open(map, marker);
+    });
 
     const infoWindow2 = new google.maps.InfoWindow({
       content: `<p>Destination</p>`,
     });
 
-    infoWindow2.open(map, marker2);
+    // infoWindow2.open(map, marker2);
 
-    // marker2.addListener("click", () => {
-    //   infoWindow2.open(map, marker2);
-    // });
+    marker2.addListener("click", () => {
+      infoWindow2.open(map, marker2);
+    });
 
     connectorref = [
       {lat: parseFloat(tpfromlat), lng: parseFloat(tpfromlong)},

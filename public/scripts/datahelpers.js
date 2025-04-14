@@ -180,6 +180,20 @@ export async function getpendingpermits(permittype) {
         snapshot.forEach((doc) => {
           const docdata = doc.data();
           const row = document.createElement("tr");
+          const evaluatebtn = document.createElement("button");
+          evaluatebtn.innerHTML = "Evaluate";
+          evaluatebtn.id = "e-btn";
+          evaluatebtn.style =
+            "color: white; background-color: green; border: none; padding: 8px; border-radius: 10px; width: 100px; cursor:pointer;";
+          evaluatebtn.addEventListener("mouseenter", () => {
+            evaluatebtn.style.backgroundColor = "rgb(162, 212, 162)";
+            evaluatebtn.style.color = "black";
+          });
+
+          evaluatebtn.addEventListener("mouseleave", () => {
+            evaluatebtn.style =
+              "color: white; background-color: green; border: none; padding: 8px; border-radius: 10px; width: 100px; cursor:pointer;";
+          });
           if (docdata.status === "Pending") {
             row.setAttribute(`${permittype}-num`, doc.id);
             if (permittype === "wildlife") {
@@ -199,6 +213,15 @@ export async function getpendingpermits(permittype) {
                 .toDate()
                 .toLocaleDateString("en-US", options)}</td>
             `;
+            const td = document.createElement("td");
+            td.appendChild(evaluatebtn);
+            row.appendChild(td);
+
+            evaluatebtn.addEventListener("click", () => {
+              window.open(
+                `/application/${docdata.client}/${doc.id}/${docdata.type}/${permittype}/evaluation`
+              );
+            });
 
             permittablebody.appendChild(row);
           }
@@ -230,6 +253,20 @@ export async function getevaluatedpermits(permittype) {
         snapshot.forEach((doc) => {
           const docdata = doc.data();
           const row = document.createElement("tr");
+          const viewbtn = document.createElement("button");
+          viewbtn.innerHTML = "View";
+          viewbtn.id = "e-btn";
+          viewbtn.style =
+            "color: white; background-color: blue; border: none; padding: 8px; border-radius: 10px; width: 100px; cursor:pointer;";
+          viewbtn.addEventListener("mouseenter", () => {
+            viewbtn.style.backgroundColor = "rgb(162, 212, 162)";
+            viewbtn.style.color = "black";
+          });
+
+          viewbtn.addEventListener("mouseleave", () => {
+            viewbtn.style =
+              "color: white; background-color: blue; border: none; padding: 8px; border-radius: 10px; width: 100px; cursor:pointer;";
+          });
           if (
             docdata.status === "Evaluated" ||
             docdata.status === "Initialized by RPS Chief"
@@ -256,6 +293,15 @@ export async function getevaluatedpermits(permittype) {
                 .toDate()
                 .toLocaleDateString("en-US", options)}</td>
             `;
+
+            viewbtn.addEventListener("click", () => {
+              window.open(
+                `/application/${docdata.client}/${doc.id}/${docdata.type}/${permittype}/view`
+              );
+            });
+            const td = document.createElement("td");
+            td.appendChild(viewbtn);
+            row.appendChild(td);
 
             evaluatedtablebody.appendChild(row);
           }
@@ -373,7 +419,9 @@ export async function getpendingpermits_chainsawandtcp(permittype, type) {
 
             evaluatebtn.addEventListener("click", () => {
               // console.log(`${doc.id}`);
-              window.open(`/application/${docdata.client}/${doc.id}/${docdata.type}/${permittype}`);
+              window.open(
+                `/application/${docdata.client}/${doc.id}/${docdata.type}/${permittype}/evaluation`
+              );
             });
 
             permittablebody.appendChild(row);
@@ -438,6 +486,12 @@ export async function getevaluatedpermits_chainsawandtcp(permittype, type) {
                 .toDate()
                 .toLocaleDateString("en-US", options)}</td>
             `;
+
+            viewbtn.addEventListener("click", () => {
+              window.open(
+                `/application/${docdata.client}/${doc.id}/${docdata.type}/${permittype}/view`
+              );
+            });
 
             const td = document.createElement("td");
             td.appendChild(viewbtn);

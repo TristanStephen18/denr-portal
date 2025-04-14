@@ -34,5 +34,5 @@ export {
   clientinitials,
   createoopbtn,
   nooop,
-  insertoopdiv
+  insertoopdiv  
 };

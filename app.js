@@ -78,6 +78,11 @@ app.post('/sample', upload.single('oopfile'),(req, res) => {
   console.log(req.file);
   
 });
+//base64encoded too large use client side
+app.get('/evaluation/:oop/:submissiondate/:inspectiondate', (req, res)=>{
+  console.log(req.params.oop, req.params.submissiondate, req.params.inspectiondate.replaceAll(',', " and "));
+  res.send('hello')
+});
 
 app.listen(port, () =>
   console.log(`App is listening on http://localhost:3000/`)

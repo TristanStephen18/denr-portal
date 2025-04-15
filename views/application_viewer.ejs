@@ -20,6 +20,7 @@
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://unpkg.com/boxicons@2.1.4/dist/boxicons.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
   </head>
   <body>
     <div class="main-content">
@@ -141,13 +142,11 @@
             <input type="file" name="oopfile" id="oopfile">
           </div>
           <br>
-          <button id="attach_oopbtn">Attach Order of Payment</button>
         </div>
         <div class="date-setter">
             <form action="" method="post" class="dater">
               <label for="submission"> Set Submission Date: </label>
-              <input type="date" name="submissiondate" id="submissiondate" />
-              <button id="setsubmission" type="submit">Set Submission Date</button>
+              <input type="date" name="submissiondate" id="submissiondate"/>
             </form>
           <div class="dater">
             <label for="inspection1"> Set Inspection date: </label>
@@ -158,8 +157,8 @@
               required
             />
             <input type="date" name="inspectiondate2" id="inspectiondate2" />
-            <button id="setinspection">Set Inspection Date</button>
           </div>
+          <br><br>
         </div>
         <button id="f_evaluation">Finish evaluation</button>
       </div>
@@ -173,11 +172,11 @@
         </div>
         <div class="date-setter">
           <div class="dater">
-            <label for="submission"> Set Submission Date: </label>
+            <label for="submission"> Client Submission Date: </label>
             <input type="date" name="submissiondate" id="submissiondate" />
           </div>
           <div class="dater">
-            <label for="inspection1"> Set Inspection date: </label>
+            <label for="inspection1"> Inspection dates: </label>
             <input
               type="date"
               name="inspectiondate1"
@@ -203,7 +202,7 @@
       var colref = '<%- JSON.stringify(permittype) %>';
       var appsubtype = '<%- JSON.stringify(apptype) %>';
       var purposivecommunication = '<%- JSON.stringify(purpose) %>';
-      var p = purposivecommunication.replaceAll('"', "");
+       window.p = purposivecommunication.replaceAll('"', "");
       // var purposivecommunication =
       const permittype = appsubtype.replaceAll('"', "");
       const permitcollection = colref.replaceAll('"', "");
@@ -238,35 +237,6 @@
 
       console.log(newpermittype, newpermitid);
 
-      if (p === "evaluation") {
-        document
-          .getElementById("f_evaluation")
-          .addEventListener("click", () => {
-            window.close();
-          });
-
-          document.getElementById('attach_oopbtn').addEventListener('click', ()=>{
-            const file = document.getElementById('oopfile').files[0];
-            if(file){
-              const reader = new FileReader();
-
-            reader.onload = function (e) {
-              const base64String = e.target.result;
-              console.log(base64String.replace('data:application/pdf;base64,', ""));
-            }
-
-            reader.readAsDataURL(file);
-            }else{
-              alert('You have not yet chosen a file to upload')
-            }
-            
-          })
-
-      } else {
-        document.getElementById("exit").addEventListener("click", () => {
-          window.close();
-        });
-      }
     </script>
     <script type="module" src="/scripts/appviewer.js"></script>
   </body>

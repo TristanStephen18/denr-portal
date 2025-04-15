@@ -15,6 +15,9 @@ const requirementsdiv = document.getElementById("requirements-div");
 const createoopbtn = document.getElementById("cna_oopbtn");
 const insertoopdiv = document.getElementById("insert_oop");
 const nooop = document.getElementById("no_oop");
+const submissiondate = document.getElementById('submissiondate');
+const inspectiondate1 = document.getElementById('inspectiondate1');
+const inspectiondate2 = document.getElementById('inspectiondate2');
 
 
 
@@ -34,5 +37,8 @@ export {
   clientinitials,
   createoopbtn,
   nooop,
-  insertoopdiv  
+  insertoopdiv,
+  submissiondate,
+  inspectiondate1,
+  inspectiondate2
 };

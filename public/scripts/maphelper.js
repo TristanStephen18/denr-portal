@@ -49,6 +49,7 @@ export function initMap(
       position: { lat: parseFloat(tpfromlat), lng: parseFloat(tpfromlong) },
       draggable: false,
       icon: {
+        url: "/images/fromicon.png",
         scaledSize: new google.maps.Size(40, 40),
       },
     });

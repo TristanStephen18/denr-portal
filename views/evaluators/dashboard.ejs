@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+  <%- include('../partials/head', {title: 'Dashboard',
+  csslink:'/css/dashboard.css'}) %>
+  <body>
+    <%- include('../partials/sidebar') %>
+
+    <div class="main-content">
+      <%- include('../partials/topbar') %>
+      <h2>Dashboard</h2>
+
+      <%- include('../partials/dashboardcards') %>
+
+      <div class="tables-section">
+        <div class="tables-column">
+          <div class="table-container">
+            <%- include('../partials/tables/tcpschedtop') %>
+            <%- include('../partials/tables/tcpschedtable') %>
+          </div>
+        </div>
+      </div>
+    </div>
+    <%- include('../partials/modals/addtcpsched') %>
+    <script
+      src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAIMuBkc8a_ciIOnIBA5n-3z5A85agZfQ0&callback=initMap"
+      async
+      defer
+    ></script>
+
+    <script type="module" src="../scripts/dashboard.js"></script>
+  </body>
+</html>

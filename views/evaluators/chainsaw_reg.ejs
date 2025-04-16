@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<%- include('../partials/head', {title: 'Chainsaw Registrations',
+csslink:'/css/chainsawreg.css'}) %>
+<body>
+    <%- include('../partials/sidebar') %>
+    <div class="main-content">
+        <div class="table-container">
+            <h2>Chainsaw Registrations</h2>
+            <h3 id="typelabel">Pending</h3>
+            <br>
+            <%- include('../partials/tables/table_partials') %>
+            <%- include('../partials/tables/pendingpermitstable') %>
+            <%- include('../partials/tables/evaluatedtable') %>
+            <%- include('../partials/tables/rejectedtable') %>
+          </div>
+    </div>
+
+    <%- include('../partials/modals/firstactionmodal') %>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script type="module" src="/scripts/chainsaw_reg.js"></script>
+
+    <script>
+      document.getElementById("closeModal").addEventListener("click", () => {
+        document.getElementById("permitModal").classList.add("hidden");
+      });
+
+      // Optional: close modal on outside click
+      window.addEventListener("click", (e) => {
+        const modal = document.getElementById("permitModal");
+        if (e.target === modal) {
+          modal.classList.add("hidden");
+        }
+      });
+    </script>
+</body>
+</html>

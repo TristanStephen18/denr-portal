@@ -1,5 +1,4 @@
 import { auth, db } from "./config.js";
-// import { sessionchecker } from "./sessionchecker.js";
 import { signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-auth.js";
 import {
   getDocs,
@@ -40,7 +39,7 @@ async function login(username, password) {
             if (username === "RPS Chief") {
               window.location.assign("/rpschiefdashboard");
             } else {
-              window.location.assign("/dashboard");
+              window.location.assign("/evaluator/dashboard");
             }
           }, 1500);
         });
@@ -72,4 +71,3 @@ loginform.addEventListener("submit", (e) => {
   const password = loginform["password"].value;
   login(username, password);
 });
-//   console.log(loginform);

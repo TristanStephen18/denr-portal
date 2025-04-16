@@ -1,0 +1,13 @@
+{
+  "type": "service_account",
+  "project_id": "denr-car-e-services-project",
+  "private_key_id": "4b763261c828d42f8529e4d0bfd30cfc20e8eaf9",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQCvMRQA7xJUjnmo\nv+vi4rToU2HpyqtDhYfq+N7AiFRxJoXOzHCZhcLhADOFvtT+tOl87rsZkkOZUmKq\n/0Wy2XL8KXmOqPfmMTJ/29IGhgTy+qefzw8ACV347GZ/n5aEIiryA6n1uNHKotLX\ncv1JnMTbTJNApwGODyV/+kqTEo68QJBbWmprDP4qmP2wT0Qion9+CaY4W0SpqksM\n+IE+cDoN7sCojVuwMpgnZJpxQS4HvIdcTzXUiYGexU5djr37uqaumoKeaJbXiQbT\nw6mYc4iaA4PRdYGoqxSOzXfvdQBpHs8fX3mNjnbooqQXOD3Gt5504DssRY+MRLAo\nwrf210s1AgMBAAECggEABEKnh6FIuxUu6LdoG1+jgh3a/PZAhXcXF9P/CMQX95t1\n+BI5L8aUt2eLmTZLlDkej3r3wlav/afG/f0Quxl2JiM1EU7THn42Se001ZNHRghp\n8KU2qmvP5PiMwpBFNwfkrvd/V9orgefFRFeHyNU+5U1erF0TWNrN8OeLjjmOjo3i\nCbw8zFlc+9/hXTojM8e37IoNVnQFKFISIKaREUwpuRLrO3GRe+1wN95B5WCcavXx\niZCmBCnC/98o+HmIz9SvG5RKl5fLv4kW+sQ+G5V2RGz9EIsYEIio0CzG2PEoMXJF\nRSXxMNIxE08tAzUCzw4yyrkQFwzB+yDU5pUij6agKQKBgQDq8svk7dO+Ah5f6bEv\nWArYXw0xlUT9nV6MfwTUYEuBu9KCAqQCcT3PB/JqXsfXJWQ2FibNRVwsMQ1RihE7\nTQulRT5TqKiRNoc0KULRv7rjdZdMLvhUJNtk0koXyIsjYgo+OPX/35sD8JDAszMd\n+TjLh4NXjDoTv26+wNC2c2X8zQKBgQC+45ffYu9jic0FH1Lg9ku5OwT9FteI5AWj\niJRtpHs27/v9YAfMk71iy0f7Cx/IRo8C7Th/jywu5Y+yCEu1yJXgj6VSW1MkYEKX\n8IqUz/770Z5LYwQB2AY+ewC94hV9//p4LSyp3ZiM80p/dYZOagaUIm7zG405uGLE\nuaioCccICQKBgFWF7BJ5QAp6WvQu7QB+2/PHJdZWr7ZiAnjCA9AK/XFMHWSV8X2y\nGv2xttxhg/0c702A4r718Idlk6OKzpr3gLW4buelDTdO0gh6vIf9cto5g8mHj32R\nrQsWQUJHDd7jYTclJObvTk4w04BRutm+Tp5Hxdeog7uMg5OMPG0ttIJBAoGADYVN\nYpM9ZY2DKhO36RtI7cvSZKLTjWypQZYQ/VsjJxcEgEPnCYSFa5P+ezekfqkQxCJN\nWCup84BrFy8jPbMBerByA01YrEDtNpnhFv1MkEWesrRGumK0voQz3z8+SnhxI0X/\n3eBGR+WLp0+JvdAguyldNncDH82BoXGNEqnuoRECgYEAuqEmsvXzyMJMFUzN2hht\nsP7ro5I2wlImENA9mFkvpplDqul9rkJaxvlh27lDzXdyweG/CL8irYJwUxEqpFRP\nhvrfvy38gtFJ2s70mEqFDARXyLkefq+gJDC7yLsrA5vlTocRn8FQnYcmMAervJlG\nJfKm18fQey4LwlRclKSQvgQ=\n-----END PRIVATE KEY-----\n",
+  "client_email": "firebase-adminsdk-fbsvc@denr-car-e-services-project.iam.gserviceaccount.com",
+  "client_id": "103585103409106265845",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/firebase-adminsdk-fbsvc%40denr-car-e-services-project.iam.gserviceaccount.com",
+  "universe_domain": "googleapis.com"
+}

@@ -185,22 +185,6 @@ if (p === "evaluation") {
   });
 }
 
-// function readFileAsBase64(file) {
-//   return new Promise((resolve, reject) => {
-//     const reader = new FileReader();
-//     reader.onload = (e) => {
-//       const base64String = e.target.result.replace(
-//         "data:application/pdf;base64,",
-//         ""
-//       );
-//       resolve(base64String);
-//       console.log(base64String);
-//     };
-//     reader.onerror = reject;
-//     reader.readAsDataURL(file);
-//   });
-// }
-
 async function updateApplication(userid, permit_id, permit_type, doctoupdate) {
   try {
     console.log(filebased62encoded);
@@ -219,4 +203,3 @@ async function updateApplication(userid, permit_id, permit_type, doctoupdate) {
 
 window.onload = initializepage;
 
-// alert(newpermittype)

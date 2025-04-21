@@ -12,12 +12,12 @@ import {
    searchfilter, typelabel, logoutbtn
 } from "./constants/tableconstants.js";
 
-
+let status = "pending";
 
 logoutbtn.addEventListener("click", logoutfunction);
 
 searchfilter.addEventListener("input", () => {
-  searching(searchfilter);
+  searching(status, searchfilter);
 });
 
 let beforechange = statusfilter.value;
@@ -25,14 +25,14 @@ let beforechange = statusfilter.value;
 statusfilter.addEventListener("change", () => {
   searchfilter.value = "";
   if (statusfilter.value === "pending") {
+    status = "pending";
     typelabel.innerText = "Pending";
-    getpendingpermits_chainsawandtcp("tree_cutting", "Public Safety Permit");
   } else if (statusfilter.value === "evaluated") {
+    status = "evaluated";
     typelabel.innerText = "Evaluated";
-    getevaluatedpermits_chainsawandtcp("tree_cutting", "Public Safety Permit");
   } else {
+    status = "rejected";
     typelabel.innerText = "Rejected";
-    getrejectedpermits_chainsawandtcp("tree_cutting", "Public Safety Permit");
   }
   tablechanger[beforechange].style.display = "none";
   console.log(beforechange);
@@ -42,6 +42,8 @@ statusfilter.addEventListener("change", () => {
 
 function initializepage() {
   getpendingpermits_chainsawandtcp("tree_cutting", "Public Safety Permit");
+  getevaluatedpermits_chainsawandtcp("tree_cutting", "Public Safety Permit");
+  getrejectedpermits_chainsawandtcp("tree_cutting", "Public Safety Permit");
 }
 
 window.onload = initializepage();

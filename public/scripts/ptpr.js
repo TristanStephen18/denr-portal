@@ -1,30 +1,23 @@
 import { logoutfunction } from "./config.js";
-import { getpendingpermits, searching, getevaluatedpermits, getrejectedpermits } from "./datahelpers.js";
+import {
+  searching,
+  getpendingpermits,
+  getevaluatedpermits,
+  getrejectedpermits
+} from "./datahelpers.js";
 
-const logoutbtn = document.getElementById("logout");
+import {
+  tablechanger,
+   statusfilter,
+   searchfilter, typelabel, logoutbtn
+} from "./constants/tableconstants.js";
+
+let status = "pending";
+
 logoutbtn.addEventListener("click", logoutfunction);
 
-const modal = new bootstrap.Modal(document.getElementById("permitModal"));
-const searchfilter = document.getElementById("searchdata");
-const requirementsdiv = document.getElementById("requirements");
-
-const statusfilter = document.getElementById("status");
-const evaluatedtable = document.getElementById("evaluated-table");
-const evaluatedtablebody = document.getElementById("evaluatedtbody");
-const rejectedtable = document.getElementById("rejected-table");
-const rejectedtablebody = document.getElementById("rejectedtbody");
-const typelabel = document.getElementById('typelabel');
-
-const pendingtable = document.getElementById("pending-table");
-
-const tablechanger = {
-  pending: pendingtable,
-  evaluated: evaluatedtable,
-  rejected: rejectedtable,
-};
-
 searchfilter.addEventListener("input", () => {
-  searching(searchfilter);
+  searching(status, searchfilter);
 });
 
 let beforechange = statusfilter.value;
@@ -32,14 +25,14 @@ let beforechange = statusfilter.value;
 statusfilter.addEventListener("change", () => {
   searchfilter.value = "";
   if (statusfilter.value === "pending") {
+    status = "pending";
     typelabel.innerText = "Pending";
-    getpendingpermits("plantation", requirementsdiv);
   } else if (statusfilter.value === "evaluated") {
+    status = "evaluated";
     typelabel.innerText = "Evaluated";
-    getevaluatedpermits("plantation", evaluatedtablebody, requirementsdiv);
   } else {
+    status = "rejected";
     typelabel.innerText = "Rejected";
-    getrejectedpermits("plantation", rejectedtablebody, requirementsdiv);
   }
   tablechanger[beforechange].style.display = "none";
   console.log(beforechange);
@@ -47,4 +40,10 @@ statusfilter.addEventListener("change", () => {
   tablechanger[statusfilter.value].style.display = "table";
 });
 
-getpendingpermits("plantation", requirementsdiv);
+function initializepage() {
+  getpendingpermits("plantation");
+  getevaluatedpermits("plantation");
+  getrejectedpermits("plantation");
+}
+
+window.onload = initializepage;

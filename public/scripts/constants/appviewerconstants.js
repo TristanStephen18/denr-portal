@@ -19,6 +19,10 @@ const submissiondate = document.getElementById('submissiondate');
 const inspectiondate1 = document.getElementById('inspectiondate1');
 const inspectiondate2 = document.getElementById('inspectiondate2');
 
+//display assets
+const loadingmodal = document.getElementById('loading-modal');
+const oopholder = document.getElementById('oop_holder');
+
 
 
 
@@ -40,5 +44,7 @@ export {
   insertoopdiv,
   submissiondate,
   inspectiondate1,
-  inspectiondate2
+  inspectiondate2,
+  loadingmodal,
+  oopholder
 };

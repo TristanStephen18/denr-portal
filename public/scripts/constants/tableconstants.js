@@ -4,6 +4,7 @@ const rejectedtable = document.getElementById("rejected-table");
 const rejectedtablebody = document.getElementById("rejectedtbody");
 const permittablebody = document.getElementById("permittablebody");
 const pendingtable = document.getElementById("pending-table");
+const markasinspected_btn = document.getElementById('mai-btn'); 
 
 const tablechanger = {
   pending: pendingtable,
@@ -28,19 +29,6 @@ export {
   statusfilter,
   logoutbtn,
   typelabel,
+  markasinspected_btn
 };
 
-const viewbtn = document.createElement("button");
-viewbtn.innerHTML = "Evaluate";
-viewbtn.id = "e-btn";
-viewbtn.style =
-  "color: white; background-color: green; border: none; padding: 8px; border-radius: 10px; width: 100px; cursor:pointer;";
-viewbtn.addEventListener("mouseenter", () => {
-  viewbtn.style.backgroundColor = "rgb(162, 212, 162)";
-  viewbtn.style.color = "black";
-});
-
-viewbtn.addEventListener("mouseleave", () => {
-  viewbtn.style =
-    "color: white; background-color: green; border: none; padding: 8px; border-radius: 10px; width: 100px; cursor:pointer;";
-});

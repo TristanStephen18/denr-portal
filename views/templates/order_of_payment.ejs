@@ -2,17 +2,53 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <title><%= data.client  %> - Order of Payment</title>
+    <title><%= data.client %> - Order of Payment</title>
     <link rel="stylesheet" href="/css/templatescss/orderofpayment.css" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
   </head>
   <body>
-    <div class="page-container">
+    <div class="page-container" id="page-container">
       <%- include('./partials/orderofpayment1') %>
 
       <div class="cut-line"></div>
 
       <%- include('./partials/orderofpayment1') %>
     </div>
+    <script>
+      const clientname = '<%- JSON.stringify(data.client) %>';
+      const permittype = '<%- JSON.stringify(data.permittype) %>';
+      const permisubtype = '<%- JSON.stringify(data.permitsubtype) %>';
+      const client = clientname.replaceAll('"', "");
+      const permit = permittype.replaceAll('"', "");
+      const psubtype = permisubtype.replaceAll('"', "");
 
+      let pdfname = "Order of Payment.pdf";
+
+      if(psubtype != ""){
+         pdfname = `${client.toUpperCase()} ${permit} ${permisubtype} Order Of Payment.pdf`;
+      }else{
+         pdfname = `${client.toUpperCase()} ${permit} Order Of Payment.pdf`;
+      }
+
+      console.log(client, permit);
+
+      window.onload = async () => {
+        const element = document.getElementById('page-container');
+        const canvas = await html2canvas(element);
+        const imgData = canvas.toDataURL('image/png');
+
+        const { jsPDF } = window.jspdf;
+        const pdf = new jsPDF();
+
+        const imgProps = pdf.getImageProperties(imgData);
+        const pdfWidth = pdf.internal.pageSize.getWidth();
+        const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
+
+        pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
+        pdf.save(`${pdfname}`);
+        window.close();
+  };
+    </script>
   </body>
 </html>

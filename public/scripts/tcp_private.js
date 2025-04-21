@@ -20,7 +20,7 @@ logoutbtn.addEventListener("click", logoutfunction);
 
 
 searchfilter.addEventListener("input", () => {
-  searching(searchfilter);
+  searching(statusidentifier, searchfilter);
 });
 
 let beforechange = statusfilter.value;

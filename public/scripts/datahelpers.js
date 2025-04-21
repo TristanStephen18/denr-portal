@@ -10,8 +10,9 @@ import {
 
 let allRowspending = [];
 //configure searching for flexible api calls
-let allRowseval = [];
-let allRowsrejected = [];
+let allRowsevaluated = [];
+let allRowsInitialized = [];
+let allRowsApproved = [];
 let username = "No user";
 
 import { options } from "./constants/dateconstants.js";
@@ -22,100 +23,57 @@ import {
   rejectedtablebody,
 } from "./constants/tableconstants.js";
 
-export function searching(searchfilter) {
+export function searching(status, searchfilter) {
   const query = searchfilter.value.toLowerCase();
 
-  allRowspending.forEach((row) => {
-    const rowContent = row.textContent.toLowerCase();
-    if (rowContent.includes(query)) {
-      row.style.display = ""; // show the row
-    } else {
-      row.style.display = "none"; // hide the row
-    }
-  });
+  switch (status) {
+    case "evaluated":
+      allRowsevaluated.forEach((row) => {
+        const rowContent = row.textContent.toLowerCase();
+        if (rowContent.includes(query)) {
+          row.style.display = ""; // show the row
+        } else {
+          row.style.display = "none"; // hide the row
+        }
+      });
+      break;
+    case "pending":
+      allRowspending.forEach((row) => {
+        const rowContent = row.textContent.toLowerCase();
+        if (rowContent.includes(query)) {
+          row.style.display = ""; // show the row
+        } else {
+          row.style.display = "none"; // hide the row
+        }
+      });
+    default:
+      allRowsInitialized.forEach((row) => {
+        const rowContent = row.textContent.toLowerCase();
+        if (rowContent.includes(query)) {
+          row.style.display = ""; // show the row
+        } else {
+          row.style.display = "none"; // hide the row
+        }
+      });
+      break;
+  }
 }
 
 export function setPermitRows(rowsArray) {
   allRowspending = rowsArray;
 }
 
-export async function toggleapplication(
-  permitid,
-  userid,
-  changeto,
-  permittype,
-  client
-) {
-  const admindoc = doc(db, `${permittype}`, permitid);
-  const userdoc = doc(db, `mobile_users/${userid}/applications`, permitid);
-
-  try {
-    if (changeto === "reject") {
-      Swal.fire({
-        title: `Do you want to reject the application of ${client}?`,
-        showCancelButton: true,
-        confirmButtonText: "Yes",
-        denyButtonText: "No",
-        customClass: {
-          actions: "my-actions",
-          cancelButton: "order-1 right-gap",
-          confirmButton: "order-2",
-          denyButton: "order-3",
-        },
-      }).then(async (result) => {
-        if (result.isConfirmed) {
-          await updateDoc(userdoc, {
-            status: "Rejected",
-          });
-          await updateDoc(admindoc, {
-            status: "Rejected",
-            rejected_by: username,
-            rejected_at: new Date(),
-            current_location: "User - Rejected by the admins",
-          });
-          Swal.fire(`The Application of ${client} was rejected`, "", "success");
-        }
-      });
-    } else {
-      Swal.fire({
-        title: "Mark as evaluated?",
-        showCancelButton: true,
-        confirmButtonText: "Yes",
-        denyButtonText: "No",
-        customClass: {
-          actions: "my-actions",
-          cancelButton: "order-1 right-gap",
-          confirmButton: "order-2",
-          denyButton: "order-3",
-        },
-      }).then(async (result) => {
-        if (result.isConfirmed) {
-          await updateDoc(userdoc, {
-            status: "Evaluated",
-          });
-          await updateDoc(admindoc, {
-            status: "Evaluated",
-            evaluated_by: username,
-            evaluated_at: new Date(),
-            current_location: "RPS CHIEF - Waiting for Recommending Approval",
-          });
-          Swal.fire(
-            `The Application of ${client} was marked as evaluated`,
-            "",
-            "success"
-          );
-        }
-      });
-    }
-  } catch (error) {
-    console.error(error);
-  }
+function setEvaluatedPermitRows(rowsArray) {
+  allRowsevaluated = rowsArray;
 }
+
+function setInitializedPermits(rowsArray) {
+  allRowsInitialized = rowsArray;
+}
+
 
 export async function markasinitialized(permitid, permittype, client) {
   const admindoc = doc(db, `${permittype}`, permitid);
-  // const userdoc = doc(db, `mobile_users/${userid}/applications`, permitid);
-
   try {
     Swal.fire({
       title: "Mark as initialized?",
@@ -147,23 +105,27 @@ export async function markasinitialized(permitid, permittype, client) {
   }
 }
 
-onAuthStateChanged(auth, async (user) => {
-  if (user) {
-    console.log("User is logged in");
+export async function getUsername() {
+  let adminname = "";
+  onAuthStateChanged(auth, async (user) => {
+    if (user) {
+      console.log("User is logged in");
 
-    try {
       const userdocref = doc(db, "admins", user.uid);
       console.log(userdocref);
       const snapshot = await getDoc(userdocref);
-      console.log(snapshot.data());
-      username = snapshot.data().username;
-    } catch (error) {
-      console.error(error);
+      console.log(snapshot.data().username);
+      // return snapshot.data().username;
+      adminname = snapshot.data().username;
+    } else {
+      console.log("Nobody is logged in");
+      // return "nobody is logged in";
+      adminname = 'Unknown';
+
     }
-  } else {
-    console.log("Nobody is logged in");
-  }
-});
+  });
+  return adminname;
+}
 
 export async function getpendingpermits(permittype) {
   const options = { month: "long", day: "numeric", year: "numeric" };
@@ -267,10 +229,22 @@ export async function getevaluatedpermits(permittype) {
             viewbtn.style =
               "color: white; background-color: blue; border: none; padding: 8px; border-radius: 10px; width: 100px; cursor:pointer;";
           });
-          if (
-            docdata.status === "Evaluated" ||
-            docdata.status === "Initialized by RPS Chief"
-          ) {
+
+          const markasinspectedbtn = document.createElement("button");
+          markasinspectedbtn.innerHTML = "Mark as Inspected";
+          markasinspectedbtn.id = "mai-btn";
+          markasinspectedbtn.style =
+            "color: white; background-color: green; border: none; padding: 8px; border-radius: 10px; width: 100px; cursor:pointer;";
+          markasinspectedbtn.addEventListener("mouseenter", () => {
+            markasinspectedbtn.style.backgroundColor = "rgb(162, 212, 162)";
+            markasinspectedbtn.style.color = "black";
+          });
+
+          markasinspectedbtn.addEventListener("mouseleave", () => {
+            markasinspectedbtn.style =
+              "color: white; background-color: green; border: none; padding: 8px; border-radius: 10px; width: 100px; cursor:pointer;";
+          });
+          if (docdata.status === "Evaluated") {
             row.setAttribute(`${permittype}-num`, doc.id);
             if (permittype === "wildlife") {
               type = "Wildlife Registration";
@@ -299,17 +273,37 @@ export async function getevaluatedpermits(permittype) {
                 `/application/${docdata.client}/${doc.id}/${docdata.type}/${permittype}/view`
               );
             });
+
+            markasinspectedbtn.addEventListener("click", () => {
+              Swal.fire({
+                title: "Mark as Inspected?",
+                showCancelButton: true,
+                confirmButtonText: "Yes",
+                denyButtonText: "No",
+                customClass: {
+                  actions: "my-actions",
+                  cancelButton: "order-1 right-gap",
+                  confirmButton: "order-2",
+                },
+              }).then((result) => {
+                if (result.isConfirmed) {
+                  Swal.fire(`Bitch`, "", "success");
+                }
+              });
+            });
             const td = document.createElement("td");
+            td.style = "display: flex; Flex-direction: row; gap: 3px;";
             td.appendChild(viewbtn);
+            td.appendChild(markasinspectedbtn);
             row.appendChild(td);
 
             evaluatedtablebody.appendChild(row);
           }
         });
-        const allPendingRows = Array.from(
+        const allEvaluatedRows = Array.from(
           evaluatedtablebody.querySelectorAll("tr")
         );
-        setPermitRows(allPendingRows);
+        setEvaluatedPermitRows(allEvaluatedRows);
       }
     });
   } catch (error) {
@@ -365,7 +359,7 @@ export async function getrejectedpermits(permittype) {
         const allPendingRows = Array.from(
           rejectedtablebody.querySelectorAll("tr")
         );
-        setPermitRows(allPendingRows);
+        setInitializedPermits(allPendingRows);
       }
     });
   } catch (error) {
@@ -467,10 +461,21 @@ export async function getevaluatedpermits_chainsawandtcp(permittype, type) {
             viewbtn.style =
               "color: white; background-color: blue; border: none; padding: 8px; border-radius: 10px; width: 100px; cursor:pointer;";
           });
-          if (
-            (docdata.status === "Evaluated" && docdata.type === `${type}`) ||
-            docdata.status === "Initialized by RPS Chief"
-          ) {
+          const markasinspectedbtn = document.createElement("button");
+          markasinspectedbtn.innerHTML = "Mark as Inspected";
+          markasinspectedbtn.id = "mai-btn";
+          markasinspectedbtn.style =
+            "color: white; background-color: green; border: none; padding: 8px; border-radius: 10px; width: 100px; cursor:pointer;";
+          markasinspectedbtn.addEventListener("mouseenter", () => {
+            markasinspectedbtn.style.backgroundColor = "rgb(162, 212, 162)";
+            markasinspectedbtn.style.color = "black";
+          });
+
+          markasinspectedbtn.addEventListener("mouseleave", () => {
+            markasinspectedbtn.style =
+              "color: white; background-color: green; border: none; padding: 8px; border-radius: 10px; width: 100px; cursor:pointer;";
+          });
+          if (docdata.status === "Evaluated" && docdata.type === `${type}`) {
             row.setAttribute(`${permittype}-num`, doc.id);
             row.innerHTML = `
               <td>${docdata.client}</td>
@@ -493,8 +498,27 @@ export async function getevaluatedpermits_chainsawandtcp(permittype, type) {
               );
             });
 
+            markasinspectedbtn.addEventListener("click", () => {
+              Swal.fire({
+                title: "Mark as Inspected?",
+                showCancelButton: true,
+                confirmButtonText: "Yes",
+                denyButtonText: "No",
+                customClass: {
+                  actions: "my-actions",
+                  cancelButton: "order-1 right-gap",
+                  confirmButton: "order-2",
+                },
+              }).then((result) => {
+                if (result.isConfirmed) {
+                  Swal.fire(`Bitch`, "", "success");
+                }
+              });
+            });
             const td = document.createElement("td");
+            td.style = "display: flex; Flex-direction: row; gap: 3px;";
             td.appendChild(viewbtn);
+            td.appendChild(markasinspectedbtn);
             row.appendChild(td);
 
             evaluatedtablebody.appendChild(row);
@@ -503,7 +527,7 @@ export async function getevaluatedpermits_chainsawandtcp(permittype, type) {
         const allPendingRows = Array.from(
           evaluatedtablebody.querySelectorAll("tr")
         );
-        setPermitRows(allPendingRows);
+        setEvaluatedPermitRows(allPendingRows);
       }
     });
   } catch (error) {
@@ -546,7 +570,7 @@ export async function getrejectedpermits_chainsawandtcp(permittype, type) {
         const allPendingRows = Array.from(
           rejectedtablebody.querySelectorAll("tr")
         );
-        setPermitRows(allPendingRows);
+        setInitializedPermits(allPendingRows);
       }
     });
   } catch (error) {

@@ -129,18 +129,19 @@
       </div>
       <% if(purpose === 'evaluation') {%>
       <div class="right-side">
-        <div class="oop" id="no_oop">
+        <!-- <div class="oop" id="no_oop">
           <h2>Order of Payment</h2>
           <div class="file-holder">
             <h2>No order of payment yet</h2>
           </div>
-          <button id="cna_oopbtn">Create Order of Payment</button>
-        </div>
-        <div class="oop" id="insert_oop" style="display: none;">
+        </div> -->
+        <div class="oop" id="insert_oop">
           <h2>Order of Payment</h2>
           <div class="file-holder">
             <input type="file" name="oopfile" id="oopfile">
           </div>
+          <br>
+          <button id="cna_oopbtn">Create Order of Payment</button>
           <br>
         </div>
         <div class="date-setter">
@@ -160,14 +161,17 @@
           </div>
           <br><br>
         </div>
-        <button id="f_evaluation">Finish evaluation</button>
+        <div class="action-btns">
+          <button id="exit_btn">Exit</button>
+          <button id="f_evaluation">Finish evaluation</button>
+        </div>
       </div>
       <% } else { %>
       <div class="right-side">
         <div class="oop">
           <h2>Order of Payment</h2>
           <div class="file-holder">
-            <div class="filebox">OOP HERE</div>
+            <div class="filebox" id="oop_holder">OOP HERE</div>
           </div>
         </div>
         <div class="date-setter">
@@ -190,6 +194,12 @@
       </div>
       <% } %>
     </div>
+    <div class="modal" id="loading-modal">
+      <div class="modal-content">
+        <div class="loader"></div><br>
+      <h2>Updating Permit Information</h2>
+      </div>
+    </div>
     <script
       src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAIMuBkc8a_ciIOnIBA5n-3z5A85agZfQ0&callback=initMap"
       async
@@ -203,7 +213,6 @@
       var appsubtype = '<%- JSON.stringify(apptype) %>';
       var purposivecommunication = '<%- JSON.stringify(purpose) %>';
        window.p = purposivecommunication.replaceAll('"', "");
-      // var purposivecommunication =
       const permittype = appsubtype.replaceAll('"', "");
       const permitcollection = colref.replaceAll('"', "");
 

@@ -1,10 +1,11 @@
-import { db } from "./config.js";
+import { db, auth } from "./config.js";
 import {
   updateDoc,
   doc,
   getDoc,
 } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-firestore.js";
 import { initMap } from "./maphelper.js";
+import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-auth.js";
 
 import {
   defaultpfp,
@@ -22,11 +23,20 @@ import {
   submissiondate,
   inspectiondate1,
   inspectiondate2,
+  loadingmodal,
 } from "./constants/appviewerconstants.js";
-import { getfiles } from "./decoder.js";
+import { getfiles, getOOP } from "./decoder.js";
+// import { getUsername } from "./datahelpers.js";
+import { updateAdminApplication } from "./helpers/appviewer_helpers.js";
+
+let username = "";
 
 let userid = "";
 let filebased62encoded = "";
+
+window.onclick = (e) => {
+  if (e.target === loadingmodal) loadingmodal.style.display = "none";
+};
 
 async function getuserdata(userid) {
   const userdoc = doc(db, "mobile_users", `${userid}`);
@@ -80,28 +90,51 @@ async function getpermitdata(permitid, permittype) {
     // permitaddress.value = `${data.tcp_location}`;
   }
 
-  if (data.type === `undefined`) {
-    document.getElementById("cna_oopbtn").addEventListener("click", () => {
-      window.open(
-        `/orderofpayment/${data.client}/${data.address}/${permittype}/`
-      );
-      nooop.style.display = "none";
-      insertoopdiv.style.display = "block";
-    });
-  } else {
-    document.getElementById("cna_oopbtn").addEventListener("click", () => {
-      window.open(
-        `/orderofpayment/${data.client}/${data.address}/${permittype}/${data.type}`
-      );
-      nooop.style.display = "none";
-      insertoopdiv.style.display = "block";
-    });
+  if (p === "evaluation") {
+    if (data.type === `undefined`) {
+      document.getElementById("cna_oopbtn").addEventListener("click", () => {
+        window.open(
+          `/orderofpayment/${data.client}/${data.address}/${permittype}/`
+        );
+        nooop.style.display = "none";
+        insertoopdiv.style.display = "block";
+      });
+    } else {
+      document.getElementById("cna_oopbtn").addEventListener("click", () => {
+        window.open(
+          `/orderofpayment/${data.client}/${data.address}/${permittype}/${data.type}`
+        );
+        nooop.style.display = "none";
+        insertoopdiv.style.display = "block";
+      });
+    }
   }
 }
+
+onAuthStateChanged(auth, async (user) => {
+  if (user) {
+    console.log("User is logged in");
+
+    const userdocref = doc(db, "admins", user.uid);
+    console.log(userdocref);
+    const snapshot = await getDoc(userdocref);
+    console.log(snapshot.data().username);
+    // return snapshot.data().username;
+    username = snapshot.data().username;
+  } else {
+    console.log("Nobody is logged in");
+    // return "nobody is logged in";
+    username = "Unknown";
+  }
+});
 
 function initializepage() {
   getpermitdata(newpermitid, newpermittype);
   getfiles(newpermitid, newpermittype);
+  const permitdoc = doc(db, `${newpermittype}`, `${newpermitid}`);
+  if (p != "evaluation") {
+    getOOP(permitdoc);
+  }
 }
 
 function setdefaultpfp(cname) {
@@ -116,9 +149,10 @@ function setdefaultpfp(cname) {
   }
 }
 
-let holder = "";
-
 if (p === "evaluation") {
+  document.getElementById("exit_btn").addEventListener("click", () => {
+    window.close();
+  });
   document
     .getElementById("f_evaluation")
     .addEventListener("click", async () => {
@@ -133,10 +167,8 @@ if (p === "evaluation") {
         const reader = new FileReader();
 
         reader.onload = function (e) {
-          filebased62encoded = e.target.result.replace(
-            "data:application/pdf;base64,",
-            ""
-          );
+          filebased62encoded = e.target.result.split(",")[1]; // cleaner way
+
           console.log("File loaded in onload");
         };
 
@@ -159,24 +191,40 @@ if (p === "evaluation") {
             );
             const admindoc = doc(db, `${newpermittype}`, `${newpermitid}`);
 
-            updateApplication(
-              userid,
-              newpermitid,
-              newpermittype,
-              userdoc,
-              filebased62encoded
-            );
-            updateApplication(
-              userid,
-              newpermitid,
-              newpermittype,
-              admindoc,
-              filebased62encoded
-            );
+            Swal.fire({
+              title: "Are you done with the evaluation?",
+              showCancelButton: true,
+              confirmButtonText: "Yes",
+              denyButtonText: "No",
+              customClass: {
+                actions: "my-actions",
+                cancelButton: "order-1 right-gap",
+                confirmButton: "order-2",
+              },
+            }).then(async (result) => {
+              if (result.isConfirmed) {
+                loadingmodal.style.display = "block";
+                await updateAdminApplication(
+                  username,
+                  admindoc,
+                  filebased62encoded,
+                  inspectiondates,
+                  new Date(submissiondate.value)
+                ).then((result) => {
+                  console.log("hi");
+                });
+                loadingmodal.style.display = "none";
+              }
+            });
           }
         }, 100);
       } else {
-        console.log("Missing input");
+        // loadingmodal.style.display = "block";
+        Swal.fire(
+          `You have not finished you evaluation yet...`,
+          "Please fill up all the fields",
+          "error"
+        );
       }
     });
 } else {
@@ -185,21 +233,4 @@ if (p === "evaluation") {
   });
 }
 
-async function updateApplication(userid, permit_id, permit_type, doctoupdate) {
-  try {
-    console.log(filebased62encoded);
-
-    console.log(userid, permit_type, permit_id, doctoupdate);
-    await updateDoc(doctoupdate, {
-      'inspection_dates': [new Date(), new Date("2025-04-01")],
-      'oop': `${filebased62encoded}`,
-      'submission_date': new Date(),
-      'status': "Evaluated",
-    });
-  } catch (error) {
-    console.error(error);
-  }
-}
-
 window.onload = initializepage;
-

@@ -1,11 +1,12 @@
 import { db } from "./config.js";
 import {
   getDocs,
+  getDoc,
   collection,
 } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-firestore.js";
 
 // const requirementsdiv = document.querySelector("requirements");
-import { requirementsdiv, pfpimage } from "./constants/appviewerconstants.js";
+import { requirementsdiv, pfpimage, oopholder } from "./constants/appviewerconstants.js";
 
 export async function getfiles(id, collectionname) {
   requirementsdiv.innerHTML = "";
@@ -74,6 +75,27 @@ export function displayPDF(base64, filename) {
   requirementsdiv.appendChild(fileBox);
 }
 
+function displayOOP(base64) {
+  oopholder.innerHTML = "";
+  const byteCharacters = atob(base64);
+  const byteNumbers = Array.from(byteCharacters, (char) => char.charCodeAt(0));
+  const byteArray = new Uint8Array(byteNumbers);
+  const blob = new Blob([byteArray], { type: "application/pdf" });
+  const blobUrl = URL.createObjectURL(blob);
+
+  const icon = document.createElement("h5");
+  icon.innerText = "ORDER OF PAYMENT";
+
+  const wrapper = document.createElement("div");
+  wrapper.className = "requirement-item-pdf";
+  wrapper.onclick = () => window.open(blobUrl, "_blank");
+  wrapper.appendChild(icon);
+
+  oopholder.style.cursor = "pointer";
+  oopholder.appendChild(wrapper);
+}
+
+
 export function displayImage(base64, filename) {
   const img = document.createElement("img");
   img.src = `data:image/jpeg;base64,${base64}`;
@@ -103,6 +125,18 @@ export function displayImage(base64, filename) {
   fileBox.style.backgroundPosition = "center"; // Center the image
   fileBox.appendChild(wrapper);
   requirementsdiv.appendChild(fileBox);
+}
+
+export async function getOOP(permitdoc){
+  try{
+    const permitsnapshot = await getDoc(permitdoc);
+    const permitdata = permitsnapshot.data();
+    const oop_base64encoded = permitdata.oop;
+    console.log(permitdata)
+    displayOOP(oop_base64encoded);
+  }catch(error){
+    console.error(error)
+  }
 }
 
 // export function displayclientpfp(base64){

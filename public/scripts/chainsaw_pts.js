@@ -6,29 +6,18 @@ import {
   getrejectedpermits_chainsawandtcp,
 } from "./datahelpers.js";
 
-const logoutbtn = document.getElementById("logout");
+import {
+  tablechanger,
+   statusfilter,
+   searchfilter, typelabel, logoutbtn
+} from "./constants/tableconstants.js";
+
+let status = "pending";
+
 logoutbtn.addEventListener("click", logoutfunction);
 
-const modal = new bootstrap.Modal(document.getElementById("permitModal"));
-const searchfilter = document.getElementById("searchdata");
-// const requirementsdiv = document.getElementById("requirements");
-const statusfilter = document.getElementById("status");
-const evaluatedtable = document.getElementById("evaluated-table");
-const evaluatedtablebody = document.getElementById("evaluatedtbody");
-const rejectedtable = document.getElementById("rejected-table");
-const rejectedtablebody = document.getElementById("rejectedtbody");
-const typelabel = document.getElementById("typelabel");
-
-const pendingtable = document.getElementById("pending-table");
-
-const tablechanger = {
-  pending: pendingtable,
-  evaluated: evaluatedtable,
-  rejected: rejectedtable,
-};
-
 searchfilter.addEventListener("input", () => {
-  searching(searchfilter);
+  searching(status, searchfilter);
 });
 
 let beforechange = statusfilter.value;
@@ -36,13 +25,14 @@ let beforechange = statusfilter.value;
 statusfilter.addEventListener("change", () => {
   searchfilter.value = "";
   if (statusfilter.value === "pending") {
+    status = "pending";
     typelabel.innerText = "Pending";
   } else if (statusfilter.value === "evaluated") {
+    status = "evaluated";
     typelabel.innerText = "Evaluated";
-
   } else {
+    status = "rejected";
     typelabel.innerText = "Rejected";
-
   }
   tablechanger[beforechange].style.display = "none";
   console.log(beforechange);
@@ -51,15 +41,16 @@ statusfilter.addEventListener("change", () => {
 });
 
 function initializetabledata(){
-  getpendingpermits_chainsawandtcp("chainsaw", "Permit To Sell");
+  getpendingpermits_chainsawandtcp(
+    "chainsaw",
+    "Permit To Sell"
+  );
   getevaluatedpermits_chainsawandtcp(
     "chainsaw",
-    evaluatedtablebody,
     "Permit To Sell"
   );
   getrejectedpermits_chainsawandtcp(
     "chainsaw",
-    rejectedtablebody,
     "Permit To Sell"
   );
 }

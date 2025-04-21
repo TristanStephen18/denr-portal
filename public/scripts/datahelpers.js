@@ -22,6 +22,7 @@ import {
   evaluatedtablebody,
   rejectedtablebody,
 } from "./constants/tableconstants.js";
+import { loadingmodal } from "./constants/appviewerconstants.js";
 
 export function searching(status, searchfilter) {
   const query = searchfilter.value.toLowerCase();
@@ -71,7 +72,6 @@ function setInitializedPermits(rowsArray) {
   allRowsInitialized = rowsArray;
 }
 
-
 export async function markasinitialized(permitid, permittype, client) {
   const admindoc = doc(db, `${permittype}`, permitid);
   try {
@@ -120,8 +120,7 @@ export async function getUsername() {
     } else {
       console.log("Nobody is logged in");
       // return "nobody is logged in";
-      adminname = 'Unknown';
-
+      adminname = "Unknown";
     }
   });
   return adminname;
@@ -373,12 +372,25 @@ export async function getpendingpermits_chainsawandtcp(permittype, type) {
     const tpcollectionref = collection(db, `${permittype}`);
     onSnapshot(tpcollectionref, (snapshot) => {
       permittablebody.innerHTML = "";
+      let pendingpermits = [];
       console.log(snapshot);
       if (snapshot.empty) {
         console.log("Snapshot is empty");
       } else {
         snapshot.forEach((doc) => {
           const docdata = doc.data();
+          if (docdata.status === "Pending" && docdata.type === `${type}`) {
+            pendingpermits.push({ id: doc.id, data: docdata });
+          }
+        });
+
+        pendingpermits.sort(
+          (a, b) => b.data.uploadedAt.toDate() - a.data.uploadedAt.toDate()
+        );
+
+        
+        pendingpermits.forEach(({id, data}) => {
+          // const data = doc.data();
           const row = document.createElement("tr");
           const evaluatebtn = document.createElement("button");
           evaluatebtn.innerHTML = "Evaluate";
@@ -389,39 +401,39 @@ export async function getpendingpermits_chainsawandtcp(permittype, type) {
             evaluatebtn.style.backgroundColor = "rgb(162, 212, 162)";
             evaluatebtn.style.color = "black";
           });
-
+        
           evaluatebtn.addEventListener("mouseleave", () => {
             evaluatebtn.style =
               "color: white; background-color: green; border: none; padding: 8px; border-radius: 10px; width: 100px; cursor:pointer;";
           });
-          if (docdata.status === "Pending" && docdata.type === `${type}`) {
-            row.setAttribute(`${permittype}-num`, doc.id);
+          if (data.status === "Pending" && data.type === `${type}`) {
+            row.setAttribute(`${permittype}-num`, id);
             row.innerHTML = `
-              <td>${docdata.client}</td>
-              <td>${doc.id}</td>
-              <td>${docdata.type}</td>
-              <td><span class="status">${docdata.status}</span></td>
-              <td>${docdata.current_location}</td>
-              <td>${docdata.uploadedAt
+              <td>${data.client}</td>
+              <td>${id}</td>
+              <td>${data.type}</td>
+              <td><span class="status">${data.status}</span></td>
+              <td>${data.current_location}</td>
+              <td>${data.uploadedAt
                 .toDate()
                 .toLocaleDateString("en-US", options)}</td>
             `;
-
+        
             const td = document.createElement("td");
             td.appendChild(evaluatebtn);
             row.appendChild(td);
-
+        
             evaluatebtn.addEventListener("click", () => {
               // console.log(`${doc.id}`);
               window.open(
-                `/application/${docdata.client}/${doc.id}/${docdata.type}/${permittype}/evaluation`
+                `/application/${data.client}/${id}/${data.type}/${permittype}/evaluation`
               );
             });
-
+        
             permittablebody.appendChild(row);
           }
         });
-
+        
         const allPendingRows = Array.from(
           permittablebody.querySelectorAll("tr")
         );
@@ -439,6 +451,7 @@ export async function getevaluatedpermits_chainsawandtcp(permittype, type) {
   try {
     const tpcollectionref = collection(db, `${permittype}`);
     onSnapshot(tpcollectionref, (snapshot) => {
+      const docsArray = [];
       evaluatedtablebody.innerHTML = "";
       console.log(snapshot);
       if (snapshot.empty) {
@@ -446,7 +459,33 @@ export async function getevaluatedpermits_chainsawandtcp(permittype, type) {
       } else {
         snapshot.forEach((doc) => {
           const docdata = doc.data();
+          if (docdata.status === "Evaluated" && docdata.type === `${type}`) {
+            docsArray.push({ id: doc.id, data: docdata });
+          }
+        });
+
+        docsArray.sort(
+          (a, b) => b.data.uploadedAt.toDate() - a.data.uploadedAt.toDate()
+        );
+
+        docsArray.forEach(({ id, data }) => {
           const row = document.createElement("tr");
+          row.setAttribute(`${permittype}-num`, id);
+          row.innerHTML = `
+            <td>${data.client}</td>
+            <td>${id}</td>
+            <td>${data.type}</td>
+            <td><span class="status">${data.status}</span></td>
+            <td>${data.evaluated_by}</td>
+            <td>${data.evaluated_at
+              .toDate()
+              .toLocaleDateString("en-US", options)}</td>
+            <td>${data.current_location}</td>
+            <td>${data.uploadedAt
+              .toDate()
+              .toLocaleDateString("en-US", options)}</td>
+          `;
+
           const viewbtn = document.createElement("button");
           viewbtn.innerHTML = "View";
           viewbtn.id = "e-btn";
@@ -456,11 +495,16 @@ export async function getevaluatedpermits_chainsawandtcp(permittype, type) {
             viewbtn.style.backgroundColor = "rgb(162, 212, 162)";
             viewbtn.style.color = "black";
           });
-
           viewbtn.addEventListener("mouseleave", () => {
             viewbtn.style =
               "color: white; background-color: blue; border: none; padding: 8px; border-radius: 10px; width: 100px; cursor:pointer;";
           });
+          viewbtn.addEventListener("click", () => {
+            window.open(
+              `/application/${data.client}/${id}/${data.type}/${permittype}/view`
+            );
+          });
+
           const markasinspectedbtn = document.createElement("button");
           markasinspectedbtn.innerHTML = "Mark as Inspected";
           markasinspectedbtn.id = "mai-btn";
@@ -470,60 +514,52 @@ export async function getevaluatedpermits_chainsawandtcp(permittype, type) {
             markasinspectedbtn.style.backgroundColor = "rgb(162, 212, 162)";
             markasinspectedbtn.style.color = "black";
           });
-
           markasinspectedbtn.addEventListener("mouseleave", () => {
             markasinspectedbtn.style =
               "color: white; background-color: green; border: none; padding: 8px; border-radius: 10px; width: 100px; cursor:pointer;";
           });
-          if (docdata.status === "Evaluated" && docdata.type === `${type}`) {
-            row.setAttribute(`${permittype}-num`, doc.id);
-            row.innerHTML = `
-              <td>${docdata.client}</td>
-              <td>${doc.id}</td>
-              <td>${docdata.type}</td>
-              <td><span class="status">${docdata.status}</span></td>
-              <td>${docdata.evaluated_by}</td>
-              <td>${docdata.evaluated_at
-                .toDate()
-                .toLocaleDateString("en-US", options)}</td>
-              <td>${docdata.current_location}</td>
-              <td>${docdata.uploadedAt
-                .toDate()
-                .toLocaleDateString("en-US", options)}</td>
-            `;
-
-            viewbtn.addEventListener("click", () => {
-              window.open(
-                `/application/${docdata.client}/${doc.id}/${docdata.type}/${permittype}/view`
-              );
+          markasinspectedbtn.addEventListener("click", () => {
+            Swal.fire({
+              title: "Mark as Inspected?",
+              showCancelButton: true,
+              confirmButtonText: "Yes",
+              denyButtonText: "No",
+              customClass: {
+                actions: "my-actions",
+                cancelButton: "order-1 right-gap",
+                confirmButton: "order-2",
+              },
+            }).then((result) => {
+              if (result.isConfirmed) {
+                axios
+                  .get(`/evaluator/markasinspected/${permittype}/${id}`)
+                  .then((response) => {
+                    if (response.data === 200) {
+                      Swal.fire(
+                        `Permit data was successfully updated`,
+                        "",
+                        "success"
+                      );
+                    } else {
+                      Swal.fire(`Error updating permit`, "", "error");
+                    }
+                  })
+                  .catch((error) => {
+                    console.log(error);
+                  });
+              }
             });
+          });
 
-            markasinspectedbtn.addEventListener("click", () => {
-              Swal.fire({
-                title: "Mark as Inspected?",
-                showCancelButton: true,
-                confirmButtonText: "Yes",
-                denyButtonText: "No",
-                customClass: {
-                  actions: "my-actions",
-                  cancelButton: "order-1 right-gap",
-                  confirmButton: "order-2",
-                },
-              }).then((result) => {
-                if (result.isConfirmed) {
-                  Swal.fire(`Bitch`, "", "success");
-                }
-              });
-            });
-            const td = document.createElement("td");
-            td.style = "display: flex; Flex-direction: row; gap: 3px;";
-            td.appendChild(viewbtn);
-            td.appendChild(markasinspectedbtn);
-            row.appendChild(td);
+          const td = document.createElement("td");
+          td.style = "display: flex; flex-direction: row; gap: 3px;";
+          td.appendChild(viewbtn);
+          td.appendChild(markasinspectedbtn);
+          row.appendChild(td);
 
-            evaluatedtablebody.appendChild(row);
-          }
+          evaluatedtablebody.appendChild(row);
         });
+
         const allPendingRows = Array.from(
           evaluatedtablebody.querySelectorAll("tr")
         );

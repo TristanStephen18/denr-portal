@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <%- include('../partials/head', {title: 'Tree Cutting Permit',
-csslink:'/css/tcp_public.css'}) %>
+csslink:'/css/permits.css'}) %>
 <body>
     <%- include('../partials/sidebar') %>
     <div class="main-content">
@@ -13,9 +13,7 @@ csslink:'/css/tcp_public.css'}) %>
             <%- include('../partials/tables/evaluatedtable') %>
             <%- include('../partials/tables/rejectedtable') %>
           </div>
-    </div>
-
-    <%- include('../partials/modals/tcpandtransportpermitmodal') %>  
+    </div> 
     <script
     src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAIMuBkc8a_ciIOnIBA5n-3z5A85agZfQ0&callback=initMap"
     async

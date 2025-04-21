@@ -45,3 +45,22 @@ exports.getWildlife = (req, res) =>{
 exports.getPTPR = (req, res) => res.render('evaluators/ptpr')
 
 exports.getTransportPermits = (req, res) => res.render('evaluators/transport_permits')
+
+exports.markasInspected = async (req, res) => {
+    console.log(req.params.permittype);
+    console.log(req.params.permitnum)
+    const permitref = db.collection(`${req.params.permittype}`).doc(`${req.params.permitnum}`);
+
+    await permitref.update({
+        status: "ahsjdgasjd",
+        sample: new Date()
+    }).then((result)=>{
+        console.log('Success');
+        res.send('200')
+        // res.status(200);
+    }).catch((error)=>{
+        console.log(error);
+        // res.status(400);
+        res.send('400')
+    });
+}

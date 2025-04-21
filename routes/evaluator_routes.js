@@ -14,5 +14,7 @@ exp_const.router.get('/transportpermits', controller.getTransportPermits)
 
 exp_const.router.get('/privatetreeplantationregistrations', controller.getPTPR);
 
+exp_const.router.get('/markasinspected/:permittype/:permitnum', controller.markasInspected)
+
 
 module.exports = exp_const.router;

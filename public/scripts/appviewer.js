@@ -27,12 +27,22 @@ import {
 } from "./constants/appviewerconstants.js";
 import { getfiles, getOOP } from "./decoder.js";
 // import { getUsername } from "./datahelpers.js";
-import { updateAdminApplication } from "./helpers/appviewer_helpers.js";
+import {
+  updateAdminApplication,
+  updateUserApplication,
+} from "./helpers/appviewer_helpers.js";
 
 let username = "";
 
 let userid = "";
-let filebased62encoded = "";
+// let filebased62encoded = "";
+let currentDate = new Date();
+let inspectiondates = [];
+let submission_date = new Date();
+const daysContainer = document.getElementById("days");
+const monthYear = document.getElementById("monthYear");
+const prevBtn = document.getElementById("prev");
+const nextBtn = document.getElementById("next");
 
 window.onclick = (e) => {
   if (e.target === loadingmodal) loadingmodal.style.display = "none";
@@ -87,6 +97,7 @@ async function getpermitdata(permitid, permittype) {
     );
     permitaddresstp1.value = `${data.from}`;
     permitaddresstp2.value = `${data.to}`;
+
     // permitaddress.value = `${data.tcp_location}`;
   }
 
@@ -109,6 +120,17 @@ async function getpermitdata(permitid, permittype) {
       });
     }
   }
+  // inspectiondates = data.inspection_dates;
+  data.inspection_dates.forEach(idate => {
+    inspectiondates.push(idate.toDate())
+  });
+
+
+  submission_date = data.submission_date.toDate();
+
+  currentDate = submission_date;
+
+  renderCalendar(currentDate);
 }
 
 onAuthStateChanged(auth, async (user) => {
@@ -119,11 +141,9 @@ onAuthStateChanged(auth, async (user) => {
     console.log(userdocref);
     const snapshot = await getDoc(userdocref);
     console.log(snapshot.data().username);
-    // return snapshot.data().username;
     username = snapshot.data().username;
   } else {
     console.log("Nobody is logged in");
-    // return "nobody is logged in";
     username = "Unknown";
   }
 });
@@ -131,10 +151,6 @@ onAuthStateChanged(auth, async (user) => {
 function initializepage() {
   getpermitdata(newpermitid, newpermittype);
   getfiles(newpermitid, newpermittype);
-  const permitdoc = doc(db, `${newpermittype}`, `${newpermitid}`);
-  if (p != "evaluation") {
-    getOOP(permitdoc);
-  }
 }
 
 function setdefaultpfp(cname) {
@@ -153,6 +169,7 @@ if (p === "evaluation") {
   document.getElementById("exit_btn").addEventListener("click", () => {
     window.close();
   });
+
   document
     .getElementById("f_evaluation")
     .addEventListener("click", async () => {
@@ -164,73 +181,134 @@ if (p === "evaluation") {
         inspectiondate1.value !== "" &&
         inspectiondate2.value !== ""
       ) {
-        const reader = new FileReader();
+        try {
+          const filebased62encoded = await readFileAsBase64(file);
 
-        reader.onload = function (e) {
-          filebased62encoded = e.target.result.split(",")[1]; // cleaner way
+          const inspectiondates = [
+            new Date(inspectiondate1.value),
+            new Date(inspectiondate2.value),
+          ];
 
-          console.log("File loaded in onload");
-        };
+          const userdoc = doc(
+            db,
+            `mobile_users/${userid}/applications`,
+            `${newpermitid}`
+          );
+          const admindoc = doc(db, `${newpermittype}`, `${newpermitid}`);
 
-        reader.readAsDataURL(file);
-
-        // Check every 100ms if filebased62encoded has been set
-        const waitForFile = setInterval(() => {
-          if (filebased62encoded && filebased62encoded.length > 0) {
-            clearInterval(waitForFile);
-
-            const inspectiondates = [
-              new Date(inspectiondate1.value),
-              new Date(inspectiondate2.value),
-            ];
-
-            const userdoc = doc(
-              db,
-              `mobile_users/${userid}/applications`,
-              `${newpermitid}`
-            );
-            const admindoc = doc(db, `${newpermittype}`, `${newpermitid}`);
-
-            Swal.fire({
-              title: "Are you done with the evaluation?",
-              showCancelButton: true,
-              confirmButtonText: "Yes",
-              denyButtonText: "No",
-              customClass: {
-                actions: "my-actions",
-                cancelButton: "order-1 right-gap",
-                confirmButton: "order-2",
-              },
-            }).then(async (result) => {
-              if (result.isConfirmed) {
-                loadingmodal.style.display = "block";
-                await updateAdminApplication(
-                  username,
-                  admindoc,
-                  filebased62encoded,
-                  inspectiondates,
-                  new Date(submissiondate.value)
-                ).then((result) => {
-                  console.log("hi");
-                });
-                loadingmodal.style.display = "none";
-              }
-            });
-          }
-        }, 100);
+          Swal.fire({
+            title: "Are you done with the evaluation?",
+            showCancelButton: true,
+            confirmButtonText: "Yes",
+            denyButtonText: "No",
+            customClass: {
+              actions: "my-actions",
+              cancelButton: "order-1 right-gap",
+              confirmButton: "order-2",
+            },
+          }).then(async (result) => {
+            if (result.isConfirmed) {
+              loadingmodal.style.display = "block";
+              await updateAdminApplication(
+                username,
+                admindoc,
+                inspectiondates,
+                new Date(submissiondate.value)
+              );
+              await updateUserApplication(
+                userdoc,
+                inspectiondates,
+                filebased62encoded,
+                username
+              );
+              loadingmodal.style.display = "none";
+            }
+          });
+        } catch (error) {
+          console.error("File read error:", error);
+        }
       } else {
-        // loadingmodal.style.display = "block";
         Swal.fire(
-          `You have not finished you evaluation yet...`,
+          `You have not finished your evaluation yet...`,
           "Please fill up all the fields",
           "error"
         );
       }
     });
 } else {
+  prevBtn.onclick = () => {
+    currentDate.setMonth(currentDate.getMonth() - 1);
+    renderCalendar(currentDate);
+  };
+  
+  nextBtn.onclick = () => {
+    currentDate.setMonth(currentDate.getMonth() + 1);
+    renderCalendar(currentDate);
+  };
   document.getElementById("exit").addEventListener("click", () => {
     window.close();
   });
+}
+
+function readFileAsBase64(file) {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      const result = e.target.result.replace(
+        "data:application/pdf;base64,",
+        ""
+      );
+      resolve(result);
+    };
+    reader.onerror = reject;
+    reader.readAsDataURL(file);
+  });
+}
+
+function isSameDate(d1, d2) {
+  return (
+    d1.getDate() === d2.getDate() &&
+    d1.getMonth() === d2.getMonth() &&
+    d1.getFullYear() === d2.getFullYear()
+  );
+}
+
+function renderCalendar(date) {
+  console.log(inspectiondates[0], inspectiondates[1], submission_date)
+  daysContainer.innerHTML = "";
+
+  const year = date.getFullYear();
+  const month = date.getMonth();
+  const firstDay = new Date(year, month, 1);
+  const lastDay = new Date(year, month + 1, 0);
+  const startDay = firstDay.getDay();
+  const totalDays = lastDay.getDate();
+
+  monthYear.textContent = `${date.toLocaleString("default", {
+    month: "long",
+  })} ${year}`;
+
+  for (let i = 0; i < startDay; i++) {
+    daysContainer.innerHTML += `<div></div>`;
+  }
+
+  for (let i = 1; i <= totalDays; i++) {
+    const dayDate = new Date(year, month, i);
+
+    let classes = "";
+    for (let highlight of inspectiondates) {
+      if (isSameDate(dayDate, highlight)) {
+        classes = "highlight";
+        break;
+      }
+    }
+
+    if (isSameDate(dayDate, submission_date)) {
+      classes = classes ? `${classes} submission` : "submission";
+    }
+
+    daysContainer.innerHTML += `<div class="${classes}">${i}</div>`;
+  }
 }
 
 window.onload = initializepage;

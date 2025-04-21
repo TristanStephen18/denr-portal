@@ -168,28 +168,35 @@
       </div>
       <% } else { %>
       <div class="right-side">
-        <div class="oop">
-          <h2>Order of Payment</h2>
-          <div class="file-holder">
-            <div class="filebox" id="oop_holder">OOP HERE</div>
+        <h2>Schedules</h2>
+        <div class="legends">
+          <div class="legends_and_labels">
+            <div class="legend_color" style="background-color: rgba(255, 166, 0, 0.897);"></div>
+            <div class="legend_label">Hardcopy Submission Date</div>
+          </div>
+          <div class="legends_and_labels">
+            <div class="legend_color" style="background-color: rgba(5, 168, 5, 0.815);"></div>
+            <div class="legend_label">Inspection Dates</div>
           </div>
         </div>
-        <div class="date-setter">
-          <div class="dater">
-            <label for="submission"> Client Submission Date: </label>
-            <input type="date" name="submissiondate" id="submissiondate" />
-          </div>
-          <div class="dater">
-            <label for="inspection1"> Inspection dates: </label>
-            <input
-              type="date"
-              name="inspectiondate1"
-              id="inspectiondate1"
-              required
-            />
-            <input type="date" name="inspectiondate2" id="inspectiondate2" />
-          </div>
-        </div>
+        <div class="calendar">
+      <div class="header">
+        <button id="prev">&#8592;</button>
+        <div id="monthYear"></div>
+        <button id="next">&#8594;</button>
+      </div>
+      <div class="weekdays">
+        <div>Sun</div>
+        <div>Mon</div>
+        <div>Tue</div>
+        <div>Wed</div>
+        <div>Thu</div>
+        <div>Fri</div>
+        <div>Sat</div>
+      </div>
+      <div class="days" id="days"></div>
+    </div>
+    <br>
         <button id="exit">Exit</button>
       </div>
       <% } %>

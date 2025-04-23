@@ -1,10 +1,10 @@
-import { db, auth } from "./config.js";
+import { db, auth } from "../helpers/config.js";
 import {
   updateDoc,
   doc,
   getDoc,
 } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-firestore.js";
-import { initMap } from "./maphelper.js";
+import { initMap } from "../helpers/maphelper.js";
 import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-auth.js";
 
 import {
@@ -24,13 +24,13 @@ import {
   inspectiondate1,
   inspectiondate2,
   loadingmodal,
-} from "./constants/appviewerconstants.js";
-import { getfiles, getOOP } from "./decoder.js";
+} from "../constants/appviewerconstants.js";
+import { getfiles, getOOP } from "../helpers/decoder.js";
 // import { getUsername } from "./datahelpers.js";
 import {
   updateAdminApplication,
   updateUserApplication,
-} from "./helpers/appviewer_helpers.js";
+} from "../helpers/appviewer_helpers.js";
 
 let username = "";
 
@@ -105,7 +105,7 @@ async function getpermitdata(permitid, permittype) {
     if (data.type === `undefined`) {
       document.getElementById("cna_oopbtn").addEventListener("click", () => {
         window.open(
-          `/orderofpayment/${data.client}/${data.address}/${permittype}/`
+          `/templates/orderofpayment/${data.client}/${data.address}/${permittype}/`
         );
         nooop.style.display = "none";
         insertoopdiv.style.display = "block";
@@ -113,24 +113,23 @@ async function getpermitdata(permitid, permittype) {
     } else {
       document.getElementById("cna_oopbtn").addEventListener("click", () => {
         window.open(
-          `/orderofpayment/${data.client}/${data.address}/${permittype}/${data.type}`
+          `/templates/orderofpayment/${data.client}/${data.address}/${permittype}/${data.type}`
         );
         nooop.style.display = "none";
         insertoopdiv.style.display = "block";
       });
     }
+  } else {
+    data.inspection_dates.forEach((idate) => {
+      inspectiondates.push(idate.toDate());
+    });
+
+    submission_date = data.submission_date.toDate();
+
+    currentDate = submission_date;
+
+    renderCalendar(currentDate);
   }
-  // inspectiondates = data.inspection_dates;
-  data.inspection_dates.forEach(idate => {
-    inspectiondates.push(idate.toDate())
-  });
-
-
-  submission_date = data.submission_date.toDate();
-
-  currentDate = submission_date;
-
-  renderCalendar(currentDate);
 }
 
 onAuthStateChanged(auth, async (user) => {
@@ -221,6 +220,13 @@ if (p === "evaluation") {
                 filebased62encoded,
                 username
               );
+
+            axios.get(`/evaluator/notifyclient/${newpermittype}/${newpermitid}/${username}/${userid}`).then((response)=>{
+              console.log(response.data())
+            }).catch((error)=>{
+              console.log(error);
+            })
+
               loadingmodal.style.display = "none";
             }
           });
@@ -240,7 +246,7 @@ if (p === "evaluation") {
     currentDate.setMonth(currentDate.getMonth() - 1);
     renderCalendar(currentDate);
   };
-  
+
   nextBtn.onclick = () => {
     currentDate.setMonth(currentDate.getMonth() + 1);
     renderCalendar(currentDate);
@@ -274,7 +280,7 @@ function isSameDate(d1, d2) {
 }
 
 function renderCalendar(date) {
-  console.log(inspectiondates[0], inspectiondates[1], submission_date)
+  console.log(inspectiondates[0], inspectiondates[1], submission_date);
   daysContainer.innerHTML = "";
 
   const year = date.getFullYear();
@@ -312,3 +318,6 @@ function renderCalendar(date) {
 }
 
 window.onload = initializepage;
+
+
+

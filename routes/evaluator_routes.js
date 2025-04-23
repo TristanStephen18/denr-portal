@@ -14,7 +14,13 @@ exp_const.router.get('/transportpermits', controller.getTransportPermits)
 
 exp_const.router.get('/privatetreeplantationregistrations', controller.getPTPR);
 
-exp_const.router.get('/markasinspected/:permittype/:permitnum', controller.markasInspected)
+exp_const.router.get('/markasinspected/:permittype/:permitnum/:evaluator/:clientid', controller.markasEvaluated)
+
+exp_const.router.get('/notifyclient/:permittype/:permitnum/:evaluator/:clientid', controller.evaluationnotif) 
+
+exp_const.router.get('/recommendforapproval/:permittype/:permitnum/:evaluator/:clientid', controller.recommendForApproval) 
+
+exp_const.router.get('/approvepermit/:permittype/:permitnum/:evaluator/:clientid', controller.cenroApproved)  
 
 
 module.exports = exp_const.router;

@@ -1,4 +1,4 @@
-import { auth, db } from "./config.js";
+import { auth, db } from "./helpers/config.js";
 import { signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-auth.js";
 import {
   getDocs,

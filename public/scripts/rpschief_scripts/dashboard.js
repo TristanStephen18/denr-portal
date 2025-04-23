@@ -13,17 +13,17 @@ import {
 // import { status } from "express/lib/response.js";
 
 import { setPermitRows, searching, markasinitialized } from "../datahelpers.js";
-import { getfiles } from "../decoder.js";
+// import { getfiles } from "../decoder.js";
 
 const options = { month: "long", day: "numeric", year: "numeric" };
 const tablebodyid = document.getElementById("evaluatedtbody");
 const modal = document.getElementById("evaluatedmodal");
 const statusfilter = document.getElementById("status");
 const searchdata = document.getElementById("searchdata");
-const requirementsdiv = document.getElementById('requirements');
-const client = document.getElementById('modalClient');
-const address = document.getElementById('modalAddress');
-const appdate = document.getElementById('modalDate');
+// const requirementsdiv = document.getElementById('requirements');
+// const client = document.getElementById('modalClient');
+// const address = document.getElementById('modalAddress');
+// const appdate = document.getElementById('modalDate');
 const initializedbtn = document.getElementById('initializedbtn');
 
 searchdata.addEventListener("input", () => {
@@ -110,7 +110,6 @@ function setupSnapshotListener(collectionName) {
   });
 }
 
-// Helper function to get permit type
 function getPermitType(collectionName) {
   switch (collectionName) {
     case "transport_permit":
@@ -172,16 +171,16 @@ function renderTable(filter) {
     `;
 
       // Click event to update status to "Pending"
-      row.addEventListener("click", async () => {
-        modal.setAttribute('permit-id', `${permit.id}`);
-        modal.setAttribute('permit-type', `${permit.collectionname}`);
-        modal.setAttribute('client', `${permit.client}`);
-        modal.style.display = "block";
-        client.value = `${permit.client}`;
-        address.value = `${permit.address}`;
-        appdate.value = `${new Date(permit.date_created).toISOString().split("T")[0]}`;
-        getfiles(`${permit.permit_number}`, requirementsdiv, `${permit.collectionname}`);
-      });
+    //   row.addEventListener("click", async () => {
+    //     modal.setAttribute('permit-id', `${permit.id}`);
+    //     modal.setAttribute('permit-type', `${permit.collectionname}`);
+    //     modal.setAttribute('client', `${permit.client}`);
+    //     modal.style.display = "block";
+    //     client.value = `${permit.client}`;
+    //     address.value = `${permit.address}`;
+    //     appdate.value = `${new Date(permit.date_created).toISOString().split("T")[0]}`;
+    //     getfiles(`${permit.permit_number}`, requirementsdiv, `${permit.collectionname}`);
+    //   });
     }
 
     tablebodyid.appendChild(row);

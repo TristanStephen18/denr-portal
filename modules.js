@@ -1,4 +1,3 @@
-const option = { month: "long", day: "numeric", year: "numeric" };
 
 const converter = function (n) {
     if (n < 0) return false;
@@ -238,4 +237,4 @@ const converter = function (n) {
         return datatodisplay;
   }
 
-  exports.converter = converter;
+  // exports.converter = converter;

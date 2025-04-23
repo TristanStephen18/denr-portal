@@ -1,4 +1,4 @@
-import { db } from "./config.js";
+import { db } from "../helpers/config.js";
 import {
   getDocs,
   getDoc,
@@ -6,7 +6,7 @@ import {
 } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-firestore.js";
 
 // const requirementsdiv = document.querySelector("requirements");
-import { requirementsdiv, pfpimage, oopholder } from "./constants/appviewerconstants.js";
+import { requirementsdiv, pfpimage, oopholder } from "../constants/appviewerconstants.js";
 
 export async function getfiles(id, collectionname) {
   requirementsdiv.innerHTML = "";

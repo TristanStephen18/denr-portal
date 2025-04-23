@@ -1,16 +1,17 @@
-import { logoutfunction } from "./config.js";
+import { logoutfunction } from "../helpers/config.js";
 import {
   searching,
   getpendingpermits_chainsawandtcp,
   getevaluatedpermits_chainsawandtcp,
   getrejectedpermits_chainsawandtcp,
-} from "./datahelpers.js";
+} from "../helpers/datahelpers.js";
 
+// import { logoutbtn,  } from "./constants/tableconstants.js";
 import {
   tablechanger,
    statusfilter,
-   searchfilter, typelabel, logoutbtn
-} from "./constants/tableconstants.js";
+   logoutbtn
+} from "../constants/tableconstants.js";
 
 let statusidentifier = "pending";
 
@@ -18,22 +19,22 @@ let statusidentifier = "pending";
 logoutbtn.addEventListener("click", logoutfunction);
 
 
-searchfilter.addEventListener("input", () => {
-  searching(statusidentifier, searchfilter);
-});
+// searchfilter.addEventListener("input", () => {
+//   searching(statusidentifier, searchfilter);
+// });
 
 let beforechange = statusfilter.value;
 
 statusfilter.addEventListener("change", () => {
-  searchfilter.value = "";
+  // searchfilter.value = "";
   if (statusfilter.value === "pending") {
-    typelabel.innerText = "Pending";
+    // typelabel.innerText = "Pending";
     statusidentifier = "pending";
   } else if (statusfilter.value === "evaluated") {
-    typelabel.innerText = "Evaluated";
+    // typelabel.innerText = "Evaluated";
     statusidentifier = "evaluated";
   } else {
-    typelabel.innerText = "Rejected";
+    // typelabel.innerText = "Rejected";
     statusidentifier = "rejected";
   }
   tablechanger[beforechange].style.display = "none";
@@ -45,15 +46,15 @@ statusfilter.addEventListener("change", () => {
 function initializepage() {
   getpendingpermits_chainsawandtcp(
     "tree_cutting",
-    "National Government Agencies"
+    "Private Land Timber Permit"
   );
   getevaluatedpermits_chainsawandtcp(
     "tree_cutting",
-    "National Government Agencies"
+    "Private Land Timber Permit"
   );
   getrejectedpermits_chainsawandtcp(
     "tree_cutting",
-    "National Government Agencies"
+    "Private Land Timber Permit"
   );
 }
 

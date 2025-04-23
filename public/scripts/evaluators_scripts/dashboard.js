@@ -1,5 +1,5 @@
-import { updateDateTime, sessionchecker } from "./sessionchecker.js";
-import { logoutfunction, db } from "./config.js";
+import { updateDateTime, sessionchecker } from "../helpers/sessionchecker.js";
+import { logoutfunction, db } from "../helpers/config.js";
 import {
   collection,
   onSnapshot,
@@ -16,15 +16,15 @@ import {
   upperagno,
   lowerAgno,
   mt_pulagCoords,
-} from "./constants/mapconstants.js";
+} from "../constants/mapconstants.js";
 
-import { collectionsToListen } from "./constants/firebaseconstants.js";
+import { collectionsToListen } from "../constants/firebaseconstants.js";
 
 import {
   searching,
   setPermitRows,
   updatetreecuttingdetails,
-} from "./datahelpers.js";
+} from "../helpers/datahelpers.js";
 
 const logoutbtn = document.getElementById("logout");
 logoutbtn.addEventListener("click", logoutfunction);

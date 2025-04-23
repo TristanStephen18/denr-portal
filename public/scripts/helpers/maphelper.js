@@ -4,7 +4,7 @@ import {
   mt_pulagCoords,
   upperagno,
   lowerAgno,
-} from "./constants/mapconstants.js";
+} from "../constants/mapconstants.js";
 
 let map, marker, marker2;
 

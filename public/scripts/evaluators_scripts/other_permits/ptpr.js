@@ -1,22 +1,26 @@
-import { logoutfunction } from "../helpers/config.js";
+import { logoutfunction } from "../../helpers/config.js";
 import {
   getpendingpermits,
   getevaluatedpermits,
   getInspectedPermits,
   getRecommendedPermits,
-  getApprovedPermits
-} from "../helpers/datahelpers.js";
+  getApprovedPermits,
+  getForwardedPermits
+} from "../../helpers/datahelpers.js";
 
 import {
   tablechanger,
    statusfilter,
-   logoutbtn,
-   cards
-} from "../constants/tableconstants.js";
+   logoutbtn
+} from "../../constants/tableconstants.js";
 
 let status = "pending";
 
 logoutbtn.addEventListener("click", logoutfunction);
+
+// searchfilter.addEventListener("input", () => {
+//   searching(status, searchfilter);
+// });
 
 let beforechange = statusfilter.value;
 
@@ -32,27 +36,19 @@ statusfilter.addEventListener("change", () => {
     status = "rejected";
     // typelabel.innerText = "Rejected";
   }
-
-  console.log(tablechanger)
   tablechanger[beforechange].style.display = "none";
   console.log(beforechange);
   beforechange = statusfilter.value;
-  tablechanger[statusfilter.value].style.display = "";
-});
-
-cards.forEach((card) => {
-  card.addEventListener('click', () => {
-    cards.forEach(c => c.classList.remove('selected')); // Remove from all
-    card.classList.add('selected'); // Add to the one clicked
-  });
+  tablechanger[statusfilter.value].style.display = "table";
 });
 
 function initializepage() {
-  getpendingpermits("wildlife");
-  getevaluatedpermits("wildlife");
-  getInspectedPermits("wildlife");
-  getRecommendedPermits("wildlife");
-  getApprovedPermits("wildlife");
+  getpendingpermits("plantation");
+  getevaluatedpermits("plantation");
+  getInspectedPermits("plantation");
+  getRecommendedPermits("plantation");
+  getApprovedPermits('plantation');
+  getForwardedPermits('plantation');
 }
 
 window.onload = initializepage;

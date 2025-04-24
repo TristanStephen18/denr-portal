@@ -8,14 +8,14 @@ exports.getChainsaw = (req, res) => {
 
   switch (navigator) {
     case "permittosell":
-      res.render("evaluators/chainsaw_pts");
+      res.render("evaluators/chainsaw/chainsaw_pts");
       break;
     case "permittopurchase":
-      res.render("evaluators/chainsaw_ptp");
+      res.render("evaluators/chainsaw/chainsaw_ptp");
       break;
 
     default:
-      res.render("evaluators/chainsaw_reg");
+      res.render("evaluators/chainsaw/chainsaw_reg");
       break;
   }
 };
@@ -25,26 +25,51 @@ exports.getTreeCutting = (req, res) => {
 
   switch (navigator) {
     case "publicsafetypermits":
-      res.render("evaluators/tcp_public");
+      res.render("evaluators/tree_cutting/tcp_public");
       break;
     case "privatelandtimberpermits":
-      res.render("evaluators/tcp_private");
+      res.render("evaluators/tree_cutting/tcp_private");
       break;
 
     default:
-      res.render("evaluators/tcp_nga");
+      res.render("evaluators/tree_cutting/tcp_nga");
       break;
   }
 };
 
 exports.getWildlife = (req, res) => {
-  res.render("evaluators/wildlife");
+  const type = req.params.type;
+  if (type === "registration") {
+    res.render("evaluators/wildlife/wildlife_reg");
+  } else {
+    res.render("evaluators/wildlife/wildlife_farm");
+  }
 };
 
-exports.getPTPR = (req, res) => res.render("evaluators/ptpr");
+exports.getLumber = (req, res) => {
+  res.render("evaluators/other_permits/lumber_permits");
+};
 
-exports.getTransportPermits = (req, res) =>
-  res.render("evaluators/transport_permits");
+exports.getResaw = (req, res) => {
+  res.render("evaluators/other_permits/resaw_permits");
+};
+
+exports.getPTPR = (req, res) => res.render("evaluators/other_permits/ptpr");
+
+exports.getTransportPermits = (req, res) => {
+  const type = req.params.type;
+  switch (type) {
+    case "flora":
+      res.render("evaluators/transport/flora");
+      break;
+    case "fauna":
+      res.render("evaluators/transport/fauna");
+      break;
+    default:
+      res.render("evaluators/transport/forest_products");
+      break;
+  }
+};
 
 exports.markasEvaluated = async (req, res) => {
   var permit_identifier = permitidentifierfunction(req.params.permittype);
@@ -177,6 +202,54 @@ exports.cenroApproved = async (req, res) => {
     });
 };
 
+exports.permitForwarder = async (req, res) => {
+  var destination = destinationidentifier(req.params.to);
+  var permittype = permitidentifierfunction(req.params.permittype);
+
+  console.log(
+    destination,
+    permittype,
+    req.params.clientid,
+    req.params.evaluator,
+    req.params.permitnum
+  );
+  const permitref = db
+    .collection(`${req.params.permittype}`)
+    .doc(`${req.params.permitnum}`);
+  const clientref = db
+    .collection("mobile_users")
+    .doc(`${req.params.clientid}`)
+    .collection("applications")
+    .doc(`${req.params.permitnum}`);
+
+  await permitref
+    .update({
+      status: `Forwarded/Endorsed`,
+      current_location: `${destination}`,
+      updated_at: new Date(),
+      updated_by: req.params.evaluator,
+    })
+    .then(async (result) => {
+      await clientref
+        .update({
+          status: `Forwarded/Endorsed`,
+          updated_by: req.params.evaluator,
+          updated_at: new Date(),
+        })
+        .then((result) => {
+          res.send("200");
+        })
+        .catch((error) => {
+          console.log(error);
+          res.send("400");
+        });
+    })
+    .catch((error) => {
+      console.log(error);
+      res.send("400");
+    });
+};
+
 exports.evaluationnotif = (req, res) => {
   var permit_identifier = "";
   switch (req.params.permittype) {
@@ -275,4 +348,15 @@ const permitidentifierfunction = (id) => {
   }
 
   return permit_identifier;
+};
+
+const destinationidentifier = (address) => {
+  let finaldestiation = "";
+  if (address === "PENRO") {
+    finaldestiation = "PENRO Benguet";
+  } else {
+    finaldestiation = "REGIONAL EXECUTIVE DIRECTOR";
+  }
+
+  return finaldestiation;
 };

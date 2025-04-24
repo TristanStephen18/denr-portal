@@ -9,6 +9,10 @@
     <title><%= client.toUpperCase() + " " + 'WILDLIFE REGISTRATION' %></title>
     <% } else if(permittype === 'transport_permit') { %>
     <title><%= client.toUpperCase() + " " + 'TRANSPORT PERMIT' %></title>
+    <% } else if(permittype === 'lumber_registration') { %>
+      <title><%= client.toUpperCase() + " " + 'LUMBER REGISTRATION' %></title>
+      <% } else if(permittype === 'resaw') { %>
+        <title><%= client.toUpperCase() + " " + 'RESAW PERMIT' %></title>
     <% } else {%>
     <title>
       <%= client.toUpperCase() + " " + 'PLANTATION AND WOOD PROCESSING REGISTRATION' %>
@@ -204,7 +208,7 @@
     <div class="modal" id="loading-modal">
       <div class="modal-content">
         <div class="loader"></div><br>
-      <h2>Updating Permit Information</h2>
+      <h2 id="loading-modal-label">Getting Permit/Application Information</h2>
       </div>
     </div>
     <script
@@ -214,6 +218,7 @@
     ></script>
 
     <script>
+      document.getElementById('loading-modal').style.display = "block";
       let permitlabel = "";
       var permitid ='<%- JSON.stringify(sn) %>';
       var colref = '<%- JSON.stringify(permittype) %>';
@@ -241,7 +246,12 @@
         case "wildlife":
           permitlabel = "Wildlife Registration";
           break;
-
+        case "lumber_registration":
+          permitlabel = "Lumber Registration";
+          break;
+        case "resaw":
+          permitlabel = "Resaw Permit";
+          break;
         default:
           permitlabel = `Transport Permit`;
           break;

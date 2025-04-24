@@ -4,6 +4,8 @@ export const collectionsToListen = {
     tree_cutting: "tcpnum",
     wildlife: "wrnum",
     plantation: "pwprnum",
+    lumber_registration: "lpnum",
+    resaw: "rpnum"
   };
 
 

@@ -1,16 +1,16 @@
-import { logoutfunction } from "../helpers/config.js";
+import { logoutfunction } from "../../helpers/config.js";
 import {
   searching,
   getpendingpermits_chainsawandtcp,
   getevaluatedpermits_chainsawandtcp,
   getrejectedpermits_chainsawandtcp,
-} from "../helpers/datahelpers.js";
+} from "../../helpers/datahelpers.js";
 
 import {
   tablechanger,
    statusfilter,
    logoutbtn
-} from "../constants/tableconstants.js";
+} from "../../constants/tableconstants.js";
 
 let status = "pending";
 
@@ -41,18 +41,18 @@ statusfilter.addEventListener("change", () => {
 });
 
 function initializetabledata(){
-  getpendingpermits_chainsawandtcp(
-    "chainsaw",
-    "Permit To Sell"
-  );
-  getevaluatedpermits_chainsawandtcp(
-    "chainsaw",
-    "Permit To Sell"
-  );
-  getrejectedpermits_chainsawandtcp(
-    "chainsaw",
-    "Permit To Sell"
-  );
+  // getpendingpermits_chainsawandtcp(
+  //   "chainsaw",
+  //   "Permit To Sell"
+  // );
+  // getevaluatedpermits_chainsawandtcp(
+  //   "chainsaw",
+  //   "Permit To Sell"
+  // );
+  // getrejectedpermits_chainsawandtcp(
+  //   "chainsaw",
+  //   "Permit To Sell"
+  // );
 }
 
 window.onload = initializetabledata;

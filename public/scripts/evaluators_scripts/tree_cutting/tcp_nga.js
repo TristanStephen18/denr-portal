@@ -1,23 +1,24 @@
-import { logoutfunction } from "../helpers/config.js";
+import { logoutfunction } from "../../helpers/config.js";
 import {
-  searching,
   getpendingpermits_chainsawandtcp,
   getevaluatedpermits_chainsawandtcp,
   getrejectedpermits_chainsawandtcp,
-} from "../helpers/datahelpers.js";
+} from "../../helpers/datahelpers.js";
 
 import {
   tablechanger,
    statusfilter,
    logoutbtn
-} from "../constants/tableconstants.js";
+} from "../../constants/tableconstants.js";
 
-let status = "pending";
+let statusidentifier = "pending";
+
 
 logoutbtn.addEventListener("click", logoutfunction);
 
+
 // searchfilter.addEventListener("input", () => {
-//   searching(status, searchfilter);
+//   searching(statusidentifier, searchfilter);
 // });
 
 let beforechange = statusfilter.value;
@@ -25,14 +26,14 @@ let beforechange = statusfilter.value;
 statusfilter.addEventListener("change", () => {
   // searchfilter.value = "";
   if (statusfilter.value === "pending") {
-    status = "pending";
     // typelabel.innerText = "Pending";
+    statusidentifier = "pending";
   } else if (statusfilter.value === "evaluated") {
-    status = "evaluated";
     // typelabel.innerText = "Evaluated";
+    statusidentifier = "evaluated";
   } else {
-    status = "rejected";
     // typelabel.innerText = "Rejected";
+    statusidentifier = "rejected";
   }
   tablechanger[beforechange].style.display = "none";
   console.log(beforechange);
@@ -41,9 +42,18 @@ statusfilter.addEventListener("change", () => {
 });
 
 function initializepage() {
-  getpendingpermits_chainsawandtcp("tree_cutting", "Public Safety Permit");
-  getevaluatedpermits_chainsawandtcp("tree_cutting", "Public Safety Permit");
-  getrejectedpermits_chainsawandtcp("tree_cutting", "Public Safety Permit");
+  // getpendingpermits_chainsawandtcp(
+  //   "tree_cutting",
+  //   "National Government Agencies"
+  // );
+  // getevaluatedpermits_chainsawandtcp(
+  //   "tree_cutting",
+  //   "National Government Agencies"
+  // );
+  // getrejectedpermits_chainsawandtcp(
+  //   "tree_cutting",
+  //   "National Government Agencies"
+  // );
 }
 
 window.onload = initializepage();

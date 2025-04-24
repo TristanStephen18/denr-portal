@@ -21,6 +21,7 @@ const inspectiondate2 = document.getElementById('inspectiondate2');
 
 //display assets
 const loadingmodal = document.getElementById('loading-modal');
+const loadingmodallabel = document.getElementById('loading-modal-label');
 const oopholder = document.getElementById('oop_holder');
 
 
@@ -46,5 +47,6 @@ export {
   inspectiondate1,
   inspectiondate2,
   loadingmodal,
-  oopholder
+  oopholder,
+  loadingmodallabel
 };

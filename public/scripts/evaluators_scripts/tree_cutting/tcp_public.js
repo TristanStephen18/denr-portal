@@ -1,16 +1,15 @@
-import { logoutfunction } from "../helpers/config.js";
+import { logoutfunction } from "../../helpers/config.js";
 import {
-  searching,
   getpendingpermits_chainsawandtcp,
   getevaluatedpermits_chainsawandtcp,
   getrejectedpermits_chainsawandtcp,
-} from "../helpers/datahelpers.js";
+} from "../../helpers/datahelpers.js";
 
 import {
   tablechanger,
    statusfilter,
    logoutbtn
-} from "../constants/tableconstants.js";
+} from "../../constants/tableconstants.js";
 
 let status = "pending";
 
@@ -40,19 +39,10 @@ statusfilter.addEventListener("change", () => {
   tablechanger[statusfilter.value].style.display = "table";
 });
 
-function initializetabledata(){
-  getpendingpermits_chainsawandtcp(
-    "chainsaw",
-    "Chainsaw Registration"
-  );
-  getevaluatedpermits_chainsawandtcp(
-    "chainsaw",
-    "Chainsaw Registration"
-  );
-  getrejectedpermits_chainsawandtcp(
-    "chainsaw",
-    "Chainsaw Registration"
-  );
+function initializepage() {
+  // getpendingpermits_chainsawandtcp("tree_cutting", "Public Safety Permit");
+  // getevaluatedpermits_chainsawandtcp("tree_cutting", "Public Safety Permit");
+  // getrejectedpermits_chainsawandtcp("tree_cutting", "Public Safety Permit");
 }
 
-window.onload = initializetabledata;
+window.onload = initializepage();

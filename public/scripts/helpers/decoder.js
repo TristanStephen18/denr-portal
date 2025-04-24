@@ -6,7 +6,13 @@ import {
 } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-firestore.js";
 
 // const requirementsdiv = document.querySelector("requirements");
-import { requirementsdiv, pfpimage, oopholder } from "../constants/appviewerconstants.js";
+import {
+  requirementsdiv,
+  pfpimage,
+  oopholder,
+  loadingmodal,
+  loadingmodallabel
+} from "../constants/appviewerconstants.js";
 
 export async function getfiles(id, collectionname) {
   requirementsdiv.innerHTML = "";
@@ -40,6 +46,8 @@ export async function getfiles(id, collectionname) {
         displayImage(file, fdoc.id);
       }
     });
+    loadingmodal.style.display = "none";
+    loadingmodallabel.innerHTML = "Updating Permit Information";
   } catch (error) {
     console.error(error);
   }
@@ -95,7 +103,6 @@ function displayOOP(base64) {
   oopholder.appendChild(wrapper);
 }
 
-
 export function displayImage(base64, filename) {
   const img = document.createElement("img");
   img.src = `data:image/jpeg;base64,${base64}`;
@@ -103,9 +110,9 @@ export function displayImage(base64, filename) {
   img.id = "imagedisplay";
 
   const label = document.createElement("h5");
-  label.style.background = 'black';
-  label.style.color = 'white';
-  label.style.textTransform = 'uppercase';
+  label.style.background = "black";
+  label.style.color = "white";
+  label.style.textTransform = "uppercase";
   label.innerText = filename;
 
   const wrapper = document.createElement("div");
@@ -127,15 +134,15 @@ export function displayImage(base64, filename) {
   requirementsdiv.appendChild(fileBox);
 }
 
-export async function getOOP(permitdoc){
-  try{
+export async function getOOP(permitdoc) {
+  try {
     const permitsnapshot = await getDoc(permitdoc);
     const permitdata = permitsnapshot.data();
     const oop_base64encoded = permitdata.oop;
-    console.log(permitdata)
+    console.log(permitdata);
     displayOOP(oop_base64encoded);
-  }catch(error){
-    console.error(error)
+  } catch (error) {
+    console.error(error);
   }
 }
 
@@ -147,11 +154,24 @@ export async function getOOP(permitdoc){
 //   return img;
 // }
 
-
-
 getfiles();
 
 const printbtn = document.getElementById("sample");
 // printbtn.addEventListener('click', ()=>{
 //   print();
 // })
+
+// const releasedbtn = document.createElement("button");
+//           releasedbtn.innerHTML = "Release";
+//           releasedbtn.id = "e-btn";
+//           releasedbtn.style =
+//             "color: white; background-color: blue; border: none; padding: 8px; border-radius: 10px; width: 100px; cursor:pointer;";
+//           releasedbtn.addEventListener("mouseenter", () => {
+//             releasedbtn.style.backgroundColor = "rgb(162, 212, 162)";
+//             releasedbtn.style.color = "black";
+//           });
+
+//           releasedbtn.addEventListener("mouseleave", () => {
+//             releasedbtn.style =
+//               "color: white; background-color: blue; border: none; padding: 8px; border-radius: 10px; width: 100px; cursor:pointer;";
+//           });

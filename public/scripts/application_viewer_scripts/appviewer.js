@@ -24,8 +24,9 @@ import {
   inspectiondate1,
   inspectiondate2,
   loadingmodal,
+  loadingmodallabel,
 } from "../constants/appviewerconstants.js";
-import { getfiles, getOOP } from "../helpers/decoder.js";
+import { getfiles} from "../helpers/decoder.js";
 // import { getUsername } from "./datahelpers.js";
 import {
   updateAdminApplication,
@@ -150,6 +151,8 @@ onAuthStateChanged(auth, async (user) => {
 function initializepage() {
   getpermitdata(newpermitid, newpermittype);
   getfiles(newpermitid, newpermittype);
+  // loadingmodal.style.display = "none";
+  // loadingmodallabel.innerHTML = "Updating Permit Information";
 }
 
 function setdefaultpfp(cname) {

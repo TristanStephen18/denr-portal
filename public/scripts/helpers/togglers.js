@@ -1,4 +1,4 @@
-import { choosercontent, loadercontent } from "../constants/tableconstants";
+import { choosercontent, loadercontent } from "../constants/tableconstants.js";
 
 export function modalcontenttoggler(purpose) {
   const pendingabtnsdiv = document.getElementById("pending-abtns");
@@ -33,9 +33,9 @@ export function modalcontenttoggler(purpose) {
 export function togglepermitmodal(status){
   if(status === "load"){
     choosercontent.style.display = "none";
-    loadercontent.style.display = "div";
+    loadercontent.style.display = "";
   }else{
     choosercontent.style.display = "div";
-    loadercontent.style.display = "none";
+    loadercontent.style.display = "";
   }
 }

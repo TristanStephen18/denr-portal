@@ -21,7 +21,7 @@ import {
 import { collectionsToListen } from "../constants/firebaseconstants.js";
 
 import {
-  searching,
+  // searching,
   setPermitRows,
   updatetreecuttingdetails,
 } from "../helpers/datahelpers.js";
@@ -126,9 +126,9 @@ markasapproved.addEventListener("click", () => {
 
 const tablesearch = document.getElementById("tablesearch");
 
-tablesearch.addEventListener("input", () => {
-  searching(tablesearch);
-});
+// tablesearch.addEventListener("input", () => {
+//   searching(tablesearch);
+// });
 
 function initializepage() {
   initMap();

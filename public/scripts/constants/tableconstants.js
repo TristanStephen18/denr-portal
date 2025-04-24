@@ -11,8 +11,11 @@ const evaluatedtable_div = document.getElementById('evaluatedtable_div');
 const inspectedtable_div = document.getElementById('inspectedtable_div');
 const rpschiefapproved_div = document.getElementById('recommendedforapproval_div');
 const cenroapproved_div = document.getElementById('approvedbycenro_div');
+const received_div = document.getElementById('received_div');
+const receivedtbody = document.getElementById('receivedtbody');
 const approvedtablebody = document.getElementById('approvedbycenrotbody');
-const released_div = document.getElementById('released_div');
+const endorsed_div = document.getElementById('endorsed_div');
+const endorsedtbody = document.getElementById('endorsedtbody');
 const endorsementmodal = document.getElementById('actionmodal');
 const cards = document.querySelectorAll('.card');
 const loadercontent = document.getElementById('loader-content');
@@ -26,7 +29,8 @@ const tablechanger = {
   inspected: inspectedtable_div,
   recommended: rpschiefapproved_div,
   approved: cenroapproved_div,
-  released: released_div
+  endorsed: endorsed_div,
+  received: received_div,
 };
 
 const searchfilter = document.getElementById("searchdata");
@@ -55,6 +59,9 @@ export {
   endorsementmodal,
   cards,
   loadercontent,
-  choosercontent
+  choosercontent,
+  endorsedtbody,
+  received_div,
+  receivedtbody
 };
 

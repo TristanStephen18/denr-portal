@@ -22,16 +22,18 @@ import {
   approvedtablebody,
   endorsementmodal,
   choosercontent,
-  loadercontent
+  loadercontent,
+  endorsedtbody,
 } from "../constants/tableconstants.js";
+import { endorsebtn } from "../constants/evaluator_constants.js";
 
 // import { togglepermitmodal } from "./togglers.js";
 
-function togglepermitmodal(status){
-  if(status === "load"){
+function togglepermitmodal(status) {
+  if (status === "load") {
     choosercontent.style.display = "none";
     loadercontent.style.display = "";
-  }else{
+  } else {
     choosercontent.style.display = "";
     loadercontent.style.display = "none";
   }
@@ -65,7 +67,7 @@ function setApprovedPermits(rowsArray) {
 
 function setEndorsedReleasedPermits(rowsArray) {
   allRowsReleased = rowsArray;
-  $("#inspectedtable").DataTable();
+  $("#endorsedtable").DataTable();
 }
 
 onAuthStateChanged(auth, async (user) => {
@@ -85,9 +87,9 @@ onAuthStateChanged(auth, async (user) => {
   }
 });
 
+//for permits without a subtype
+
 export async function getpendingpermits(permittype) {
-  const options = { month: "long", day: "numeric", year: "numeric" };
-  let type = "";
 
   try {
     const tpcollectionref = collection(db, `${permittype}`);
@@ -115,14 +117,6 @@ export async function getpendingpermits(permittype) {
               "color: white; background-color: green; border: none; padding: 8px; border-radius: 10px; width: 100px; cursor:pointer;";
           });
           if (docdata.status === "Pending") {
-            row.setAttribute(`${permittype}-num`, doc.id);
-            if (permittype === "wildlife") {
-              type = "Wildlife Registration";
-            } else if (permittype === "plantation") {
-              type = "Private Tree Plantation Registration";
-            } else {
-              type = "Transport Permit";
-            }
             row.innerHTML = `
               <td>${docdata.client}</td>
               <td>${doc.id}</td>
@@ -160,9 +154,7 @@ export async function getpendingpermits(permittype) {
 }
 
 export async function getevaluatedpermits(permittype) {
-  const options = { month: "long", day: "numeric", year: "numeric" };
   console.log("getting evaluated dataa");
-  let type = "";
 
   try {
     const tpcollectionref = collection(db, `${permittype}`);
@@ -205,14 +197,6 @@ export async function getevaluatedpermits(permittype) {
               "color: white; background-color: green; border: none; padding: 8px; border-radius: 10px; width: 100px; cursor:pointer;";
           });
           if (docdata.status === "Evaluated") {
-            row.setAttribute(`${permittype}-num`, doc.id);
-            if (permittype === "wildlife") {
-              type = "Wildlife Registration";
-            } else if (permittype === "plantation") {
-              type = "Private Tree Plantation Registration";
-            } else {
-              type = "Transport Permit";
-            }
             row.innerHTML = `
               <td>${docdata.client}</td>
               <td>${doc.id}</td>
@@ -292,9 +276,7 @@ export async function getevaluatedpermits(permittype) {
 }
 
 export async function getInspectedPermits(permittype) {
-  const options = { month: "long", day: "numeric", year: "numeric" };
   console.log("getting REJECTED dataa");
-  let type = "";
 
   try {
     const tpcollectionref = collection(db, `${permittype}`);
@@ -337,14 +319,6 @@ export async function getInspectedPermits(permittype) {
               "color: white; background-color: green; border: none; padding: 8px; border-radius: 10px; width: 100px; cursor:pointer;";
           });
           if (docdata.status === "Inspected") {
-            row.setAttribute(`${permittype}-num`, doc.id);
-            if (permittype === "wildlife") {
-              type = "Wildlife Registration";
-            } else if (permittype === "plantation") {
-              type = "Private Tree Plantation Registration";
-            } else {
-              type = "Transport Permit";
-            }
             row.innerHTML = `
               <td>${docdata.client}</td>
               <td>${doc.id}</td>
@@ -383,7 +357,7 @@ export async function getInspectedPermits(permittype) {
               }).then((result) => {
                 if (result.isConfirmed) {
                   endorsementmodal.style.display = "block";
-                  togglepermitmodal('load');
+                  togglepermitmodal("load");
                   axios
                     .get(
                       `/evaluator/recommendforapproval/${permittype}/${doc.id}/${adminname}/${docdata.userID}`
@@ -430,8 +404,6 @@ export async function getInspectedPermits(permittype) {
 }
 
 export async function getRecommendedPermits(permittype) {
-  const options = { month: "long", day: "numeric", year: "numeric" };
-  let type = "";
 
   try {
     const tpcollectionref = collection(db, `${permittype}`);
@@ -474,14 +446,6 @@ export async function getRecommendedPermits(permittype) {
               "color: white; background-color: green; border: none; padding: 8px; border-radius: 10px; width: 100px; cursor:pointer;";
           });
           if (docdata.status === "Recommended for Approval") {
-            row.setAttribute(`${permittype}-num`, doc.id);
-            if (permittype === "wildlife") {
-              type = "Wildlife Registration";
-            } else if (permittype === "plantation") {
-              type = "Private Tree Plantation Registration";
-            } else {
-              type = "Transport Permit";
-            }
             row.innerHTML = `
               <td>${docdata.client}</td>
               <td>${doc.id}</td>
@@ -521,7 +485,7 @@ export async function getRecommendedPermits(permittype) {
                 if (result.isConfirmed) {
                   endorsementmodal.style.display = "block";
                   // togglepermitmodal('load')
-                  togglepermitmodal('load');
+                  togglepermitmodal("load");
                   axios
                     .get(
                       `/evaluator/approvepermit/${permittype}/${doc.id}/${adminname}/${docdata.userID}`
@@ -568,9 +532,6 @@ export async function getRecommendedPermits(permittype) {
 }
 
 export async function getApprovedPermits(permittype) {
-  const options = { month: "long", day: "numeric", year: "numeric" };
-  let type = "";
-
   try {
     const tpcollectionref = collection(db, `${permittype}`);
     onSnapshot(tpcollectionref, (snapshot) => {
@@ -612,14 +573,6 @@ export async function getApprovedPermits(permittype) {
               "color: white; background-color: green; border: none; padding: 8px; border-radius: 10px; width: 100px; cursor:pointer;";
           });
           if (docdata.status === "Approved by CENRO for Release/Endorsement") {
-            row.setAttribute(`${permittype}-num`, doc.id);
-            if (permittype === "wildlife") {
-              type = "Wildlife Registration";
-            } else if (permittype === "plantation") {
-              type = "Private Tree Plantation Registration";
-            } else {
-              type = "Transport Permit";
-            }
             row.innerHTML = `
               <td>${docdata.client}</td>
               <td>${doc.id}</td>
@@ -629,10 +582,10 @@ export async function getApprovedPermits(permittype) {
                 .toDate()
                 .toLocaleDateString("en-US", options)}</td>
                 <td>${
-                docdata.updated_by === "undefined"
-                  ? "Default"
-                  : docdata.updated_by
-              }</td>
+                  docdata.updated_by === "undefined"
+                    ? "Default"
+                    : docdata.updated_by
+                }</td>
               <td>${docdata.updated_at
                 .toDate()
                 .toLocaleDateString("en-US", options)}</td>
@@ -644,9 +597,15 @@ export async function getApprovedPermits(permittype) {
               );
             });
 
-            showactionsbtn.addEventListener('click', ()=>{
+            showactionsbtn.addEventListener("click", () => {
+              endorsementmodal.setAttribute("permit-id", `${doc.id}`);
+              endorsementmodal.setAttribute("evaluator", `${adminname}`);
+              endorsementmodal.setAttribute("permittype", `${permittype}`);
+              // endorsementmodal.setAttribute('permit-id', `${}`);
+              endorsementmodal.setAttribute("clientid", `${docdata.userID}`);
               endorsementmodal.style.display = "block";
-            })
+              togglepermitmodal("endorse");
+            });
 
             console.log(docdata.uploadedAt);
             const td = document.createElement("td");
@@ -670,8 +629,171 @@ export async function getApprovedPermits(permittype) {
   }
 }
 
+export async function getForwardedPermits(permittype) {
+  try {
+    const tpcollectionref = collection(db, `${permittype}`);
+    onSnapshot(tpcollectionref, (snapshot) => {
+      endorsedtbody.innerHTML = "";
+      console.log(snapshot);
+      if (snapshot.empty) {
+        console.log("Snapshot is empty");
+      } else {
+        snapshot.forEach((doc) => {
+          const docdata = doc.data();
+          const row = document.createElement("tr");
+          const viewbtn = document.createElement("button");
+          viewbtn.innerHTML = "View";
+          viewbtn.id = "e-btn";
+          viewbtn.style =
+            "color: white; background-color: blue; border: none; padding: 8px; border-radius: 10px; width: 100px; cursor:pointer;";
+          viewbtn.addEventListener("mouseenter", () => {
+            viewbtn.style.backgroundColor = "rgb(162, 212, 162)";
+            viewbtn.style.color = "black";
+          });
+
+          viewbtn.addEventListener("mouseleave", () => {
+            viewbtn.style =
+              "color: white; background-color: blue; border: none; padding: 8px; border-radius: 10px; width: 100px; cursor:pointer;";
+          });
+
+          if (docdata.status === "Forwarded/Endorsed") {
+            row.innerHTML = `
+              <td>${docdata.client}</td>
+              <td>${doc.id}</td>
+              <td><span class="status">${docdata.status}</span></td>
+              <td>${docdata.current_location}</td>
+              <td>${docdata.uploadedAt
+                .toDate()
+                .toLocaleDateString("en-US", options)}</td>
+                <td>${
+                  docdata.updated_by === "undefined"
+                    ? "Default"
+                    : docdata.updated_by
+                }</td>
+              <td>${docdata.updated_at
+                .toDate()
+                .toLocaleDateString("en-US", options)}</td>
+            `;
+
+            viewbtn.addEventListener("click", () => {
+              window.open(
+                `/permit/application/${docdata.client}/${doc.id}/${docdata.type}/${permittype}/view`
+              );
+            });
+
+            console.log(docdata.uploadedAt);
+            const td = document.createElement("td");
+            td.style = "display: flex; Flex-direction: row; gap: 3px;";
+            td.appendChild(viewbtn);
+            // td.appendChild(showactionsbtn);
+            row.appendChild(td);
+
+            endorsedtbody.appendChild(row);
+          }
+        });
+
+        const allPendingRows = Array.from(endorsedtbody.querySelectorAll("tr"));
+        setEndorsedReleasedPermits(allPendingRows);
+      }
+    });
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+export async function getPenroandRedApprovedPermits(permittype) {
+  try {
+    const tpcollectionref = collection(db, `${permittype}`);
+    onSnapshot(tpcollectionref, (snapshot) => {
+      endorsedtbody.innerHTML = "";
+      console.log(snapshot);
+      if (snapshot.empty) {
+        console.log("Snapshot is empty");
+      } else {
+        snapshot.forEach((doc) => {
+          const docdata = doc.data();
+          const row = document.createElement("tr");
+          const viewbtn = document.createElement("button");
+          viewbtn.innerHTML = "View";
+          viewbtn.id = "e-btn";
+          viewbtn.style =
+            "color: white; background-color: blue; border: none; padding: 8px; border-radius: 10px; width: 100px; cursor:pointer;";
+          viewbtn.addEventListener("mouseenter", () => {
+            viewbtn.style.backgroundColor = "rgb(162, 212, 162)";
+            viewbtn.style.color = "black";
+          });
+
+          viewbtn.addEventListener("mouseleave", () => {
+            viewbtn.style =
+              "color: white; background-color: blue; border: none; padding: 8px; border-radius: 10px; width: 100px; cursor:pointer;";
+          });
+
+          const releasedbtn = document.createElement("button");
+          releasedbtn.innerHTML = "Release";
+          releasedbtn.id = "e-btn";
+          releasedbtn.style =
+            "color: white; background-color: green; border: none; padding: 8px; border-radius: 10px; width: 100px; cursor:pointer;";
+          releasedbtn.addEventListener("mouseenter", () => {
+            releasedbtn.style.backgroundColor = "rgb(162, 212, 162)";
+            releasedbtn.style.color = "black";
+          });
+
+          releasedbtn.addEventListener("mouseleave", () => {
+            releasedbtn.style =
+              "color: white; background-color: green; border: none; padding: 8px; border-radius: 10px; width: 100px; cursor:pointer;";
+          });
+
+          if (
+            docdata.status === "Approved by PENRO" ||
+            docdata.status === "Approved by RED"
+          ) {
+            row.innerHTML = `
+              <td>${docdata.client}</td>
+              <td>${doc.id}</td>
+              <td><span class="status">${docdata.status}</span></td>
+              <td>${docdata.current_location}</td>
+              <td>${docdata.uploadedAt
+                .toDate()
+                .toLocaleDateString("en-US", options)}</td>
+                <td>${
+                  docdata.updated_by === "undefined"
+                    ? "Default"
+                    : docdata.updated_by
+                }</td>
+              <td>${docdata.updated_at
+                .toDate()
+                .toLocaleDateString("en-US", options)}</td>
+            `;
+
+            viewbtn.addEventListener("click", () => {
+              window.open(
+                `/permit/application/${docdata.client}/${doc.id}/${docdata.type}/${permittype}/view`
+              );
+            });
+
+            console.log(docdata.uploadedAt);
+            const td = document.createElement("td");
+            td.style = "display: flex; Flex-direction: row; gap: 3px;";
+            td.appendChild(viewbtn);
+            td.appendChild(releasedbtn);
+            row.appendChild(td);
+
+            endorsedtbody.appendChild(row);
+          }
+        });
+
+        const allPendingRows = Array.from(endorsedtbody.querySelectorAll("tr"));
+        setEndorsedReleasedPermits(allPendingRows);
+      }
+    });
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+//for permits with subtypes data fetching and updates
+
 export async function getpendingpermits_chainsawandtcp(permittype, type) {
-  const options = { month: "long", day: "numeric", year: "numeric" };
   try {
     const tpcollectionref = collection(db, `${permittype}`);
     onSnapshot(tpcollectionref, (snapshot) => {
@@ -726,7 +848,6 @@ export async function getpendingpermits_chainsawandtcp(permittype, type) {
             row.appendChild(td);
 
             evaluatebtn.addEventListener("click", () => {
-              // console.log(`${doc.id}`);
               window.open(
                 `/permit/application/${data.client}/${id}/${data.type}/${permittype}/evaluation`
               );
@@ -748,7 +869,6 @@ export async function getpendingpermits_chainsawandtcp(permittype, type) {
 }
 
 export async function getevaluatedpermits_chainsawandtcp(permittype, type) {
-  const options = { month: "long", day: "numeric", year: "numeric" };
 
   try {
     const tpcollectionref = collection(db, `${permittype}`);
@@ -917,7 +1037,7 @@ export async function getrejectedpermits_chainsawandtcp(permittype, type) {
               "color: white; background-color: green; border: none; padding: 8px; border-radius: 10px; width: 100px; cursor:pointer;";
           });
           if (docdata.status === "Inspected" && docdata.type === `${type}`) {
-            row.setAttribute(`${permittype}-num`, doc.id);
+            // row.setAttribute(`${permittype}-num`, doc.id);
             row.innerHTML = `
               <td>${docdata.client}</td>
               <td>${doc.id}</td>

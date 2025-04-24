@@ -1,16 +1,16 @@
-import { logoutfunction } from "../helpers/config.js";
+import { logoutfunction } from "../../helpers/config.js";
 import {
-  searching,
   getpendingpermits_chainsawandtcp,
   getevaluatedpermits_chainsawandtcp,
   getrejectedpermits_chainsawandtcp,
-} from "../helpers/datahelpers.js";
+} from "../../helpers/datahelpers.js";
 
+// import { logoutbtn,  } from "./constants/tableconstants.js";
 import {
   tablechanger,
    statusfilter,
    logoutbtn
-} from "../constants/tableconstants.js";
+} from "../../constants/tableconstants.js";
 
 let statusidentifier = "pending";
 
@@ -43,18 +43,18 @@ statusfilter.addEventListener("change", () => {
 });
 
 function initializepage() {
-  getpendingpermits_chainsawandtcp(
-    "tree_cutting",
-    "National Government Agencies"
-  );
-  getevaluatedpermits_chainsawandtcp(
-    "tree_cutting",
-    "National Government Agencies"
-  );
-  getrejectedpermits_chainsawandtcp(
-    "tree_cutting",
-    "National Government Agencies"
-  );
+  // getpendingpermits_chainsawandtcp(
+  //   "tree_cutting",
+  //   "Private Land Timber Permit"
+  // );
+  // getevaluatedpermits_chainsawandtcp(
+  //   "tree_cutting",
+  //   "Private Land Timber Permit"
+  // );
+  // getrejectedpermits_chainsawandtcp(
+  //   "tree_cutting",
+  //   "Private Land Timber Permit"
+  // );
 }
 
 window.onload = initializepage();
